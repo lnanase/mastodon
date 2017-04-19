@@ -56,6 +56,7 @@ import ru from 'react-intl/locale-data/ru';
 import uk from 'react-intl/locale-data/uk';
 import zh from 'react-intl/locale-data/zh';
 import bg from 'react-intl/locale-data/bg';
+import im from 'react-intl/locale-data/im';
 import { localeData as zh_hk } from '../locales/zh-hk';
 import { localeData as pt_br } from '../locales/pt-br';
 import getMessagesForLocale from '../locales';
@@ -88,6 +89,7 @@ addLocaleData([
   ...zh,
   ...zh_hk,
   ...bg,
+  ...im,
 ]);
 
 const Mastodon = React.createClass({

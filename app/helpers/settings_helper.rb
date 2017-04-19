@@ -22,6 +22,7 @@ module SettingsHelper
     'zh-HK': '繁體中文（香港）',
     'zh-TW': '繁體中文（臺灣）',
     bg: 'Български',
+    im: '日本語(im@s)',
   }.freeze
 
   def human_locale(locale)
