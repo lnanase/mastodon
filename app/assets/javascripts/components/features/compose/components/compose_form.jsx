@@ -19,7 +19,8 @@ import TextIconButton from './text_icon_button';
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What is on your mind?' },
   spoiler_placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Content warning' },
-  publish: { id: 'compose_form.publish', defaultMessage: 'Toot' }
+  publish: { id: 'compose_form.publish', defaultMessage: 'Toot' },
+  public_publish: { id: 'compose_form.public_publish', defaultMessage: '' }
 });
 
 const ComposeForm = React.createClass({
@@ -135,6 +136,7 @@ const ComposeForm = React.createClass({
     let publishText    = '';
     let privacyWarning = '';
     let reply_to_other = false;
+    let publicPublish = intl.formatMessage(messages.public_publish);
 
     if (needsPrivacyWarning) {
       privacyWarning = (
@@ -151,7 +153,11 @@ const ComposeForm = React.createClass({
     if (this.props.privacy === 'private' || this.props.privacy === 'direct') {
       publishText = <span><i className='fa fa-lock' /> {intl.formatMessage(messages.publish)}</span>;
     } else {
-      publishText = intl.formatMessage(messages.publish) + (this.props.privacy !== 'unlisted' ? '!' : '');
+        if (this.props.privacy !== 'unlisted' && publicPublish !== '') {
+            publishText = publicPublish;
+        } else {
+            publishText = intl.formatMessage(messages.publish) + (this.props.privacy !== 'unlisted' ? '!' : '');
+        }
     }
 
     return (
