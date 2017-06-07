@@ -393,6 +393,15 @@
   {
     "descriptors": [
       {
+        "defaultMessage": "Welcome to {domain}!",
+        "id": "welcome.message"
+      }
+    ],
+    "path": "app/javascript/mastodon/features/compose/components/announcements.json"
+  },
+  {
+    "descriptors": [
+      {
         "defaultMessage": "What is on your mind?",
         "id": "compose_form.placeholder"
       },

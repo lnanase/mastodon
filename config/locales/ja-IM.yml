@@ -1,5 +1,5 @@
 ---
-ja:
+ja-IM:
   about:
     about_mastodon: Mastodon は<em>自由でオープンソース</em>なソーシャルネットワークです。商用プラットフォームの代替となる<em>分散型</em>を採用し、あなたのやりとりが一つの会社によって独占されるのを防ぎます。信頼できるインスタンスを選択してください &mdash; どのインスタンスを選んでも、誰とでもやりとりすることができます。 だれでも自分の Mastodon インスタンスを作ることができ、シームレスに<em>ソーシャルネットワーク</em>に参加できます。
     about_this: このインスタンスについて
@@ -24,11 +24,11 @@ ja:
     links: リンク
     other_instances: 他のインスタンス
     source_code: ソースコード
-    status_count_after: トゥート
-    status_count_before: トゥート数
+    status_count_after: あふぅ
+    status_count_before: あふぅした数
     terms: プライバシーポリシー
     user_count_after: 人
-    user_count_before: ユーザー数
+    user_count_before: プロデューサー数
     version: バージョン
   accounts:
     follow: フォロー
@@ -94,7 +94,7 @@ ja:
         report: レポート
         targeted_reports: このアカウントについてのレポート
       silence: サイレンス
-      statuses: トゥート数
+      statuses: あふぅした数
       title: アカウント
       undo_silenced: サイレンスから戻す
       undo_suspension: 停止から戻す
@@ -109,7 +109,7 @@ ja:
         create: ブロックを作成
         hint: ドメインブロックはデータベース中のアカウント項目の作成を妨げませんが、遡って自動的に指定されたモデレーションをそれらのアカウントに適用します。
         severity:
-          desc_html: "<strong>サイレンス</strong>はアカウントのトゥートをフォローしていない人から隠します。<strong>停止</strong>はそのアカウントのコンテンツ、メディア、プロフィールデータをすべて削除します。"
+          desc_html: "<strong>サイレンス</strong>はアカウントのあふぅをフォローしていない人から隠します。<strong>停止</strong>はそのアカウントのコンテンツ、メディア、プロフィールデータをすべて削除します。"
           silence: サイレンス
           suspend: 停止
         title: 新規ドメインブロック
@@ -233,11 +233,11 @@ ja:
     blocks: ブロック
     csv: CSV
     follows: フォロー
-    mutes: ミュート
+    mutes: "だまっとけ☆"
     storage: メディア
   followers:
     domain: ドメイン
-    explanation_html: あなたの投稿のプライバシーを確保したい場合、誰があなたをフォローしているのかを把握している必要があります。 <strong>プライベート投稿は、あなたのフォロワーがいる全てのインスタンスに配信されます</strong>。 フォロワーのインスタンスの管理者やソフトウェアがあなたのプライバシーを尊重してくれるかどうか怪しい場合は、そのフォロワーを削除した方がよいかもしれません。
+    explanation_html: あなたのあふぅのプライバシーを確保したい場合、誰があなたをフォローしているのかを把握している必要があります。 <strong>プライベートあふぅは、あなたのフォロワーがいる全てのインスタンスに配信されます</strong>。 フォロワーのインスタンスの管理者やソフトウェアがあなたのプライバシーを尊重してくれるかどうか怪しい場合は、そのフォロワーを削除した方がよいかもしれません。
     followers_count: フォロワー数
     lock_link: 非公開アカウント
     purge: フォロワーから削除する
@@ -260,7 +260,7 @@ ja:
     types:
       blocking: ブロックしたアカウントリスト
       following: フォロー中のアカウントリスト
-      muting: ミュートしたアカウントリスト
+      muting: "だまっとけ☆リストにいるアカウントリスト"
     upload: アップロード
   landing_strip_html: <strong>%{name}</strong> さんはインスタンス %{link_to_root_path} のユーザーです。アカウントさえ持っていればフォローしたり会話したりできます。
   landing_strip_signup_html: もしお持ちでないなら <a href="%{sign_up_path}">こちら</a> からサインアップできます。
@@ -271,7 +271,7 @@ ja:
   notification_mailer:
     digest:
       body: "%{instance} での最後のログインからの出来事:"
-      mention: "%{name} さんがあなたに返信しました:"
+      mention: "%{name} さんがあなたにReあふぅしました:"
       new_followers_summary:
         one: 新たなフォロワーを獲得しました！
         other: "%{count} 人の新たなフォロワーを獲得しました！"
@@ -279,8 +279,8 @@ ja:
         one: "新しい1件の通知 \U0001F418"
         other: "新しい%{count}件の通知 \U0001F418"
     favourite:
-      body: 'あなたのトゥートが %{name} さんにお気に入り登録されました:'
-      subject: "%{name} さんがあなたのトゥートをお気に入りに登録しました"
+      body: 'あなたのあふぅが %{name} さんの頭にティンときたようです:'
+      subject: "%{name} さんがあなたのあふぅにティンときたようです"
     follow:
       body: "%{name} さんにフォローされています"
       subject: "%{name} さんにフォローされています"
@@ -288,11 +288,11 @@ ja:
       body: "%{name} さんがあなたにフォローをリクエストしました。"
       subject: "%{name} さんからのフォローリクエスト"
     mention:
-      body: "%{name} さんから返信がありました:"
-      subject: "%{name} さんに返信されました"
+      body: "%{name} さんからReあふぅがありました:"
+      subject: "%{name} さんにReあふぅされました"
     reblog:
-      body: 'あなたのトゥートが %{name} さんにブーストされました:'
-      subject: あなたのトゥートが %{name} さんにブーストされました
+      body: 'あなたのあふぅが %{name} さんに同意されました:'
+      subject: あなたのあふぅが %{name} さんに同意されました。わかるわ
   pagination:
     next: 次
     prev: 前
@@ -317,15 +317,15 @@ ja:
     over_character_limit: 上限は %{max}文字までです
     show_more: もっと見る
     visibilities:
-      private: 非公開
+      private: 私的資料
       private_long: フォロワーにのみ表示されます
-      public: 公開
-      public_long: 誰でも見ることができ、かつ公開タイムラインに表示されます
-      unlisted: 未収載
-      unlisted_long: 誰でも見ることができますが、公開タイムラインには表示されません
+      public: 公開資料
+      public_long: 誰でも見ることができ、かつ楽屋に表示されます
+      unlisted: 社内資料
+      unlisted_long: 誰でも見ることができますが、ライブステージには表示されません
   stream_entries:
     click_to_show: クリックして表示
-    reblogged: ブーストされました
+    reblogged: わかられました
     sensitive_content: 閲覧注意
   time:
     formats:
