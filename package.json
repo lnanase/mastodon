@@ -3,7 +3,7 @@
   "license": "AGPL-3.0",
   "scripts": {
     "postversion": "git push --tags",
-    "build:development": "NODE_ENV=development yarn webpack -- --config config/webpack/development.js",
+    "build:development": "NODE_ENV=production yarn webpack -- --config config/webpack/production.js",
     "build:production": "NODE_ENV=production yarn webpack -- --config config/webpack/production.js",
     "manage:translations": "node ./config/webpack/translationRunner.js",
     "start": "rimraf ./tmp/streaming && babel ./streaming/index.js --out-dir ./tmp && node ./tmp/streaming/index.js",
