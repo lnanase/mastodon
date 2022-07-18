@@ -26,8 +26,8 @@ RSpec.describe FanOutOnWriteService, type: :service do
 
     shared_examples 'LTLに配信される' do
       it '' do
-        expect(redis).to have_received(:publish).with('timeline:public', anything)
-        expect(redis).to have_received(:publish).with('timeline:public:local', anything)
+        expect(redis).to have_received(:publish).with('timeline:public', anything).once
+        expect(redis).to have_received(:publish).with('timeline:public:local', anything).once
       end
     end
 
@@ -41,8 +41,8 @@ RSpec.describe FanOutOnWriteService, type: :service do
     shared_examples 'tagTLのunauthorizedチャンネルに配信される' do
       it '' do
         status.tags.pluck(:name).each do |tag_name|
-          expect(redis).to have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}", anything)
-          expect(redis).to have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}:local", anything)
+          expect(redis).to have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}", anything).once
+          expect(redis).to have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}:local", anything).once
         end
       end
     end
@@ -59,8 +59,8 @@ RSpec.describe FanOutOnWriteService, type: :service do
     shared_examples 'tagTLのauthorizedチャンネルに配信される' do
       it '' do
         status.tags.pluck(:name).each do |tag_name|
-          expect(redis).to have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}:authorized", anything)
-          expect(redis).to have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}:authorized:local", anything)
+          expect(redis).to have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}:authorized", anything).once
+          expect(redis).to have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}:authorized:local", anything).once
         end
       end
     end
@@ -97,7 +97,7 @@ RSpec.describe FanOutOnWriteService, type: :service do
         it_behaves_like 'tagTLのunauthorizedチャンネルに配信される'
         it_behaves_like 'tagTLのauthorizedチャンネルに配信される'
       end
-  
+
       context 'unlisted' do
         let(:visibility) { :unlisted }
         it_behaves_like 'LTLに配信されない'
@@ -115,14 +115,13 @@ RSpec.describe FanOutOnWriteService, type: :service do
         it_behaves_like 'tagTLのunauthorizedチャンネルに配信される'
         it_behaves_like 'tagTLのauthorizedチャンネルに配信される'
       end
-  
+
       context 'unlisted' do
         let(:visibility) { :unlisted }
         it_behaves_like 'LTLに配信されない'
         it_behaves_like 'tagTLのunauthorizedチャンネルに配信されない'
         it_behaves_like 'tagTLのauthorizedチャンネルに配信されない'
       end
-
     end
 
     context '自分の投稿へのin_reply_toが設定されている投稿' do
@@ -134,7 +133,7 @@ RSpec.describe FanOutOnWriteService, type: :service do
         it_behaves_like 'tagTLのunauthorizedチャンネルに配信される'
         it_behaves_like 'tagTLのauthorizedチャンネルに配信される'
       end
-  
+
       context 'unlisted' do
         let(:visibility) { :unlisted }
         it_behaves_like 'LTLに配信されない'
