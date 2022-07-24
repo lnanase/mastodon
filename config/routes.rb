@@ -531,10 +531,7 @@ Rails.application.routes.draw do
         resource :note, only: :create, controller: 'accounts/notes'
       end
 
-      resources :favourite_tags, only: [:index, :create, :destroy], param: :tag
-      resource :trend_tags, only: [:show]
-
-      resources :tags, only: [:show], constraints: { id: /#{Tag::HASHTAG_NAME_RE}/ } do
+      resources :tags, only: [:show] do
         member do
           post :follow
           post :unfollow
@@ -597,6 +594,9 @@ Rails.application.routes.draw do
         post :dimensions, to: 'dimensions#create'
         post :retention, to: 'retention#create'
       end
+
+      resources :favourite_tags, only: [:index, :create, :destroy], param: :tag
+      resource :trend_tags, only: [:show]
     end
 
     namespace :v2 do
