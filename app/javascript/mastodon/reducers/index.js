@@ -17,7 +17,7 @@ import status_lists from './status_lists';
 import mutes from './mutes';
 import blocks from './blocks';
 import boosts from './boosts';
-import rules from './rules';
+import server from './server';
 import contexts from './contexts';
 import favourite_tags from './favourite_tags';
 import trend_tags from './trend_tags';
@@ -64,7 +64,7 @@ const reducers = {
   mutes,
   blocks,
   boosts,
-  rules,
+  server,
   contexts,
   favourite_tags,
   trend_tags,
