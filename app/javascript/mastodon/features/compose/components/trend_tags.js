@@ -81,9 +81,9 @@ export default class TrendTags extends React.PureComponent {
           <i className='fa fa-tag' />
           <div className='compose__extra__header__name'>{intl.formatMessage(messages.trend_tags)}</div>
           <div className='compose__extra__header__icon'>
-            <a href='javascript:void(0);' onClick={this.onClickReload} >
+            <button onClick={this.onClickReload} >
               {this.reloadIcon(this.state.animate)}
-            </a>
+            </button>
           </div>
           <div className='compose__extra__header__fold__icon'>
             <FoldButton title={intl.formatMessage(messages.toggle_visible)} icon='caret-up' onClick={onToggle} size={20} animate active={visible} />
