@@ -494,7 +494,7 @@ class Status extends ImmutablePureComponent {
     if (account ==  null && status.get('visibility') === 'public') {
       statusAvatar = <Avatar account={status.get('account')} size={46} />;
     } else if (account ==  null) {
-      statusAvatar = <AvatarOverlayIcon account={status.get('account')} visibility={status.get('visibility')} />
+      statusAvatar = <AvatarOverlayIcon account={status.get('account')} visibility={status.get('visibility')} />;
     } else {
       statusAvatar = <AvatarOverlay account={status.get('account')} friend={account} />;
     }

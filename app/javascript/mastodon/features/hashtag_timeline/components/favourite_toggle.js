@@ -45,7 +45,7 @@ export default class FavouriteToggle extends React.PureComponent {
           <div className='column-settings__row'>
             <Button className='favourite-tags__remove-button-in-column' text={intl.formatMessage(messages.remove_favourite_tags)} onClick={this.removeFavouriteTags} block />
           </div>
-        :
+          :
           <div className='column-settings__row'>
             <Button className='favourite-tags__add-button-in-column' text={intl.formatMessage(messages.add_favourite_tags_public)} onClick={this.addPublic} block />
             <Button className='favourite-tags__add-button-in-column' text={intl.formatMessage(messages.add_favourite_tags_unlisted)} onClick={this.addUnlisted} block />

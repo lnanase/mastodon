@@ -135,7 +135,7 @@ function clearAll(state) {
 
 function getPrivacy(state) {
   return state.get('tag_privacy') || state.get('default_privacy');
-};
+}
 
 function appendMedia(state, media, file) {
   const prevSize = state.get('media_attachments').size;

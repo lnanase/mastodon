@@ -38,15 +38,15 @@ export default class TrendTags extends React.PureComponent {
       this.setState({ animate: true });
       this.props.refreshTrendTags();
     }
-  }
+  };
 
   onAnimationEnd = () => {
     this.setState({ animate: false });
-  }
+  };
 
   reloadIcon = (isAnimate) => {
     return isAnimate ? <i className='fa fa-repeat animate' onAnimationEnd={this.onAnimationEnd} /> : <i className='fa fa-repeat' />;
-  }
+  };
 
   render () {
     const { intl, visible, trendTags, trendTagsHistory, onToggle } = this.props;
