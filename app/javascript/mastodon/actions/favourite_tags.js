@@ -8,7 +8,7 @@ export function refreshFavouriteTags() {
   return (dispatch, getState) => {
     api(getState).get('/api/v1/favourite_tags').then(response => {
       dispatch(refreshFavouriteTagsSuccess(response.data));
-    });
+    }).catch(() => {});
   };
 }
 
@@ -19,7 +19,7 @@ export function addFavouriteTags(tag, visibility) {
       visibility: visibility,
     }).then(() => {
       dispatch(refreshFavouriteTags());
-    });
+    }).catch(() => {});
   };
 }
 
@@ -27,7 +27,7 @@ export function removeFavouriteTags(tag) {
   return (dispatch, getState) => {
     api(getState).delete(`/api/v1/favourite_tags/${tag}`).then(() => {
       dispatch(refreshFavouriteTags());
-    });
+    }).catch(() => {});
   };
 }
 

@@ -8,7 +8,7 @@ export function refreshTrendTags() {
   return (dispatch, getState) => {
     api(getState).get('/api/v1/trend_tags').then(response => {
       dispatch(refreshTrendTagsSuccess(response.data));
-    });
+    }).catch(() => {});
   };
 }
 
@@ -29,7 +29,7 @@ export function refreshTrendTagsHistory() {
   return (dispatch, getState) => {
     api(getState).get('/api/v1/trend_tags?history_mode=true').then(response => {
       dispatch(refreshTrendTagsHistorySuccess(response.data));
-    });
+    }).catch(() => {});
   };
 }
 

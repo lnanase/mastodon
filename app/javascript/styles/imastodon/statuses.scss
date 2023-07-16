@@ -1,11 +1,11 @@
 .account__avatar-overlay-icon {
   &-base {
-    @include avatar-radius();
+    @include avatar-radius;
     @include avatar-size(40px);
   }
 
   &-overlay {
-    @include avatar-radius();
+    @include avatar-radius;
 
     background-color: darken($white, 20%);
     position: absolute;

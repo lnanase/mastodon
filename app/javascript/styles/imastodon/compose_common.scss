@@ -1,7 +1,8 @@
-@keyframes rotate_anime {
+@keyframes rotate-anime {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -22,6 +23,10 @@
 
   > i {
     padding-right: 4px;
+  }
+
+  button {
+    background-color: transparent;
   }
 
   &__icon {
@@ -45,7 +50,7 @@
       color: $ui-primary-color;
 
       &.animate {
-        animation: rotate_anime 1s ease 0s 1 normal none;
+        animation: rotate-anime 1s ease 0s 1 normal none;
       }
     }
   }
@@ -64,10 +69,10 @@
       height: 30px;
       display: flex;
       align-items: center;
-      padding: 0px 10px;
+      padding: 0 10px;
       position: relative;
 
-      &:before {
+      &::before {
         counter-increment: index;
         content: counter(index) ".";
         font-size: 16px;
