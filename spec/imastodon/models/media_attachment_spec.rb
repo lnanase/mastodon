@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe MediaAttachment, type: :model do
   describe 'jpgで保存したほうがサイズが小さくなる不透過pngはjpgに変換して保存する' do
-    let(:media) { MediaAttachment.create(account: Fabricate(:account), file: attachment_fixture('photo.png')) }
+    let(:media) { described_class.create(account: Fabricate(:account), file: attachment_fixture('photo.png')) }
 
     it 'sets type to image' do
       expect(media.type).to eq 'image'
@@ -21,7 +21,7 @@ RSpec.describe MediaAttachment, type: :model do
   end
 
   describe 'pngで保存したほうがサイズが小さくなる不透過pngはpngのまま保存する' do
-    let(:media) { MediaAttachment.create(account: Fabricate(:account), file: attachment_fixture('not-transparent.png')) }
+    let(:media) { described_class.create(account: Fabricate(:account), file: attachment_fixture('not-transparent.png')) }
 
     it 'sets type to image' do
       expect(media.type).to eq 'image'
@@ -40,7 +40,7 @@ RSpec.describe MediaAttachment, type: :model do
   end
 
   describe '透過pngはpngのまま保存する' do
-    let(:media) { MediaAttachment.create(account: Fabricate(:account), file: attachment_fixture('transparent.png')) }
+    let(:media) { described_class.create(account: Fabricate(:account), file: attachment_fixture('transparent.png')) }
 
     it 'sets type to image' do
       expect(media.type).to eq 'image'

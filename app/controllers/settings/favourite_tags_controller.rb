@@ -14,7 +14,7 @@ class Settings::FavouriteTagsController < Settings::BaseController
   end
 
   def create
-    name = tag_params[:name].gsub(/\A#/, '')
+    name = tag_params[:name].delete_prefix('#')
     tag = Tag.find_or_initialize_by(name: name)
     @favourite_tag = FavouriteTag.new(account: @account, tag: tag, visibility: favourite_tag_params[:visibility], order: favourite_tag_params[:order])
     if @favourite_tag.save
@@ -25,7 +25,7 @@ class Settings::FavouriteTagsController < Settings::BaseController
   end
 
   def update
-    name = tag_params[:name].gsub(/\A#/, '')
+    name = tag_params[:name].delete_prefix('#')
     tag = Tag.find_or_initialize_by(name: name)
     if @favourite_tag.update(tag: tag, visibility: favourite_tag_params[:visibility], order: favourite_tag_params[:order])
       redirect_to settings_favourite_tags_path, notice: I18n.t('generic.changes_saved_msg')

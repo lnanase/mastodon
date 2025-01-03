@@ -8,21 +8,21 @@ RSpec.describe FavouriteTag, type: :model do
     let(:tag) { Fabricate(:tag, name: 'valid_tag') }
 
     it 'valid visibility' do
-      expect(FavouriteTag.new(account: account, tag: tag, visibility: 0)).to be_valid
-      expect(FavouriteTag.new(account: account, tag: tag, visibility: 1)).to be_valid
-      expect(FavouriteTag.new(account: account, tag: tag, visibility: 2)).to be_valid
-      expect(FavouriteTag.new(account: account, tag: tag, visibility: 3)).to be_valid
+      expect(described_class.new(account: account, tag: tag, visibility: 0)).to be_valid
+      expect(described_class.new(account: account, tag: tag, visibility: 1)).to be_valid
+      expect(described_class.new(account: account, tag: tag, visibility: 2)).to be_valid
+      expect(described_class.new(account: account, tag: tag, visibility: 3)).to be_valid
     end
 
     context 'when visibility is out of ranges' do
       it 'invalid visibility' do
-        expect { FavouriteTag.new(account: account, tag: tag, visibility: 4) }.to raise_error(ArgumentError)
+        expect { described_class.new(account: account, tag: tag, visibility: 4) }.to raise_error(ArgumentError)
       end
     end
 
     context 'when the tag is invalid' do
       it 'when tag name is invalid' do
-        expect(FavouriteTag.new(account: account, tag: Tag.new(name: 'test tag'), visibility: 0)).to_not be_valid
+        expect(described_class.new(account: account, tag: Tag.new(name: 'test tag'), visibility: 0)).to_not be_valid
       end
     end
   end
@@ -31,8 +31,8 @@ RSpec.describe FavouriteTag, type: :model do
     let!(:favourite_tag) { Fabricate(:favourite_tag) }
 
     it 'delete favourite_tag' do
-      expect { favourite_tag.destroy }.to change { FavouriteTag.count }.by(-1)
-      expect { favourite_tag.destroy }.to_not change { FavouriteTag.count }
+      expect { favourite_tag.destroy }.to change(described_class, :count).by(-1)
+      expect { favourite_tag.destroy }.to_not change(described_class, :count)
     end
   end
 

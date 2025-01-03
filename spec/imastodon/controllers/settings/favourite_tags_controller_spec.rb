@@ -75,7 +75,7 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
     end
 
     it 'after create, favourite tag' do
-      expect { subject }.to change { FavouriteTag.count }.by(1)
+      expect { subject }.to change(FavouriteTag, :count).by(1)
       expect(response).to redirect_to(settings_favourite_tags_path)
     end
 
@@ -103,7 +103,7 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
           id: favourite_tag.id,
           favourite_tag: {
             tag_attributes: {
-              name: 'dummy_tag_' + favourite_tag.id.to_s,
+              name: "dummy_tag_#{favourite_tag.id}",
             },
             visibility: 'unlisted',
             order: 2,
@@ -112,7 +112,7 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
       end
 
       it 'after update, tag' do
-        expect { subject }.to change { Tag.count }.by(1)
+        expect { subject }.to change(Tag, :count).by(1)
         expect(assigns(:favourite_tag).tag.name).to_not eq('dummy_tag')
         expect(response).to redirect_to(settings_favourite_tags_path)
       end
@@ -171,7 +171,7 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
     end
 
     it 'after destroy, favourite tag' do
-      expect { subject }.to change { FavouriteTag.count }.by(-1)
+      expect { subject }.to change(FavouriteTag, :count).by(-1)
       expect(response).to redirect_to(settings_favourite_tags_path)
     end
   end

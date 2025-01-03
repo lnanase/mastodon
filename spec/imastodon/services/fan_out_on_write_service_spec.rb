@@ -26,21 +26,21 @@ RSpec.describe FanOutOnWriteService, type: :service do
     let(:status) { Fabricate(:status, text: body, account: author, visibility: visibility) }
 
     shared_examples 'LTLに配信される' do
-      it '' do
+      it do
         expect(redis).to have_received(:publish).with('timeline:public', anything).once
         expect(redis).to have_received(:publish).with('timeline:public:local', anything).once
       end
     end
 
     shared_examples 'LTLに配信されない' do
-      it '' do
+      it do
         expect(redis).to_not have_received(:publish).with('timeline:public', anything)
         expect(redis).to_not have_received(:publish).with('timeline:public:local', anything)
       end
     end
 
     shared_examples 'tagTLのunauthorizedチャンネルに配信される' do
-      it '' do
+      it do
         status.tags.pluck(:name).each do |tag_name|
           expect(redis).to have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}", anything).once
           expect(redis).to have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}:local", anything).once
@@ -49,7 +49,7 @@ RSpec.describe FanOutOnWriteService, type: :service do
     end
 
     shared_examples 'tagTLのunauthorizedチャンネルに配信されない' do
-      it '' do
+      it do
         status.tags.pluck(:name).each do |tag_name|
           expect(redis).to_not have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}", anything)
           expect(redis).to_not have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}:local", anything)
@@ -58,7 +58,7 @@ RSpec.describe FanOutOnWriteService, type: :service do
     end
 
     shared_examples 'tagTLのauthorizedチャンネルに配信される' do
-      it '' do
+      it do
         status.tags.pluck(:name).each do |tag_name|
           expect(redis).to have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}:authorized", anything).once
           expect(redis).to have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}:authorized:local", anything).once
@@ -67,7 +67,7 @@ RSpec.describe FanOutOnWriteService, type: :service do
     end
 
     shared_examples 'tagTLのauthorizedチャンネルに配信されない' do
-      it '' do
+      it do
         status.tags.pluck(:name).each do |tag_name|
           expect(redis).to_not have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}:authorized", anything)
           expect(redis).to_not have_received(:publish).with("timeline:hashtag:#{tag_name.mb_chars.downcase}:authorized:local", anything)

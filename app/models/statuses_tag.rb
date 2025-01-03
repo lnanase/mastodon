@@ -83,7 +83,7 @@ class StatusesTag < ApplicationRecord
 
     def aggregate_tags_in(t: 10.minutes, until_t: Time.now.utc)
       status_ids = status_ids_in((until_t - t)..until_t)
-      StatusesTag.where(status_id: status_ids).group(:tag_id).count.map { |k, v| [k.to_s, v] }.to_h
+      StatusesTag.where(status_id: status_ids).group(:tag_id).count.transform_keys(&:to_s)
     end
 
     def status_ids_in(time_range)
