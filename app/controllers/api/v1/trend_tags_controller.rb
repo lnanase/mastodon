@@ -21,7 +21,7 @@ class Api::V1::TrendTagsController < Api::BaseController
   end
 
   def history_mode?
-    ActiveModel::Type::Boolean.new.cast(trend_tags_params[:history_mode]) 
+    ActiveModel::Type::Boolean.new.cast(trend_tags_params[:history_mode])
   end
 
   def trend_tags_params

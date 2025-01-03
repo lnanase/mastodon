@@ -8,13 +8,13 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
     sign_in @user, scope: :user
   end
 
-  describe "GET #index" do
+  describe 'GET #index' do
     before do
       get :index
     end
 
     it 'assigns @favourite_tag' do
-      expect(assigns(:favourite_tag)).to be_kind_of FavouriteTag
+      expect(assigns(:favourite_tag)).to be_a FavouriteTag
     end
 
     it 'returns http success' do
@@ -36,7 +36,7 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
       end
 
       it 'assigns @favourite_tag' do
-        expect(assigns(:favourite_tag)).to be_kind_of FavouriteTag
+        expect(assigns(:favourite_tag)).to be_a FavouriteTag
         expect(assigns(:favourite_tag)).to eq(favourite_tag)
       end
     end
@@ -53,24 +53,24 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
   end
 
   describe 'POST #create' do
+    subject { post :create, params: params }
+
     let(:tag_name) { 'dummy_tag' }
-    let(:params) {
+    let(:params) do
       {
         favourite_tag: {
           tag_attributes: {
-            name: tag_name
+            name: tag_name,
           },
           visibility: 'public',
-          order: 1
-        }
+          order: 1,
+        },
       }
-    }
+    end
     let!(:tag) { Fabricate(:tag, name: tag_name) }
 
-    subject { post :create, params: params }
-
     it 'after create, tag' do
-      expect { subject }.not_to change(Tag, :count)
+      expect { subject }.to_not change(Tag, :count)
       expect(response).to redirect_to(settings_favourite_tags_path)
     end
 
@@ -84,8 +84,8 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
         Fabricate(:favourite_tag, account: @user.account, tag: tag)
       end
 
-      it 'should not create any tags and should render index template' do
-        expect { subject }.not_to change(FavouriteTag, :count)
+      it 'does not create any tags and should render index template' do
+        expect { subject }.to_not change(FavouriteTag, :count)
         expect(response).to render_template(:index)
       end
     end
@@ -96,29 +96,29 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
     let!(:favourite_tag) { Fabricate(:favourite_tag, account: @user.account, tag: tag) }
 
     context 'The favourite tag can update.' do
-      let(:params) {
+      subject { put :update, params: params }
+
+      let(:params) do
         {
           id: favourite_tag.id,
           favourite_tag: {
             tag_attributes: {
-              name: 'dummy_tag_' + favourite_tag.id.to_s
+              name: 'dummy_tag_' + favourite_tag.id.to_s,
             },
             visibility: 'unlisted',
-            order: 2
-          }
+            order: 2,
+          },
         }
-      }
-
-      subject { put :update, params: params }
+      end
 
       it 'after update, tag' do
         expect { subject }.to change { Tag.count }.by(1)
-        expect(assigns(:favourite_tag).tag.name).not_to eq('dummy_tag')
+        expect(assigns(:favourite_tag).tag.name).to_not eq('dummy_tag')
         expect(response).to redirect_to(settings_favourite_tags_path)
       end
 
       it 'after update, favourite tag' do
-        expect { subject }.not_to change(FavouriteTag, :count)
+        expect { subject }.to_not change(FavouriteTag, :count)
         expect(assigns(:favourite_tag).visibility).to eq('unlisted')
         expect(assigns(:favourite_tag).order).to eq(2)
         expect(response).to redirect_to(settings_favourite_tags_path)
@@ -126,47 +126,47 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
     end
 
     context 'The favourite tag could not update, because tag has already been registered.' do
+      subject { put :update, params: params }
+
       let(:tag_name) { 'dummy_tag2' }
-      let(:params) {
+      let(:params) do
         {
           id: favourite_tag.id,
           favourite_tag: {
             tag_attributes: {
-              name: tag_name
+              name: tag_name,
             },
             visibility: 'unlisted',
-            order: 2
-          }
+            order: 2,
+          },
         }
-      }
+      end
       let(:tag2) { Fabricate(:tag, name: tag_name) }
-
-      subject { put :update, params: params }
 
       before do
         Fabricate(:favourite_tag, account: @user.account, tag: tag2)
       end
 
-      it 'should not update any tags and should render edit template' do
-        expect { subject }.not_to change(Tag, :count)
+      it 'does not update any tags and should render edit template' do
+        expect { subject }.to_not change(Tag, :count)
         expect(response).to render_template(:edit)
       end
     end
   end
 
   describe 'DELETE #destroy' do
-    let(:tag) { Fabricate(:tag, name: 'dummy_tag') }
-    let!(:favourite_tag) { Fabricate(:favourite_tag, account: @user.account, tag: tag) }
-    let(:params) {
-      {
-        id: favourite_tag.id
-      }
-    }
-
     subject { delete :destroy, params: params }
 
+    let(:tag) { Fabricate(:tag, name: 'dummy_tag') }
+    let!(:favourite_tag) { Fabricate(:favourite_tag, account: @user.account, tag: tag) }
+    let(:params) do
+      {
+        id: favourite_tag.id,
+      }
+    end
+
     it 'after destroy, tag' do
-      expect { subject }.not_to change(Tag, :count)
+      expect { subject }.to_not change(Tag, :count)
       expect(response).to redirect_to(settings_favourite_tags_path)
     end
 

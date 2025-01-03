@@ -12,11 +12,10 @@
 #
 
 class FavouriteTag < ApplicationRecord
+  enum visibility: { public: 0, unlisted: 1, private: 2, direct: 3 }, _suffix: :visibility
 
-  enum visibility: [:public, :unlisted, :private, :direct], _suffix: :visibility
-
-  belongs_to :account, required: true
-  belongs_to :tag, required: true
+  belongs_to :account, optional: false
+  belongs_to :tag, optional: false
   accepts_nested_attributes_for :tag
 
   validates :tag, uniqueness: { scope: :account }
@@ -29,9 +28,9 @@ class FavouriteTag < ApplicationRecord
 
   def to_json_for_api
     {
-      id: self.id,
-      name: self.name,
-      visibility: self.visibility,
+      id: id,
+      name: name,
+      visibility: visibility,
     }
   end
 end

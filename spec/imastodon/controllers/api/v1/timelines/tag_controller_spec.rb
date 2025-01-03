@@ -44,7 +44,7 @@ describe Api::V1::Timelines::TagController, type: :controller do
           expect(response).to have_http_status(200)
           expect(response.headers['Link'].links.size).to eq(2)
           expect(JSON.parse(response.body).length).to eq(1)
-          expect(JSON.parse(response.body).first["content"]).to include('It is a public')
+          expect(JSON.parse(response.body).first['content']).to include('It is a public')
         end
       end
     end

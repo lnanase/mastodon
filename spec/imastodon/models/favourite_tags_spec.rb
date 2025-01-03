@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe FavouriteTag, type: :model do
@@ -21,7 +22,7 @@ RSpec.describe FavouriteTag, type: :model do
 
     context 'when the tag is invalid' do
       it 'when tag name is invalid' do
-        expect(FavouriteTag.new(account: account, tag: Tag.new(name: 'test tag'), visibility: 0)).not_to be_valid
+        expect(FavouriteTag.new(account: account, tag: Tag.new(name: 'test tag'), visibility: 0)).to_not be_valid
       end
     end
   end
@@ -31,7 +32,7 @@ RSpec.describe FavouriteTag, type: :model do
 
     it 'delete favourite_tag' do
       expect { favourite_tag.destroy }.to change { FavouriteTag.count }.by(-1)
-      expect { favourite_tag.destroy }.not_to change { FavouriteTag.count }
+      expect { favourite_tag.destroy }.to_not change { FavouriteTag.count }
     end
   end
 

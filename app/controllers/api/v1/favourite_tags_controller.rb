@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Api::V1::FavouriteTagsController < Api::BaseController
-
   before_action :set_account
   before_action -> { doorkeeper_authorize! :read, :'read:statuses' }, only: [:index]
   before_action -> { doorkeeper_authorize! :write, :'write:statuses' }, except: [:index]
@@ -19,7 +18,7 @@ class Api::V1::FavouriteTagsController < Api::BaseController
     if @favourite_tag.save
       render json: @favourite_tag.to_json_for_api
     else
-      render json: find_fav_tag_by(tag).to_json_for_api, status: :conflict
+      render json: find_fav_tag_by(tag).to_json_for_api, status: 409
     end
   end
 
@@ -27,7 +26,7 @@ class Api::V1::FavouriteTagsController < Api::BaseController
     tag = find_tag
     @favourite_tag = find_fav_tag_by(tag)
     if @favourite_tag.nil?
-      render json: { succeeded: false }, status: :not_found
+      render json: { succeeded: false }, status: 404
     else
       @favourite_tag.destroy
       render json: { succeeded: true }
