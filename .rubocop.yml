@@ -96,9 +96,17 @@ Rails/Exit:
     - 'lib/mastodon/cli_helper.rb'
     - 'lib/cli.rb'
 
+RSpec/ContextWording:
+  Exclude:
+    - spec/imastodon/**/*
+
 RSpec/FilePath:
   CustomTransform:
     DeepL: deepl
+
+RSpec/NamedSubject:
+  Exclude:
+    - spec/imastodon/**/*
 
 RSpec/NotToNot:
   EnforcedStyle: to_not
