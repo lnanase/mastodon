@@ -52,12 +52,12 @@ RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
       end
 
       it 'returns http 409' do
-        expect { subject }.to_not change { user.account.favourite_tags.count }
+        expect { subject }.to_not(change { user.account.favourite_tags.count })
         expect(response).to have_http_status(409)
       end
 
       it 'does not create new favourite_tag' do
-        expect { subject }.to_not change { user.account.favourite_tags.count }
+        expect { subject }.to_not(change { user.account.favourite_tags.count })
         expect(
           JSON.parse(response.body, symbolize_names: true).except(:id)
         ).to eq({ name: tag_name, visibility: 'public' })
@@ -95,12 +95,12 @@ RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
       let(:tag_name) { 'unregistered' }
 
       it 'returns http 404' do
-        expect { subject }.to_not change { user.account.favourite_tags.count }
+        expect { subject }.to_not(change { user.account.favourite_tags.count })
         expect(response).to have_http_status(404)
       end
 
       it 'responce has fail message by json' do
-        expect { subject }.to_not change { user.account.favourite_tags.count }
+        expect { subject }.to_not(change { user.account.favourite_tags.count })
         expect(
           JSON.parse(response.body, symbolize_names: true)
         ).to eq({ succeeded: false })
