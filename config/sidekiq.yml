@@ -59,7 +59,6 @@
       class: Scheduler::SuspendedUserCleanupScheduler
       queue: scheduler
 
-
     trend_tags_update_scheduler:
       cron: '5-55/10 * * * *'
       class: Scheduler::TrendTagsUpdateScheduler
