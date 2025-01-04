@@ -3,36 +3,12 @@ import { connect } from 'react-redux';
 import Warning from '../components/warning';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { me } from '../../../initial_state';
-
-const buildHashtagRE = () => {
-  try {
-    const HASHTAG_SEPARATORS = '_\\u00b7\\u200c';
-    const ALPHA = '\\p{L}\\p{M}';
-    const WORD = '\\p{L}\\p{M}\\p{N}\\p{Pc}';
-    return new RegExp(
-      '(?:^|[^\\/\\)\\w])#((' +
-      '[' + WORD + '_]' +
-      '[' + WORD + HASHTAG_SEPARATORS + ']*' +
-      '[' + ALPHA + HASHTAG_SEPARATORS + ']' +
-      '[' + WORD + HASHTAG_SEPARATORS +']*' +
-      '[' + WORD + '_]' +
-      ')|(' +
-      '[' + WORD + '_]*' +
-      '[' + ALPHA + ']' +
-      '[' + WORD + '_]*' +
-      '))', 'iu',
-    );
-  } catch {
-    return /(?:^|[^/)\w])#(\w*[a-zA-Z·]\w*)/i;
-  }
-};
-
-const APPROX_HASHTAG_RE = buildHashtagRE();
+import { me } from 'mastodon/initial_state';
+import { HASHTAG_PATTERN_REGEX } from 'mastodon/utils/hashtags';
 
 const mapStateToProps = state => ({
   needsLockWarning: state.getIn(['compose', 'privacy']) === 'private' && !state.getIn(['accounts', me, 'locked']),
-  hashtagWarning: ['private', 'direct'].includes(state.getIn(['compose', 'privacy'])) && APPROX_HASHTAG_RE.test(state.getIn(['compose', 'text'])),
+  hashtagWarning: ['private', 'direct'].includes(state.getIn(['compose', 'privacy'])) && HASHTAG_PATTERN_REGEX.test(state.getIn(['compose', 'text'])),
   directMessageWarning: state.getIn(['compose', 'privacy']) === 'direct',
 });
 

@@ -87,8 +87,6 @@ ga:
       reject: Diúltaigh
       remove_avatar: Bain abhatár
       remove_header: Bain ceanntásc
-      resend_confirmation:
-        success: Seoladh go rathúil ríomhphost deimhnithe!
       reset: Athshocraigh
       reset_password: Athshocraigh pasfhocal
       resubscribe: Athchláraigh
@@ -461,7 +459,6 @@ ga:
       ios: iOS
       linux: Linux
       mac: macOS
-      other: ardán anaithnid
       windows: Windows
       windows_mobile: Windows Mobile
       windows_phone: Windows Phone

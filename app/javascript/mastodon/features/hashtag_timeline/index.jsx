@@ -27,8 +27,6 @@ const mapStateToProps = (state, props) => ({
   tag: state.getIn(['tags', props.params.id]),
 });
 
-export default @connect(mapStateToProps)
-@injectIntl
 class HashtagTimeline extends React.PureComponent {
 
   disconnects = [];
@@ -194,8 +192,12 @@ class HashtagTimeline extends React.PureComponent {
     if (tag) {
       const following = tag.get('following');
 
+      const classes = classNames('column-header__button', {
+        active: following,
+      });
+
       followButton = (
-        <button className={classNames('column-header__button')} onClick={this.handleFollow} disabled={!signedIn} active={following} title={intl.formatMessage(following ? messages.unfollowHashtag : messages.followHashtag)} aria-label={intl.formatMessage(following ? messages.unfollowHashtag : messages.followHashtag)}>
+        <button className={classes} onClick={this.handleFollow} disabled={!signedIn} title={intl.formatMessage(following ? messages.unfollowHashtag : messages.followHashtag)} aria-label={intl.formatMessage(following ? messages.unfollowHashtag : messages.followHashtag)}>
           <Icon id={following ? 'user-times' : 'user-plus'} fixedWidth className='column-header__icon' />
         </button>
       );
@@ -239,3 +241,5 @@ class HashtagTimeline extends React.PureComponent {
   }
 
 }
+
+export default connect(mapStateToProps)(injectIntl(HashtagTimeline));
