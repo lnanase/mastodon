@@ -95,6 +95,7 @@ namespace :api, format: false do
     resources :filters, only: [:index, :create, :show, :update, :destroy]
     resources :endorsements, only: [:index]
     resources :markers, only: [:index, :create]
+    resources :profile, only: :destroy, param: :image, controller: 'profiles'
 
     namespace :apps do
       get :verify_credentials, to: 'credentials#show'
@@ -120,7 +121,12 @@ namespace :api, format: false do
       resource :privacy_policy, only: [:show], controller: 'instances/privacy_policies'
       resource :extended_description, only: [:show], controller: 'instances/extended_descriptions'
       resource :translation_languages, only: [:show], controller: 'instances/translation_languages'
+      resource :languages, only: [:show], controller: 'instances/languages'
       resource :activity, only: [:show], controller: 'instances/activity'
+    end
+
+    namespace :peers do
+      get :search, to: 'search#index'
     end
 
     resource :domain_blocks, only: [:show, :create, :destroy]
@@ -299,7 +305,7 @@ namespace :api, format: false do
 
   namespace :web do
     resource :settings, only: [:update]
-    resource :embed, only: [:create]
+    resources :embeds, only: [:show]
     resources :push_subscriptions, only: [:create] do
       member do
         put :update

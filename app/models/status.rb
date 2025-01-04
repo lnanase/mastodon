@@ -104,7 +104,9 @@ class Status < ApplicationRecord
   scope :not_domain_blocked_by_account, ->(account) { account.excluded_from_timeline_domains.blank? ? left_outer_joins(:account) : left_outer_joins(:account).where('accounts.domain IS NULL OR accounts.domain NOT IN (?)', account.excluded_from_timeline_domains) }
   scope :tagged_with_all, lambda { |tag_ids|
     Array(tag_ids).map(&:to_i).reduce(self) do |result, id|
-      result.joins("INNER JOIN statuses_tags t#{id} ON t#{id}.status_id = statuses.id AND t#{id}.tag_id = #{id}")
+      result.where(<<~SQL.squish, tag_id: id)
+        EXISTS(SELECT 1 FROM statuses_tags WHERE statuses_tags.status_id = statuses.id AND statuses_tags.tag_id = :tag_id)
+      SQL
     end
   }
   scope :tagged_with_none, lambda { |tag_ids|
@@ -161,7 +163,7 @@ class Status < ApplicationRecord
   REAL_TIME_WINDOW = 6.hours
 
   def cache_key
-    "v2:#{super}"
+    "v3:#{super}"
   end
 
   def searchable_by(preloaded = nil)
@@ -366,13 +368,25 @@ class Status < ApplicationRecord
 
       account_ids.uniq!
 
+      status_ids = cached_items.map { |item| item.reblog? ? item.reblog_of_id : item.id }.uniq
+
       return if account_ids.empty?
 
       accounts = Account.where(id: account_ids).includes(:account_stat, :user).index_by(&:id)
 
+      status_stats = StatusStat.where(status_id: status_ids).index_by(&:status_id)
+
       cached_items.each do |item|
         item.account = accounts[item.account_id]
         item.reblog.account = accounts[item.reblog.account_id] if item.reblog?
+
+        if item.reblog?
+          status_stat = status_stats[item.reblog.id]
+          item.reblog.status_stat = status_stat if status_stat.present?
+        else
+          status_stat = status_stats[item.id]
+          item.status_stat = status_stat if status_stat.present?
+        end
       end
     end
 

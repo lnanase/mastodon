@@ -9,6 +9,7 @@ import { WordmarkLogo } from 'mastodon/components/logo';
 import NavigationPortal from 'mastodon/components/navigation_portal';
 import TrendTagsContainer from 'mastodon/features/compose/containers/trend_tags_container';
 import { timelinePreview, trendsEnabled } from 'mastodon/initial_state';
+import { transientSingleColumn } from 'mastodon/is_mobile';
 
 import ColumnLink from './column_link';
 import DisabledAccountBanner from './disabled_account_banner';
@@ -23,13 +24,14 @@ const messages = defineMessages({
   explore: { id: 'explore.title', defaultMessage: 'Explore' },
   firehose: { id: 'column.firehose', defaultMessage: 'Live feeds' },
   direct: { id: 'navigation_bar.direct', defaultMessage: 'Private mentions' },
-  favourites: { id: 'navigation_bar.favourites', defaultMessage: 'Favourites' },
+  favourites: { id: 'navigation_bar.favourites', defaultMessage: 'Favorites' },
   bookmarks: { id: 'navigation_bar.bookmarks', defaultMessage: 'Bookmarks' },
   lists: { id: 'navigation_bar.lists', defaultMessage: 'Lists' },
   preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },
   followsAndFollowers: { id: 'navigation_bar.follows_and_followers', defaultMessage: 'Follows and followers' },
   about: { id: 'navigation_bar.about', defaultMessage: 'About' },
   search: { id: 'navigation_bar.search', defaultMessage: 'Search' },
+  advancedInterface: { id: 'navigation_bar.advanced_interface', defaultMessage: 'Open in advanced web interface' },
   faq: { id: 'navigation_bar.faq', defaultMessage: 'FAQ' },
 });
 
@@ -56,6 +58,12 @@ class NavigationPanel extends Component {
       <div className='navigation-panel'>
         <div className='navigation-panel__logo'>
           <Link to='/' className='column-link column-link--logo'><WordmarkLogo /></Link>
+
+          {transientSingleColumn && (
+            <a href={`/deck${location.pathname}`} className='button button--block'>
+              {intl.formatMessage(messages.advancedInterface)}
+            </a>
+          )}
           <hr />
         </div>
 
