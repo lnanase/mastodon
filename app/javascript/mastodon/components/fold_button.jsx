@@ -6,7 +6,7 @@ import spring from 'react-motion/lib/spring';
 
 import Motion from '../features/ui/util/optional_motion';
 
-import IconButton from './icon_button';
+import { IconButton } from './icon_button';
 
 export default class FoldButton extends IconButton {
 
