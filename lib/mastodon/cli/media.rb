@@ -1,19 +1,12 @@
 # frozen_string_literal: true
 
-require_relative '../../../config/boot'
-require_relative '../../../config/environment'
-require_relative 'helper'
+require_relative 'base'
 
 module Mastodon::CLI
-  class Media < Thor
+  class Media < Base
     include ActionView::Helpers::NumberHelper
-    include Helper
 
     VALID_PATH_SEGMENTS_SIZE = [7, 10].freeze
-
-    def self.exit_on_failure?
-      true
-    end
 
     option :days, type: :numeric, default: 7, aliases: [:d]
     option :prune_profiles, type: :boolean, default: false
@@ -42,12 +35,12 @@ module Mastodon::CLI
         say('--prune-profiles and --remove-headers should not be specified simultaneously', :red, true)
         exit(1)
       end
+
       if options[:include_follows] && !(options[:prune_profiles] || options[:remove_headers])
         say('--include-follows can only be used with --prune-profiles or --remove-headers', :red, true)
         exit(1)
       end
-      time_ago        = options[:days].days.ago
-      dry_run         = options[:dry_run] ? ' (DRY RUN)' : ''
+      time_ago = options[:days].days.ago
 
       if options[:prune_profiles] || options[:remove_headers]
         processed, aggregate = parallelize_with_progress(Account.remote.where({ last_webfingered_at: ..time_ago, updated_at: ..time_ago })) do |account|
@@ -58,7 +51,7 @@ module Mastodon::CLI
           size = (account.header_file_size || 0)
           size += (account.avatar_file_size || 0) if options[:prune_profiles]
 
-          unless options[:dry_run]
+          unless dry_run?
             account.header.destroy
             account.avatar.destroy if options[:prune_profiles]
             account.save!
@@ -67,7 +60,7 @@ module Mastodon::CLI
           size
         end
 
-        say("Visited #{processed} accounts and removed profile media totaling #{number_to_human_size(aggregate)}#{dry_run}", :green, true)
+        say("Visited #{processed} accounts and removed profile media totaling #{number_to_human_size(aggregate)}#{dry_run_mode_suffix}", :green, true)
       end
 
       unless options[:prune_profiles] || options[:remove_headers]
@@ -76,7 +69,7 @@ module Mastodon::CLI
 
           size = (media_attachment.file_file_size || 0) + (media_attachment.thumbnail_file_size || 0)
 
-          unless options[:dry_run]
+          unless dry_run?
             media_attachment.file.destroy
             media_attachment.thumbnail.destroy
             media_attachment.save
@@ -85,7 +78,7 @@ module Mastodon::CLI
           size
         end
 
-        say("Removed #{processed} media attachments (approx. #{number_to_human_size(aggregate)})#{dry_run}", :green, true)
+        say("Removed #{processed} media attachments (approx. #{number_to_human_size(aggregate)})#{dry_run_mode_suffix}", :green, true)
       end
     end
 
@@ -104,7 +97,6 @@ module Mastodon::CLI
       progress        = create_progress_bar(nil)
       reclaimed_bytes = 0
       removed         = 0
-      dry_run         = options[:dry_run] ? ' (DRY RUN)' : ''
       prefix          = options[:prefix]
 
       case Paperclip::Attachment.default_options[:storage]
@@ -130,7 +122,7 @@ module Mastodon::CLI
           record_map = preload_records_from_mixed_objects(objects)
 
           objects.each do |object|
-            object.acl.put(acl: s3_permissions) if options[:fix_permissions] && !options[:dry_run]
+            object.acl.put(acl: s3_permissions) if options[:fix_permissions] && !dry_run?
 
             path_segments = object.key.split('/')
             path_segments.delete('cache')
@@ -152,7 +144,7 @@ module Mastodon::CLI
             next unless attachment.blank? || !attachment.variant?(file_name)
 
             begin
-              object.delete unless options[:dry_run]
+              object.delete unless dry_run?
 
               reclaimed_bytes += object.size
               removed += 1
@@ -201,7 +193,7 @@ module Mastodon::CLI
           begin
             size = File.size(path)
 
-            unless options[:dry_run]
+            unless dry_run?
               File.delete(path)
               begin
                 FileUtils.rmdir(File.dirname(path), parents: true)
@@ -223,7 +215,7 @@ module Mastodon::CLI
       progress.total = progress.progress
       progress.finish
 
-      say("Removed #{removed} orphans (approx. #{number_to_human_size(reclaimed_bytes)})#{dry_run}", :green, true)
+      say("Removed #{removed} orphans (approx. #{number_to_human_size(reclaimed_bytes)})#{dry_run_mode_suffix}", :green, true)
     end
 
     option :account, type: :string
@@ -253,8 +245,6 @@ module Mastodon::CLI
       not be re-downloaded. To force re-download of every URL, use --force.
     DESC
     def refresh
-      dry_run = options[:dry_run] ? ' (DRY RUN)' : ''
-
       if options[:status]
         scope = MediaAttachment.where(status_id: options[:status])
       elsif options[:account]
@@ -281,7 +271,7 @@ module Mastodon::CLI
         next if media_attachment.remote_url.blank? || (!options[:force] && media_attachment.file_file_name.present?)
         next if DomainBlock.reject_media?(media_attachment.account.domain)
 
-        unless options[:dry_run]
+        unless dry_run?
           media_attachment.reset_file!
           media_attachment.reset_thumbnail!
           media_attachment.save
@@ -290,7 +280,7 @@ module Mastodon::CLI
         media_attachment.file_file_size + (media_attachment.thumbnail_file_size || 0)
       end
 
-      say("Downloaded #{processed} media attachments (approx. #{number_to_human_size(aggregate)})#{dry_run}", :green, true)
+      say("Downloaded #{processed} media attachments (approx. #{number_to_human_size(aggregate)})#{dry_run_mode_suffix}", :green, true)
     end
 
     desc 'usage', 'Calculate disk space consumed by Mastodon'

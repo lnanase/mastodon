@@ -1,17 +1,9 @@
 # frozen_string_literal: true
 
-require_relative '../../../config/boot'
-require_relative '../../../config/environment'
-require_relative 'helper'
+require_relative 'base'
 
 module Mastodon::CLI
-  class Upgrade < Thor
-    include Helper
-
-    def self.exit_on_failure?
-      true
-    end
-
+  class Upgrade < Base
     CURRENT_STORAGE_SCHEMA_VERSION = 1
 
     option :dry_run, type: :boolean, default: false
@@ -25,7 +17,6 @@ module Mastodon::CLI
     LONG_DESC
     def storage_schema
       progress = create_progress_bar(nil)
-      dry_run  = dry_run? ? ' (DRY RUN)' : ''
       records  = 0
 
       klasses = [
@@ -77,7 +68,7 @@ module Mastodon::CLI
       progress.total = progress.progress
       progress.finish
 
-      say("Upgraded storage schema of #{records} records#{dry_run}", :green, true)
+      say("Upgraded storage schema of #{records} records#{dry_run_mode_suffix}", :green, true)
     end
 
     private

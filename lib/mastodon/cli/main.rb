@@ -1,29 +1,25 @@
 # frozen_string_literal: true
 
-require 'thor'
-require_relative 'media'
-require_relative 'emoji'
+require_relative 'base'
+
 require_relative 'accounts'
+require_relative 'cache'
+require_relative 'canonical_email_blocks'
+require_relative 'domains'
+require_relative 'email_domain_blocks'
+require_relative 'emoji'
 require_relative 'feeds'
+require_relative 'ip_blocks'
+require_relative 'maintenance'
+require_relative 'media'
+require_relative 'preview_cards'
 require_relative 'search'
 require_relative 'settings'
 require_relative 'statuses'
-require_relative 'domains'
-require_relative 'preview_cards'
-require_relative 'cache'
 require_relative 'upgrade'
-require_relative 'email_domain_blocks'
-require_relative 'canonical_email_blocks'
-require_relative 'ip_blocks'
-require_relative 'maintenance'
-require_relative '../version'
 
 module Mastodon::CLI
-  class Main < Thor
-    def self.exit_on_failure?
-      true
-    end
-
+  class Main < Base
     desc 'media SUBCOMMAND ...ARGS', 'Manage media files'
     subcommand 'media', Media
 
@@ -98,7 +94,7 @@ module Mastodon::CLI
 
       exit(1) unless prompt.ask('Type in the domain of the server to confirm:', required: true) == Rails.configuration.x.local_domain
 
-      unless options[:dry_run]
+      unless dry_run?
         prompt.warn('This operation WILL NOT be reversible. It can also take a long time.')
         prompt.warn('While the data won\'t be erased locally, the server will be in a BROKEN STATE afterwards.')
         prompt.warn('A running Sidekiq process is required. Do not shut it down until queues clear.')
@@ -108,12 +104,11 @@ module Mastodon::CLI
 
       inboxes   = Account.inboxes
       processed = 0
-      dry_run   = options[:dry_run] ? ' (DRY RUN)' : ''
 
-      Setting.registrations_mode = 'none' unless options[:dry_run]
+      Setting.registrations_mode = 'none' unless dry_run?
 
       if inboxes.empty?
-        Account.local.without_suspended.in_batches.update_all(suspended_at: Time.now.utc, suspension_origin: :local) unless options[:dry_run]
+        Account.local.without_suspended.in_batches.update_all(suspended_at: Time.now.utc, suspension_origin: :local) unless dry_run?
         prompt.ok('It seems like your server has not federated with anything')
         prompt.ok('You can shut it down and delete it any time')
         return
@@ -130,7 +125,7 @@ module Mastodon::CLI
 
         json = Oj.dump(ActivityPub::LinkedDataSignature.new(payload).sign!(account))
 
-        unless options[:dry_run]
+        unless dry_run?
           ActivityPub::DeliveryWorker.push_bulk(inboxes, limit: 1_000) do |inbox_url|
             [json, account.id, inbox_url]
           end
@@ -144,7 +139,7 @@ module Mastodon::CLI
       Account.local.without_suspended.find_each { |account| delete_account.call(account) }
       Account.local.suspended.joins(:deletion_request).find_each { |account| delete_account.call(account) }
 
-      prompt.ok("Queued #{inboxes.size * processed} items into Sidekiq for #{processed} accounts#{dry_run}")
+      prompt.ok("Queued #{inboxes.size * processed} items into Sidekiq for #{processed} accounts#{dry_run_mode_suffix}")
       prompt.ok('Wait until Sidekiq processes all items, then you can shut everything down and delete the data')
     rescue TTY::Reader::InputInterrupt
       exit(1)

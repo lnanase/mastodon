@@ -1,18 +1,10 @@
 # frozen_string_literal: true
 
 require 'concurrent'
-require_relative '../../../config/boot'
-require_relative '../../../config/environment'
-require_relative 'helper'
+require_relative 'base'
 
 module Mastodon::CLI
-  class Domains < Thor
-    include Helper
-
-    def self.exit_on_failure?
-      true
-    end
-
+  class Domains < Base
     option :concurrency, type: :numeric, default: 5, aliases: [:c]
     option :verbose, type: :boolean, aliases: [:v]
     option :dry_run, type: :boolean
@@ -42,7 +34,6 @@ module Mastodon::CLI
       When the --purge-domain-blocks option is given, also purge matching domain blocks.
     LONG_DESC
     def purge(*domains)
-      dry_run            = options[:dry_run] ? ' (DRY RUN)' : ''
       domains            = domains.map { |domain| TagManager.instance.normalize_domain(domain) }
       account_scope      = Account.none
       domain_block_scope = DomainBlock.none
@@ -87,23 +78,23 @@ module Mastodon::CLI
 
       # Actually perform the deletions
       processed, = parallelize_with_progress(account_scope) do |account|
-        DeleteAccountService.new.call(account, reserve_username: false, skip_side_effects: true) unless options[:dry_run]
+        DeleteAccountService.new.call(account, reserve_username: false, skip_side_effects: true) unless dry_run?
       end
 
-      say("Removed #{processed} accounts#{dry_run}", :green)
+      say("Removed #{processed} accounts#{dry_run_mode_suffix}", :green)
 
       if options[:purge_domain_blocks]
         domain_block_count = domain_block_scope.count
-        domain_block_scope.in_batches.destroy_all unless options[:dry_run]
-        say("Removed #{domain_block_count} domain blocks#{dry_run}", :green)
+        domain_block_scope.in_batches.destroy_all unless dry_run?
+        say("Removed #{domain_block_count} domain blocks#{dry_run_mode_suffix}", :green)
       end
 
       custom_emojis_count = emoji_scope.count
-      emoji_scope.in_batches.destroy_all unless options[:dry_run]
+      emoji_scope.in_batches.destroy_all unless dry_run?
 
-      Instance.refresh unless options[:dry_run]
+      Instance.refresh unless dry_run?
 
-      say("Removed #{custom_emojis_count} custom emojis#{dry_run}", :green)
+      say("Removed #{custom_emojis_count} custom emojis#{dry_run_mode_suffix}", :green)
     end
 
     option :concurrency, type: :numeric, default: 50, aliases: [:c]

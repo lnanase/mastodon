@@ -1,13 +1,9 @@
 # frozen_string_literal: true
 
-require_relative '../../../config/boot'
-require_relative '../../../config/environment'
-require_relative 'helper'
+require_relative 'base'
 
 module Mastodon::CLI
-  class Search < Thor
-    include Helper
-
+  class Search < Base
     # Indices are sorted by amount of data to be expected in each, so that
     # smaller indices can go online sooner
     INDICES = [
@@ -33,15 +29,7 @@ module Mastodon::CLI
       database will be imported into the indices, unless overridden with --no-import.
     LONG_DESC
     def deploy
-      if options[:concurrency] < 1
-        say('Cannot run with this concurrency setting, must be at least 1', :red)
-        exit(1)
-      end
-
-      if options[:batch_size] < 1
-        say('Cannot run with this batch_size setting, must be at least 1', :red)
-        exit(1)
-      end
+      verify_deploy_options!
 
       indices = if options[:only]
                   options[:only].map { |str| "#{str.camelize}Index".constantize }
@@ -101,6 +89,27 @@ module Mastodon::CLI
       progress.finish
 
       say("Indexed #{added} records, de-indexed #{removed}", :green, true)
+    end
+
+    private
+
+    def verify_deploy_options!
+      verify_deploy_concurrency!
+      verify_deploy_batch_size!
+    end
+
+    def verify_deploy_concurrency!
+      return unless options[:concurrency] < 1
+
+      say('Cannot run with this concurrency setting, must be at least 1', :red)
+      exit(1)
+    end
+
+    def verify_deploy_batch_size!
+      return unless options[:batch_size] < 1
+
+      say('Cannot run with this batch_size setting, must be at least 1', :red)
+      exit(1)
     end
   end
 end

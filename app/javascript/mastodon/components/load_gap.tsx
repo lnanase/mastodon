@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 
-import type { InjectedIntl } from 'react-intl';
-import { injectIntl, defineMessages } from 'react-intl';
+import { useIntl, defineMessages } from 'react-intl';
 
 import { Icon } from 'mastodon/components/icon';
 
@@ -13,24 +12,23 @@ interface Props {
   disabled: boolean;
   maxId: string;
   onClick: (maxId: string) => void;
-  intl: InjectedIntl;
 }
 
-export const LoadGap = injectIntl<Props>(
-  ({ disabled, maxId, onClick, intl }) => {
-    const handleClick = useCallback(() => {
-      onClick(maxId);
-    }, [maxId, onClick]);
+export const LoadGap: React.FC<Props> = ({ disabled, maxId, onClick }) => {
+  const intl = useIntl();
 
-    return (
-      <button
-        className='load-more load-gap'
-        disabled={disabled}
-        onClick={handleClick}
-        aria-label={intl.formatMessage(messages.load_more)}
-      >
-        <Icon id='ellipsis-h' />
-      </button>
-    );
-  }
-);
+  const handleClick = useCallback(() => {
+    onClick(maxId);
+  }, [maxId, onClick]);
+
+  return (
+    <button
+      className='load-more load-gap'
+      disabled={disabled}
+      onClick={handleClick}
+      aria-label={intl.formatMessage(messages.load_more)}
+    >
+      <Icon id='ellipsis-h' />
+    </button>
+  );
+};
