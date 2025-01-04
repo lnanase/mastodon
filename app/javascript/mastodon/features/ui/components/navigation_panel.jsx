@@ -119,8 +119,6 @@ class NavigationPanel extends Component {
         </div>
 
         <NavigationPortal />
-
-
       </div>
     );
   }

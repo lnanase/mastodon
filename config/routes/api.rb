@@ -285,7 +285,6 @@ namespace :api, format: false do
     end
 
     resources :favourite_tags, only: [:index, :create, :destroy], param: :tag
-    resource :trend_tags, only: [:show]
   end
 
   namespace :v2 do
