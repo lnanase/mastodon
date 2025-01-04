@@ -1,4 +1,4 @@
 - content_for :page_title do
   = t('favourite_tags.edit.title')
 
-= render 'form', submit: t('favourite_tags.edit.submit')
+= render 'form', submit: t('favourite_tags.edit.submit'), favourite_tag: @favourite_tag
