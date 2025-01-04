@@ -9,8 +9,6 @@ About what is Mastodon, see [tootsuite/mastodon](https://github.com/tootsuite/ma
 
 ## 主な独自機能
 
-- 投稿の添付画像を png から jpg へ変換し保存
-- 画像サイズ制限を緩和
 - 未収載タグ付き投稿のタグ TL への表示
 - お気に入りタグ機能
 
