@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
@@ -13,6 +15,7 @@ RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
 
   describe 'GET #index' do
     let(:scopes) { 'read:statuses' }
+
     it 'returns http success' do
       get :index
       expect(response).to have_http_status(:success)
@@ -20,6 +23,8 @@ RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
   end
 
   describe 'POST #create' do
+    subject { post :create, params: params }
+
     let(:scopes) { 'write:statuses' }
     let(:tag_name) { 'dummy_tag' }
     let(:params) do
@@ -28,8 +33,6 @@ RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
         visibility: 'public',
       }
     end
-
-    subject { post :create, params: params }
 
     context 'when the tag is a new favourite tag' do
       it 'returns http success' do
@@ -51,12 +54,12 @@ RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
       end
 
       it 'returns http 409' do
-        expect { subject }.not_to change { user.account.favourite_tags.count }
-        expect(response).to have_http_status(:conflict)
+        expect { subject }.to_not(change { user.account.favourite_tags.count })
+        expect(response).to have_http_status(409)
       end
 
       it 'does not create new favourite_tag' do
-        expect { subject }.not_to change { user.account.favourite_tags.count }
+        expect { subject }.to_not(change { user.account.favourite_tags.count })
         expect(
           JSON.parse(response.body, symbolize_names: true).except(:id)
         ).to eq({ name: tag_name, visibility: 'public' })
@@ -65,10 +68,10 @@ RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    subject { delete :destroy, params: params }
+
     let(:scopes) { 'write:statuses' }
     let(:params) { { tag: tag_name } }
-
-    subject { delete :destroy, params: params }
 
     context 'when try to destroy the favourite tag' do
       let(:tag_name) { 'dummy_tag' }
@@ -86,22 +89,23 @@ RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
         expect { subject }.to change { user.account.favourite_tags.count }.by(-1)
         expect(
           JSON.parse(response.body, symbolize_names: true)
-        ).to eq({ "succeeded": true })
+        ).to eq({ succeeded: true })
       end
     end
 
     context 'when try to destroy an unregistered tag' do
       let(:tag_name) { 'unregistered' }
+
       it 'returns http 404' do
-        expect { subject }.not_to change { user.account.favourite_tags.count }
-        expect(response).to have_http_status(:not_found)
+        expect { subject }.to_not(change { user.account.favourite_tags.count })
+        expect(response).to have_http_status(404)
       end
 
       it 'responce has fail message by json' do
-        expect { subject }.not_to change { user.account.favourite_tags.count }
+        expect { subject }.to_not(change { user.account.favourite_tags.count })
         expect(
           JSON.parse(response.body, symbolize_names: true)
-        ).to eq({ "succeeded": false })
+        ).to eq({ succeeded: false })
       end
     end
   end

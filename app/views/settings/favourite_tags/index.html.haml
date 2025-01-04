@@ -1,7 +1,7 @@
 - content_for :page_title do
   = t('settings.favourite_tags')
 
-= render 'form', submit: t('favourite_tags.submit')
+= render 'form', submit: t('favourite_tags.submit'), favourite_tag: @favourite_tag
 %hr
 
 .table-wrapper

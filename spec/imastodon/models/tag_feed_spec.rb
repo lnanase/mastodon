@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe TagFeed, type: :service do
@@ -10,8 +12,8 @@ describe TagFeed, type: :service do
       other = Fabricate(:status)
 
       results = described_class.new(tag, nil).get(20)
-      expect(results).not_to include(unlisted_status)
-      expect(results).not_to include(other)
+      expect(results).to_not include(unlisted_status)
+      expect(results).to_not include(other)
     end
 
     it 'no unlisted replies to be included when account absent' do
@@ -19,7 +21,7 @@ describe TagFeed, type: :service do
       status = Fabricate(:status, tags: [tag], in_reply_to_id: original.id, visibility: :unlisted)
 
       results = described_class.new(tag, nil).get(20)
-      expect(results).not_to include(status)
+      expect(results).to_not include(status)
     end
 
     it 'includes unlisted tagged statuses when account present' do
@@ -28,7 +30,7 @@ describe TagFeed, type: :service do
 
       results = described_class.new(tag, account).get(20)
       expect(results).to include(unlisted_status)
-      expect(results).not_to include(other)
+      expect(results).to_not include(other)
     end
 
     it 'no unlisted replies to be included, even if account present' do
@@ -36,7 +38,7 @@ describe TagFeed, type: :service do
       status = Fabricate(:status, tags: [tag], in_reply_to_id: original.id, visibility: :unlisted)
 
       results = described_class.new(tag, account).get(20)
-      expect(results).not_to include(status)
+      expect(results).to_not include(status)
     end
   end
 end
