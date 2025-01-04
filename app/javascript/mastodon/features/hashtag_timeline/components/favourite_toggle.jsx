@@ -12,8 +12,7 @@ const messages = defineMessages({
   remove_favourite_tags: { id: 'tag.remove_favourite', defaultMessage: 'Remove from the favourite tags' },
 });
 
-@injectIntl
-export default class FavouriteToggle extends React.PureComponent {
+class FavouriteToggle extends React.PureComponent {
 
   static propTypes = {
     tag: PropTypes.string.isRequired,
@@ -59,3 +58,5 @@ export default class FavouriteToggle extends React.PureComponent {
   }
 
 }
+
+export default injectIntl(FavouriteToggle)

@@ -22,7 +22,6 @@ const icons = [
   { key: 'private', icon: 'lock' },
 ];
 
-@injectIntl
 class FavouriteTags extends React.PureComponent {
 
   static propTypes = {
@@ -125,4 +124,4 @@ class FavouriteTags extends React.PureComponent {
 
 }
 
-export default FavouriteTags;
+export default injectIntl(FavouriteTags);

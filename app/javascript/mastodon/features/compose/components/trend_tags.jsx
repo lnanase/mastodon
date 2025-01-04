@@ -16,8 +16,7 @@ const messages = defineMessages({
   toggle_visible: { id: 'media_gallery.toggle_visible', defaultMessage: 'Toggle visibility' },
 });
 
-@injectIntl
-export default class TrendTags extends React.PureComponent {
+class TrendTags extends React.PureComponent {
 
   static propTypes = {
     intl: PropTypes.object.isRequired,
@@ -105,3 +104,5 @@ export default class TrendTags extends React.PureComponent {
   }
 
 }
+
+export default injectIntl(TrendTags)
