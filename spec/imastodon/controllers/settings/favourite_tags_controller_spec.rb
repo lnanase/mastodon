@@ -6,9 +6,10 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
   render_views
 
   before do
-    @user = Fabricate(:user)
-    sign_in @user, scope: :user
+    sign_in user, scope: :user
   end
+
+  let!(:user) { Fabricate(:user) }
 
   describe 'GET #index' do
     before do
@@ -26,7 +27,7 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
 
   describe 'GET #edit' do
     let(:tag) { Fabricate(:tag, name: 'dummy_tag') }
-    let!(:favourite_tag) { Fabricate(:favourite_tag, account: @user.account, tag: tag) }
+    let!(:favourite_tag) { Fabricate(:favourite_tag, account: user.account, tag: tag) }
 
     context 'when the favourite tag is found.' do
       before do
@@ -83,7 +84,7 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
 
     context 'when the tag has already been favourite.' do
       before do
-        Fabricate(:favourite_tag, account: @user.account, tag: tag)
+        Fabricate(:favourite_tag, account: user.account, tag: tag)
       end
 
       it 'does not create any tags and should render index template' do
@@ -95,7 +96,7 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
 
   describe 'PUT #update' do
     let(:tag) { Fabricate(:tag, name: 'dummy_tag') }
-    let!(:favourite_tag) { Fabricate(:favourite_tag, account: @user.account, tag: tag) }
+    let!(:favourite_tag) { Fabricate(:favourite_tag, account: user.account, tag: tag) }
 
     context 'The favourite tag can update.' do
       subject { put :update, params: params }
@@ -146,7 +147,7 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
       let(:tag2) { Fabricate(:tag, name: tag_name) }
 
       before do
-        Fabricate(:favourite_tag, account: @user.account, tag: tag2)
+        Fabricate(:favourite_tag, account: user.account, tag: tag2)
       end
 
       it 'does not update any tags and should render edit template' do
@@ -160,7 +161,7 @@ RSpec.describe Settings::FavouriteTagsController, type: :controller do
     subject { delete :destroy, params: params }
 
     let(:tag) { Fabricate(:tag, name: 'dummy_tag') }
-    let!(:favourite_tag) { Fabricate(:favourite_tag, account: @user.account, tag: tag) }
+    let!(:favourite_tag) { Fabricate(:favourite_tag, account: user.account, tag: tag) }
     let(:params) do
       {
         id: favourite_tag.id,
