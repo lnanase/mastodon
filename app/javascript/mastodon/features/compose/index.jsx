@@ -27,7 +27,6 @@ import FavouriteTagsContainer from './containers/favourite_tags_container';
 import NavigationContainer from './containers/navigation_container';
 import SearchContainer from './containers/search_container';
 import SearchResultsContainer from './containers/search_results_container';
-import TrendTagsContainer from './containers/trend_tags_container';
 
 const messages = defineMessages({
   start: { id: 'getting_started.heading', defaultMessage: 'Getting started' },
@@ -152,7 +151,6 @@ class Compose extends PureComponent {
         <ComposeFormContainer />
 
         <FavouriteTagsContainer />
-        <TrendTagsContainer />
 
         <Helmet>
           <meta name='robots' content='noindex' />

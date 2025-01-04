@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 
 import { WordmarkLogo } from 'mastodon/components/logo';
 import NavigationPortal from 'mastodon/components/navigation_portal';
-import TrendTagsContainer from 'mastodon/features/compose/containers/trend_tags_container';
 import { timelinePreview, trendsEnabled } from 'mastodon/initial_state';
 import { transientSingleColumn } from 'mastodon/is_mobile';
 
@@ -111,10 +110,6 @@ class NavigationPanel extends Component {
 
             <ColumnLink transparent href='/settings/preferences' icon='cog' text={intl.formatMessage(messages.preferences)} />
             <ColumnLink transparent href='https://faq.imastodon.net/getting-started/' icon='question' text={intl.formatMessage(messages.faq)} targetWindow='_blank' />
-
-            <hr />
-
-            <TrendTagsContainer />
           </>
         )}
 

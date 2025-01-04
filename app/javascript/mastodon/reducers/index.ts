@@ -42,7 +42,6 @@ import statuses from './statuses';
 import suggestions from './suggestions';
 import tags from './tags';
 import timelines from './timelines';
-import trend_tags from './trend_tags';
 import trends from './trends';
 import user_lists from './user_lists';
 
@@ -70,7 +69,6 @@ const reducers = {
   server,
   contexts,
   favourite_tags,
-  trend_tags,
   compose,
   search,
   media_attachments,
