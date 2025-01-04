@@ -27,7 +27,7 @@ RSpec.describe 'Tags' do
     end
 
     context 'when there are no tags' do
-      it 'returns an empty list' do
+      it 'returns an empty list', skip: 'アイマストドンではお気に入りタグ機能のデフォルトによってタグが常に存在するため' do
         subject
 
         expect(body_as_json).to be_empty
