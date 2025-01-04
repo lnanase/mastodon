@@ -95,7 +95,11 @@ namespace :api, format: false do
     resources :filters, only: [:index, :create, :show, :update, :destroy]
     resources :endorsements, only: [:index]
     resources :markers, only: [:index, :create]
-    resources :profile, only: :destroy, param: :image, controller: 'profiles'
+
+    namespace :profile do
+      resource :avatar, only: :destroy
+      resource :header, only: :destroy
+    end
 
     namespace :apps do
       get :verify_credentials, to: 'credentials#show'
@@ -276,6 +280,8 @@ namespace :api, format: false do
           post :test
         end
       end
+
+      resources :tags, only: [:index, :show, :update]
     end
 
     resources :favourite_tags, only: [:index, :create, :destroy], param: :tag
