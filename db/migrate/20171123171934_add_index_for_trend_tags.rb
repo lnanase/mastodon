@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddIndexForTrendTags < ActiveRecord::Migration[5.1]
   def change
     commit_db_transaction

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateFavouriteTags < ActiveRecord::Migration[5.1]
   def change
     create_table :favourite_tags do |t|

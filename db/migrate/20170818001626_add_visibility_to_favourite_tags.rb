@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddVisibilityToFavouriteTags < ActiveRecord::Migration[5.1]
   def change
     add_column :favourite_tags, :visibility, :integer, null: false, default: 0
