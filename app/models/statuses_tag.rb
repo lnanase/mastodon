@@ -18,7 +18,7 @@ class StatusesTag < ApplicationRecord
 
     private
 
-    def get_data
+    def get_data # rubocop:todo Naming/AccessorMethodName
       redis.hset('trend_tags_management_data', 'updated_at', Time.now.utc.as_json) unless redis.exists('trend_tags_management_data')
       [
         aggregate_tags_in,
@@ -81,7 +81,7 @@ class StatusesTag < ApplicationRecord
       [(gamma * (level - level_last)) + ((1 - gamma) * trend_last), 0].max # return 0 if trend is negative
     end
 
-    def aggregate_tags_in(t: 10.minutes, until_t: Time.now.utc)
+    def aggregate_tags_in(t: 10.minutes, until_t: Time.now.utc) # rubocop:todo Naming/MethodParameterName
       status_ids = status_ids_in((until_t - t)..until_t)
       StatusesTag.where(status_id: status_ids).group(:tag_id).count.transform_keys(&:to_s)
     end
