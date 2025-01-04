@@ -17,10 +17,6 @@ updates:
       - dependency-name: '@rails/ujs'
         versions:
           - '>= 7'
-      # TODO: This was ignored in https://github.com/mastodon/mastodon/pull/19120
-      - dependency-name: 'uuid'
-        versions:
-          - '>= 9'
       # TODO: This requires code changes for migration
       - dependency-name: 'tesseract.js'
         versions:
@@ -43,10 +39,6 @@ updates:
           - '>= 7'
       # TODO: This version requires code changes
       - dependency-name: 'webpack-dev-server'
-        versions:
-          - '>= 4'
-      # TODO: This version requires code changes https://github.com/reduxjs/react-redux/releases/tag/v8.0.0
-      - dependency-name: 'react-redux'
         versions:
           - '>= 4'
       # TODO: This version was ignored in https://github.com/mastodon/mastodon/pull/15238

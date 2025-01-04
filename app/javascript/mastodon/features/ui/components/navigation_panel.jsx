@@ -1,17 +1,21 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import { Component } from 'react';
+
 import { defineMessages, injectIntl } from 'react-intl';
+
 import { Link } from 'react-router-dom';
-import Logo from 'mastodon/components/logo';
+
+import { WordmarkLogo } from 'mastodon/components/logo';
+import NavigationPortal from 'mastodon/components/navigation_portal';
+import TrendTagsContainer from 'mastodon/features/compose/containers/trend_tags_container';
 import { timelinePreview, showTrends } from 'mastodon/initial_state';
+
 import ColumnLink from './column_link';
 import DisabledAccountBanner from './disabled_account_banner';
 import FollowRequestsColumnLink from './follow_requests_column_link';
 import ListPanel from './list_panel';
-import TrendTagsContainer from 'mastodon/features/compose/containers/trend_tags_container';
 import NotificationsCounterIcon from './notifications_counter_icon';
 import SignInBanner from './sign_in_banner';
-import NavigationPortal from 'mastodon/components/navigation_portal';
 
 const messages = defineMessages({
   home: { id: 'tabs_bar.home', defaultMessage: 'Home' },
@@ -30,7 +34,7 @@ const messages = defineMessages({
   faq: { id: 'navigation_bar.faq', defaultMessage: 'FAQ' },
 });
 
-class NavigationPanel extends React.Component {
+class NavigationPanel extends Component {
 
   static contextTypes = {
     router: PropTypes.object.isRequired,
@@ -48,16 +52,16 @@ class NavigationPanel extends React.Component {
     return (
       <div className='navigation-panel'>
         <div className='navigation-panel__logo'>
-          <Link to='/' className='column-link column-link--logo'><Logo /></Link>
+          <Link to='/' className='column-link column-link--logo'><WordmarkLogo /></Link>
           <hr />
         </div>
 
         {signedIn && (
-          <React.Fragment>
+          <>
             <ColumnLink transparent to='/home' icon='home' text={intl.formatMessage(messages.home)} />
             <ColumnLink transparent to='/notifications' icon={<NotificationsCounterIcon className='column-link__icon' />} text={intl.formatMessage(messages.notifications)} />
             <FollowRequestsColumnLink />
-          </React.Fragment>
+          </>
         )}
 
         {showTrends ? (
@@ -81,7 +85,7 @@ class NavigationPanel extends React.Component {
         )}
 
         {signedIn && (
-          <React.Fragment>
+          <>
             <ColumnLink transparent to='/conversations' icon='at' text={intl.formatMessage(messages.direct)} />
             <ColumnLink transparent to='/bookmarks' icon='bookmark' text={intl.formatMessage(messages.bookmarks)} />
             <ColumnLink transparent to='/favourites' icon='star' text={intl.formatMessage(messages.favourites)} />
@@ -97,7 +101,7 @@ class NavigationPanel extends React.Component {
             <hr />
 
             <TrendTagsContainer />
-          </React.Fragment>
+          </>
         )}
 
         <div className='navigation-panel__legal'>
