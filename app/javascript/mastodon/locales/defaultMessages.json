@@ -2082,12 +2082,12 @@
         "id": "explore.trending_tags"
       },
       {
-        "defaultMessage": "News",
-        "id": "explore.trending_links"
+        "defaultMessage": "People",
+        "id": "explore.suggested_follows"
       },
       {
-        "defaultMessage": "For you",
-        "id": "explore.suggested_follows"
+        "defaultMessage": "News",
+        "id": "explore.trending_links"
       }
     ],
     "path": "app/javascript/mastodon/features/explore/index.json"
@@ -3196,6 +3196,10 @@
   {
     "descriptors": [
       {
+        "defaultMessage": "Unfortunately, no results can be shown right now. You can try using search or browsing the explore page to find people to follow, or try again later.",
+        "id": "onboarding.follows.empty"
+      },
+      {
         "defaultMessage": "Popular on Mastodon",
         "id": "onboarding.follows.title"
       },
@@ -3216,6 +3220,10 @@
   },
   {
     "descriptors": [
+      {
+        "defaultMessage": "Hello #Mastodon!",
+        "id": "onboarding.compose.template"
+      },
       {
         "defaultMessage": "You've made it!",
         "id": "onboarding.start.title"
@@ -3274,7 +3282,7 @@
   {
     "descriptors": [
       {
-        "defaultMessage": "I'm {username} on Mastodon! Come follow me at {url}",
+        "defaultMessage": "I'm {username} on #Mastodon! Come follow me at {url}",
         "id": "onboarding.share.message"
       },
       {
@@ -3292,6 +3300,18 @@
       {
         "defaultMessage": "Let people know how they can find you on Mastodon!",
         "id": "onboarding.share.lead"
+      },
+      {
+        "defaultMessage": "<strong>Did you know?</strong> You can verify your account by putting a link to your Mastodon profile on your own website and adding the website to your profile. No fees or documents necessary!",
+        "id": "onboarding.tips.verification"
+      },
+      {
+        "defaultMessage": "<strong>Did you know?</strong> If you feel like {domain} is not a great server choice for you in the future, you can move to another Mastodon server without losing your followers. You can even host your own server!",
+        "id": "onboarding.tips.migration"
+      },
+      {
+        "defaultMessage": "<strong>Did you know?</strong> You can secure your account by setting up two-factor authentication in your account settings. It works with any TOTP app of your choice, no phone number necessary!",
+        "id": "onboarding.tips.2fa"
       },
       {
         "defaultMessage": "Possible next steps:",
