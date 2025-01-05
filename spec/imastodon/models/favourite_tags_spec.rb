@@ -30,6 +30,20 @@ RSpec.describe FavouriteTag, type: :model do
       it 'お気に入りタグを作成しようとしたとき、そのタグの名前が不正ならinvalid' do
         expect(described_class.new(account: account, name: 'test tag', visibility: 0)).to_not be_valid
       end
+
+      it '同じ名前でも公開範囲が異なるならばvalid' do
+        Fabricate(:favourite_tag, account: account, name: 'test', visibility: :public)
+
+        duplicated = described_class.new(account: account, visibility: :unlisted, order: 100, name: 'test')
+        expect(duplicated).to be_valid
+      end
+
+      it '同じ名前、同じ公開範囲で既にお気に入りタグを作成しているならばinvalid' do
+        Fabricate(:favourite_tag, account: account, name: 'test')
+
+        duplicated = described_class.new(account: account, visibility: :public, order: 100, name: 'test')
+        expect(duplicated).to_not be_valid
+      end
     end
   end
 
@@ -48,11 +62,17 @@ RSpec.describe FavouriteTag, type: :model do
 
       it 'returns an array of recent favourite tags ordered by order and id' do
         specifieds = [
-          Fabricate(:favourite_tag, account: account, order: 9900),
-          Fabricate(:favourite_tag, account: account, order: 9800),
-          Fabricate(:favourite_tag, account: account, order: 9800),
+          Fabricate(:favourite_tag, account: account, name: 'test1', order: 10),
+          Fabricate(:favourite_tag, account: account, name: 'test2', order: 11),
+          Fabricate(:favourite_tag, account: account, name: 'test3', order: 10),
         ]
-        expect(account.favourite_tags.with_order.limit(3)).to match_array(specifieds)
+        expect(account.favourite_tags.with_order.limit(3)).to eq(
+          [
+            specifieds[1],
+            specifieds[0],
+            specifieds[2],
+          ]
+        )
       end
     end
   end

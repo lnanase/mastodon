@@ -20,7 +20,7 @@ class FavouriteTag < ApplicationRecord
   belongs_to :account, optional: false
   belongs_to :tag, optional: true
 
-  validates :name, format: { with: Tag::HASHTAG_NAME_RE }
+  validates :name, format: { with: Tag::HASHTAG_NAME_RE }, uniqueness: { scope: [:account, :visibility] }
   validates :visibility, presence: true
   validates :order, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 

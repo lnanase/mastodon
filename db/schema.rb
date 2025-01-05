@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_05_010419) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_05_030426) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -460,6 +460,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_05_010419) do
     t.bigint "tag_id"
     t.integer "order", default: 0, null: false
     t.string "name"
+    t.index ["account_id", "name", "visibility"], name: "index_favourite_tags_on_account_id_and_name_and_visibility", unique: true
     t.index ["account_id", "tag_id"], name: "index_favourite_tags_on_account_id_and_tag_id", unique: true
   end
 
