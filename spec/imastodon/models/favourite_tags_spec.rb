@@ -7,21 +7,21 @@ RSpec.describe FavouriteTag, type: :model do
     let(:account) { Fabricate :account }
     let(:tag) { Fabricate(:tag, name: 'valid_tag') }
 
-    it 'valid visibility' do
-      expect(described_class.new(account: account, tag: tag, visibility: 0)).to be_valid
-      expect(described_class.new(account: account, tag: tag, visibility: 1)).to be_valid
-      expect(described_class.new(account: account, tag: tag, visibility: 2)).to be_valid
-      expect(described_class.new(account: account, tag: tag, visibility: 3)).to be_valid
-    end
+    describe 'visibility' do
+      it '値が0(public)から3(direct)ならvalid' do
+        expect(described_class.new(account: account, tag: tag, visibility: 0)).to be_valid
+        expect(described_class.new(account: account, tag: tag, visibility: 1)).to be_valid
+        expect(described_class.new(account: account, tag: tag, visibility: 2)).to be_valid
+        expect(described_class.new(account: account, tag: tag, visibility: 3)).to be_valid
+      end
 
-    context 'when visibility is out of ranges' do
-      it 'invalid visibility' do
+      it '値が4(enum上で未定義)ならArgumentErrorをraise' do
         expect { described_class.new(account: account, tag: tag, visibility: 4) }.to raise_error(ArgumentError)
       end
     end
 
-    context 'when the tag is invalid' do
-      it 'when tag name is invalid' do
+    describe 'tag' do
+      it 'お気に入りタグを作成しようとしたとき、そのタグの名前が不正ならinvalid' do
         expect(described_class.new(account: account, tag: Tag.new(name: 'test tag'), visibility: 0)).to_not be_valid
       end
     end
