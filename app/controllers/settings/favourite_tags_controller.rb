@@ -8,7 +8,7 @@ class Settings::FavouriteTagsController < Settings::BaseController
   before_action :set_favourite_tag, only: [:edit, :update, :destroy]
 
   def index
-    @favourite_tag = FavouriteTag.new(tag: Tag.new, visibility: FavouriteTag.visibilities[:public])
+    @favourite_tag = FavouriteTag.new(visibility: FavouriteTag.visibilities[:public])
   end
 
   def edit
@@ -16,9 +16,8 @@ class Settings::FavouriteTagsController < Settings::BaseController
   end
 
   def create
-    name = tag_params[:name].delete_prefix('#')
-    tag = Tag.find_or_initialize_by(name: name)
-    @favourite_tag = FavouriteTag.new(account: @account, tag: tag, visibility: favourite_tag_params[:visibility], order: favourite_tag_params[:order])
+    name = create_params[:name].delete_prefix('#')
+    @favourite_tag = FavouriteTag.new(account: @account, name: name, order: create_params[:order], visibility: create_params[:visibility])
     if @favourite_tag.save
       redirect_to settings_favourite_tags_path, notice: I18n.t('generic.changes_saved_msg')
     else
@@ -27,9 +26,8 @@ class Settings::FavouriteTagsController < Settings::BaseController
   end
 
   def update
-    name = tag_params[:name].delete_prefix('#')
-    tag = Tag.find_or_initialize_by(name: name)
-    if @favourite_tag.update(tag: tag, visibility: favourite_tag_params[:visibility], order: favourite_tag_params[:order])
+    name = update_params[:name].delete_prefix('#')
+    if @favourite_tag.update(name: name, order: update_params[:order], visibility: update_params[:visibility])
       redirect_to settings_favourite_tags_path, notice: I18n.t('generic.changes_saved_msg')
     else
       render :edit
@@ -43,12 +41,12 @@ class Settings::FavouriteTagsController < Settings::BaseController
 
   private
 
-  def tag_params
-    params.require(:favourite_tag).require(:tag_attributes).permit(:id, :name)
+  def create_params
+    params.require(:favourite_tag).permit(:name, :visibility, :order)
   end
 
-  def favourite_tag_params
-    params.require(:favourite_tag).permit(:visibility, :order, { tag_attributes: [:id, :name] })
+  def update_params
+    params.require(:favourite_tag).permit(:name, :visibility, :order)
   end
 
   def set_account
@@ -60,6 +58,6 @@ class Settings::FavouriteTagsController < Settings::BaseController
   end
 
   def set_favourite_tags
-    @favourite_tags = @account.favourite_tags.with_order.includes(:tag)
+    @favourite_tags = @account.favourite_tags.with_order
   end
 end
