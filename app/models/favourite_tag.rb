@@ -18,16 +18,13 @@ class FavouriteTag < ApplicationRecord
   enum visibility: { public: 0, unlisted: 1, private: 2, direct: 3 }, _suffix: :visibility
 
   belongs_to :account, optional: false
-  belongs_to :tag, optional: false
-  accepts_nested_attributes_for :tag
+  belongs_to :tag, optional: true
 
-  validates :tag, uniqueness: { scope: :account }
+  validates :name, format: { with: Tag::HASHTAG_NAME_RE }
   validates :visibility, presence: true
   validates :order, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   scope :with_order, -> { order(order: :desc, id: :asc) }
-
-  delegate :name, to: :tag
 
   def to_json_for_api
     {
