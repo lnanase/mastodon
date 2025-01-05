@@ -1,6 +1,6 @@
 import { FormattedMessage } from 'react-intl';
 
-import illustration from 'mastodon/../images/yukiho.png';
+import illustration from '@/images/yukiho.png';
 
 const RegenerationIndicator = () => (
   <div className='regeneration-indicator'>

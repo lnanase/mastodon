@@ -224,7 +224,7 @@ module LanguagesHelper
     'en-GB': 'English (British)',
     'es-AR': 'Español (Argentina)',
     'es-MX': 'Español (México)',
-    'fr-QC': 'Français (Canadien)',
+    'fr-CA': 'Français (Canadien)',
     'ja-IM': '日本語(im@s)',
     'pt-BR': 'Português (Brasil)',
     'pt-PT': 'Português (Portugal)',
