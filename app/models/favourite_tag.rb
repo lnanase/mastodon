@@ -11,6 +11,7 @@
 #  updated_at :datetime         not null
 #  visibility :integer          default("public"), not null
 #  order      :integer          default(0), not null
+#  name       :string
 #
 
 class FavouriteTag < ApplicationRecord
