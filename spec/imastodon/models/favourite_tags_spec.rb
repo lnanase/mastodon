@@ -5,24 +5,30 @@ require 'rails_helper'
 RSpec.describe FavouriteTag, type: :model do
   describe 'validation' do
     let(:account) { Fabricate :account }
-    let(:tag) { Fabricate(:tag, name: 'valid_tag') }
 
     describe 'visibility' do
       it '値が0(public)から3(direct)ならvalid' do
-        expect(described_class.new(account: account, tag: tag, visibility: 0)).to be_valid
-        expect(described_class.new(account: account, tag: tag, visibility: 1)).to be_valid
-        expect(described_class.new(account: account, tag: tag, visibility: 2)).to be_valid
-        expect(described_class.new(account: account, tag: tag, visibility: 3)).to be_valid
+        expect(described_class.new(account: account, name: 'tag', visibility: 0)).to be_valid
+        expect(described_class.new(account: account, name: 'tag', visibility: 1)).to be_valid
+        expect(described_class.new(account: account, name: 'tag', visibility: 2)).to be_valid
+        expect(described_class.new(account: account, name: 'tag', visibility: 3)).to be_valid
       end
 
       it '値が4(enum上で未定義)ならArgumentErrorをraise' do
-        expect { described_class.new(account: account, tag: tag, visibility: 4) }.to raise_error(ArgumentError)
+        expect { described_class.new(account: account, name: 'tag', visibility: 4) }.to raise_error(ArgumentError)
       end
     end
 
-    describe 'tag' do
+    describe 'name' do
+      it 'nameは大文字小文字混ざりで作成できる' do
+        # Tagモデルは途中から英字が小文字に正規化されるようになったが、お気に入りタグは大文字小文字混ざりで作成したいという要望があるため
+        favourite_tag = described_class.new(account: account, name: 'Test', visibility: 0)
+
+        expect(favourite_tag).to be_valid
+      end
+
       it 'お気に入りタグを作成しようとしたとき、そのタグの名前が不正ならinvalid' do
-        expect(described_class.new(account: account, tag: Tag.new(name: 'test tag'), visibility: 0)).to_not be_valid
+        expect(described_class.new(account: account, name: 'test tag', visibility: 0)).to_not be_valid
       end
     end
   end
@@ -53,8 +59,7 @@ RSpec.describe FavouriteTag, type: :model do
 
   describe 'expect to_json_for_api' do
     let(:account) { Fabricate :account }
-    let(:tag) { Tag.new(name: 'test_tag') }
-    let!(:favourite_tag) { Fabricate(:favourite_tag, account: account, tag: tag) }
+    let!(:favourite_tag) { Fabricate(:favourite_tag, account: account, name: 'test_tag') }
 
     it 'expect to_json_for_api' do
       json = favourite_tag.to_json_for_api
