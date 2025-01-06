@@ -9,7 +9,10 @@ class Api::V1::FavouriteTagsController < Api::BaseController
   respond_to :json
 
   def index
-    render json: current_favourite_tags
+    current_account = current_user.account
+    orderd_favourite_tags = current_account.favourite_tags.with_order
+
+    render json: orderd_favourite_tags.map(&:to_json_for_api)
   end
 
   def create
