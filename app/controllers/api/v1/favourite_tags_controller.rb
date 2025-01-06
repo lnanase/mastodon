@@ -16,13 +16,17 @@ class Api::V1::FavouriteTagsController < Api::BaseController
   end
 
   def create
-    tag = find_or_init_tag
-    @favourite_tag = FavouriteTag.new(account: @account, tag: tag, visibility: favourite_tag_visibility)
-    if @favourite_tag.save
-      render json: @favourite_tag.to_json_for_api
-    else
-      render json: find_fav_tag_by(tag).to_json_for_api, status: 409
+    current_account = current_user.account
+    favourite_tag = current_account.favourite_tags.find_by(name: create_params[:name], visibility: create_params[:visibility])
+
+    if favourite_tag.present?
+      render json: favourite_tag.to_json_for_api, status: 409
+      return
     end
+
+    favourite_tag = FavouriteTag.new(account: current_account, name: create_params[:name], visibility: create_params[:visibility])
+    favourite_tag.save!
+    render json: favourite_tag.to_json_for_api
   end
 
   def destroy
@@ -38,8 +42,8 @@ class Api::V1::FavouriteTagsController < Api::BaseController
 
   private
 
-  def tag_params
-    params.permit(:tag, :visibility)
+  def create_params
+    params.permit(:name, :visibility)
   end
 
   def set_account
