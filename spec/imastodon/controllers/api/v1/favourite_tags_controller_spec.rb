@@ -7,7 +7,6 @@ RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
 
   let(:user)  { Fabricate(:user, account: Fabricate(:account, username: 'alice')) }
   let(:token) { Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: scopes) }
-  let(:tag) { Fabricate(:tag, name: tag_name) }
 
   before do
     allow(controller).to receive(:doorkeeper_token) { token }
@@ -170,42 +169,46 @@ RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
   describe 'DELETE #destroy' do
     subject { delete :destroy, params: params }
 
-    let(:scopes) { 'write:statuses' }
-    let(:params) { { tag: tag_name } }
+    let!(:scopes) { 'write:statuses' }
 
-    context 'when try to destroy the favourite tag' do
-      let(:tag_name) { 'dummy_tag' }
+    context '存在するお気に入りタグのIDを指定したとき' do
+      let!(:favourite_tag) { Fabricate(:favourite_tag, account: user.account) }
+      let!(:params) { { id: favourite_tag.id } }
 
-      before do
-        Fabricate(:favourite_tag, account: user.account, tag: tag)
-      end
-
-      it 'returns http success' do
+      it 'ステータスコード200が返り、お気に入りタグのレコード数が1つ減る' do
         expect { subject }.to change { user.account.favourite_tags.count }.by(-1)
-        expect(response).to have_http_status(:success)
-      end
-
-      it 'responce has success message by json' do
-        expect { subject }.to change { user.account.favourite_tags.count }.by(-1)
-        expect(
-          JSON.parse(response.body, symbolize_names: true)
-        ).to eq({ succeeded: true })
+        expect(response).to have_http_status(204)
       end
     end
 
-    context 'when try to destroy an unregistered tag' do
-      let(:tag_name) { 'unregistered' }
+    context '存在しないお気に入りタグのIDを指定したとき' do
+      let!(:params) { { id: 1 } }
 
-      it 'returns http 404' do
+      it 'ステータスコード404が返り、お気に入りタグのレコード数は変わらない' do
         expect { subject }.to_not(change { user.account.favourite_tags.count })
         expect(response).to have_http_status(404)
-      end
 
-      it 'responce has fail message by json' do
-        expect { subject }.to_not(change { user.account.favourite_tags.count })
         expect(
           JSON.parse(response.body, symbolize_names: true)
-        ).to eq({ succeeded: false })
+        ).to eq({
+          error: 'FavouriteTag is not found',
+        })
+      end
+    end
+
+    context '自分以外の人のお気に入りタグのIDを指定したとき' do
+      let!(:favourite_tag) { Fabricate(:favourite_tag) }
+      let!(:params) { { id: favourite_tag.id } }
+
+      it 'ステータスコード404が返り、お気に入りタグのレコード数は変わらない' do
+        expect { subject }.to_not(change { user.account.favourite_tags.count })
+        expect(response).to have_http_status(404)
+
+        expect(
+          JSON.parse(response.body, symbolize_names: true)
+        ).to eq({
+          error: 'FavouriteTag is not found',
+        })
       end
     end
   end
