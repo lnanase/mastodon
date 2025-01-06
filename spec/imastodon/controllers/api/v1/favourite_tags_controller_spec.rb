@@ -164,6 +164,25 @@ RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
         })
       end
     end
+
+    context 'validでない名前のタグを登録しようとしたとき' do
+      let!(:params) do
+        {
+          name: 'invalid tag name',
+          visibility: 'public',
+        }
+      end
+
+      it '新しいお気に入りタグのレコードは増えず、ステータスコード422と、バリデーションエラーの内容が返る' do
+        expect { subject }.to_not(change { user.account.favourite_tags.count })
+
+        expect(response).to have_http_status(422)
+        body = JSON.parse(response.body, symbolize_names: true)
+        expect(body).to match({
+          error: 'Validation failed: Name is invalid',
+        })
+      end
+    end
   end
 
   describe 'DELETE #destroy' do
