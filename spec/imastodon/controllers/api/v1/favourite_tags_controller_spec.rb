@@ -35,44 +35,134 @@ RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
   describe 'POST #create' do
     subject { post :create, params: params }
 
-    let(:scopes) { 'write:statuses' }
-    let(:tag_name) { 'dummy_tag' }
-    let(:params) do
-      {
-        tag: tag_name,
-        visibility: 'public',
-      }
+    let!(:scopes) { 'write:statuses' }
+
+    context '新しいタグをお気に入りタグに登録するとき' do
+      context '公開範囲をpublicで登録するとき' do
+        let!(:params) do
+          {
+            name: 'お気に入りタグ',
+            visibility: 'public',
+          }
+        end
+
+        it '新しいお気に入りタグのレコードが記録され、ステータスコード200と、作成されたお気に入りタグがレスポンスボディとして返る' do
+          expect { subject }.to change { user.account.favourite_tags.count }.by(1)
+
+          created = FavouriteTag.last
+          expect(created.name).to eq('お気に入りタグ')
+          expect(created.visibility).to eq('public')
+
+          expect(response).to have_http_status(:success)
+          body = JSON.parse(response.body, symbolize_names: true)
+          expect(body).to match({
+            id: created.id,
+            name: 'お気に入りタグ',
+            visibility: 'public',
+          })
+        end
+      end
+
+      context '公開範囲をunlistedで登録するとき' do
+        let!(:params) do
+          {
+            name: 'お気に入りタグ',
+            visibility: 'unlisted',
+          }
+        end
+
+        it '新しいお気に入りタグのレコードが記録され、ステータスコード200と、作成されたお気に入りタグがレスポンスボディとして返る' do
+          expect { subject }.to change { user.account.favourite_tags.count }.by(1)
+
+          created = FavouriteTag.last
+          expect(created.name).to eq('お気に入りタグ')
+          expect(created.visibility).to eq('unlisted')
+
+          expect(response).to have_http_status(:success)
+          body = JSON.parse(response.body, symbolize_names: true)
+          expect(body).to match({
+            id: created.id,
+            name: 'お気に入りタグ',
+            visibility: 'unlisted',
+          })
+        end
+      end
     end
 
-    context 'when the tag is a new favourite tag' do
-      it 'returns http success' do
+    context '登録しようとしたタグが既にお気に入りタグに登録されているとき' do
+      let!(:already_exists) { Fabricate(:favourite_tag, account: user.account, name: '登録済みのお気に入りタグ', visibility: 'public') }
+
+      context '公開範囲も同じとき' do
+        let!(:params) do
+          {
+            name: '登録済みのお気に入りタグ',
+            visibility: 'public',
+          }
+        end
+
+        it '新しいお気に入りタグのレコードは増えず、ステータスコード409と、既存のお気に入りタグがレスポンスボディとして返る' do
+          expect { subject }.to_not(change { user.account.favourite_tags.count })
+
+          expect(response).to have_http_status(409)
+          body = JSON.parse(response.body, symbolize_names: true)
+          expect(body).to match({
+            id: already_exists.id,
+            name: '登録済みのお気に入りタグ',
+            visibility: 'public',
+          })
+        end
+      end
+
+      context '公開範囲が異なるとき' do
+        let!(:params) do
+          {
+            name: '登録済みのお気に入りタグ',
+            visibility: 'unlisted',
+          }
+        end
+
+        it '新しいお気に入りタグのレコードが記録され、ステータスコード200と、作成されたお気に入りタグがレスポンスボディとして返る' do
+          expect { subject }.to change { user.account.favourite_tags.count }.by(1)
+
+          created = FavouriteTag.last
+          expect(created.name).to eq('登録済みのお気に入りタグ')
+          expect(created.visibility).to eq('unlisted')
+
+          expect(response).to have_http_status(:success)
+          body = JSON.parse(response.body, symbolize_names: true)
+          expect(body).to match({
+            id: created.id,
+            name: '登録済みのお気に入りタグ',
+            visibility: 'unlisted',
+          })
+        end
+      end
+    end
+
+    context '英字のタグを大文字小文字違いで登録しようとしたとき' do
+      let!(:already_exists) { Fabricate(:favourite_tag, account: user.account, name: 'already_favourited_tag', visibility: 'public') }
+
+      let!(:params) do
+        {
+          name: 'Already_favourited_tag',
+          visibility: 'public',
+        }
+      end
+
+      it '新しいお気に入りタグのレコードが記録され、ステータスコード200と、作成されたお気に入りタグがレスポンスボディとして返る' do
         expect { subject }.to change { user.account.favourite_tags.count }.by(1)
+
+        created = FavouriteTag.last
+        expect(created.name).to eq('Already_favourited_tag')
+        expect(created.visibility).to eq('public')
+
         expect(response).to have_http_status(:success)
-      end
-
-      it 'responce has created tag' do
-        expect { subject }.to change { user.account.favourite_tags.count }.by(1)
-        expect(
-          JSON.parse(response.body, symbolize_names: true).except(:id)
-        ).to eq({ name: tag_name, visibility: 'public' })
-      end
-    end
-
-    context 'when the tag has already been favourite.' do
-      before do
-        Fabricate(:favourite_tag, account: user.account, tag: tag)
-      end
-
-      it 'returns http 409' do
-        expect { subject }.to_not(change { user.account.favourite_tags.count })
-        expect(response).to have_http_status(409)
-      end
-
-      it 'does not create new favourite_tag' do
-        expect { subject }.to_not(change { user.account.favourite_tags.count })
-        expect(
-          JSON.parse(response.body, symbolize_names: true).except(:id)
-        ).to eq({ name: tag_name, visibility: 'public' })
+        body = JSON.parse(response.body, symbolize_names: true)
+        expect(body).to match({
+          id: created.id,
+          name: 'Already_favourited_tag',
+          visibility: 'public',
+        })
       end
     end
   end
