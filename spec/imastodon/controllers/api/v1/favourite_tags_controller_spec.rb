@@ -19,6 +19,16 @@ RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
     it 'returns http success' do
       get :index
       expect(response).to have_http_status(:success)
+      body = JSON.parse(response.body, symbolize_names: true)
+      expect(body).to match(
+        [
+          { id: be_integer, name: 'デレラジ', visibility: 'unlisted' },
+          { id: be_integer, name: 'デレパ', visibility: 'unlisted' },
+          { id: be_integer, name: 'imas_mor', visibility: 'unlisted' },
+          { id: be_integer, name: 'millionradio', visibility: 'unlisted' },
+          { id: be_integer, name: 'sidem', visibility: 'unlisted' },
+        ]
+      )
     end
   end
 
