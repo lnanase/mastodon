@@ -33,4 +33,10 @@ class FavouriteTag < ApplicationRecord
       visibility: visibility,
     }
   end
+
+  def migrate_tag_name!
+    return if name.present?
+
+    update!(name: tag&.name)
+  end
 end

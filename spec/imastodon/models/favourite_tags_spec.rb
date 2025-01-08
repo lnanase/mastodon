@@ -88,4 +88,32 @@ RSpec.describe FavouriteTag, type: :model do
       expect(json[:visibility]).to eq 'public'
     end
   end
+
+  describe 'migrate_tag_name!' do
+    it 'モデルのnameカラムに値が入っていない場合は関連付けのtagからnameをコピーする' do
+      account = Fabricate(:account)
+      tag = Tag.create!(name: 'tag')
+      favourite_tag = described_class.new(account: account, tag: tag, visibility: :public, name: nil)
+      favourite_tag.save!(validate: false)
+
+      expect(favourite_tag.name).to be_nil
+
+      favourite_tag.migrate_tag_name!
+
+      expect(favourite_tag.name).to eq('tag')
+    end
+
+    it 'モデルのnameカラムに値が入っている場合は変更しない' do
+      account = Fabricate(:account)
+      tag = Tag.create!(name: 'hoge_tag')
+      favourite_tag = described_class.new(account: account, tag: tag, visibility: :public, name: 'tag')
+      favourite_tag.save!
+
+      expect(favourite_tag.name).to eq('tag')
+
+      favourite_tag.migrate_tag_name!
+
+      expect(favourite_tag.name).to eq('tag')
+    end
+  end
 end
