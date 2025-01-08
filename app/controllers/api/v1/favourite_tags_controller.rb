@@ -30,13 +30,12 @@ class Api::V1::FavouriteTagsController < Api::BaseController
   end
 
   def destroy
-    tag = find_tag
-    @favourite_tag = find_fav_tag_by(tag)
-    if @favourite_tag.nil?
-      render json: { succeeded: false }, status: 404
+    current_account = current_user.account
+    favourite_tag = current_account.favourite_tags.find_by(id: params[:id])
+    if favourite_tag.nil?
+      render json: { error: 'FavouriteTag is not found' }, status: 404
     else
-      @favourite_tag.destroy
-      render json: { succeeded: true }
+      favourite_tag.destroy!
     end
   end
 
