@@ -43,6 +43,8 @@ class Api::V1::FavouriteTagsController < Api::BaseController
 
   def create_params
     params.permit(:name, :visibility)
+    params[:visibility] ||= 'public'
+    params
   end
 
   def set_account
