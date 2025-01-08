@@ -165,6 +165,30 @@ RSpec.describe Api::V1::FavouriteTagsController, type: :controller do
       end
     end
 
+    context '公開範囲が指定されなかった場合' do
+      let!(:params) do
+        {
+          name: 'お気に入りタグ',
+        }
+      end
+
+      it '新しいお気に入りタグのレコードが公開範囲publicとして記録され、ステータスコード200と、作成されたお気に入りタグがレスポンスボディとして返る' do
+        expect { subject }.to change { user.account.favourite_tags.count }.by(1)
+
+        created = FavouriteTag.last
+        expect(created.name).to eq('お気に入りタグ')
+        expect(created.visibility).to eq('public')
+
+        expect(response).to have_http_status(:success)
+        body = JSON.parse(response.body, symbolize_names: true)
+        expect(body).to match({
+          id: created.id,
+          name: 'お気に入りタグ',
+          visibility: 'public',
+        })
+      end
+    end
+
     context 'validでない名前のタグを登録しようとしたとき' do
       let!(:params) do
         {
