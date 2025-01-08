@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Api::V1::FavouriteTagsController < Api::BaseController
-  before_action :set_account
   before_action -> { doorkeeper_authorize! :read, :'read:statuses' }, only: [:index]
   before_action -> { doorkeeper_authorize! :write, :'write:statuses' }, except: [:index]
   before_action :require_user!
@@ -45,29 +44,5 @@ class Api::V1::FavouriteTagsController < Api::BaseController
     params.permit(:name, :visibility)
     params[:visibility] ||= 'public'
     params
-  end
-
-  def set_account
-    @account = current_user.account
-  end
-
-  def find_or_init_tag
-    Tag.find_or_initialize_by(name: tag_params[:tag])
-  end
-
-  def find_tag
-    Tag.find_by(name: tag_params[:tag])
-  end
-
-  def find_fav_tag_by(tag)
-    @account.favourite_tags.find_by(tag: tag)
-  end
-
-  def favourite_tag_visibility
-    tag_params[:visibility].nil? ? 'public' : tag_params[:visibility]
-  end
-
-  def current_favourite_tags
-    current_account.favourite_tags.with_order.includes(:tag).map(&:to_json_for_api)
   end
 end
