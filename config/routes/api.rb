@@ -290,7 +290,7 @@ namespace :api, format: false do
       resources :tags, only: [:index, :show, :update]
     end
 
-    resources :favourite_tags, only: [:index, :create, :destroy], param: :tag
+    resources :favourite_tags, only: [:index, :create, :destroy]
   end
 
   namespace :v2 do

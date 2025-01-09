@@ -144,6 +144,10 @@ RSpec/ContextWording:
 RSpec/FilePath:
   Enabled: false
 
+RSpec/LetSetup:
+  Exclude:
+    - spec/imastodon/**/*
+
 # Reason:
 # https://docs.rubocop.org/rubocop-rspec/cops_rspec.html#rspecnamedsubject
 RSpec/NamedSubject:
