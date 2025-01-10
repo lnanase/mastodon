@@ -3,7 +3,7 @@ import React from 'react';
 
 import { defineMessages, injectIntl } from 'react-intl';
 
-import Button from '../../../components/button';
+import { Button } from '../../../components/button';
 
 
 const messages = defineMessages({
@@ -69,4 +69,4 @@ class FavouriteToggle extends React.PureComponent {
 
 }
 
-export default injectIntl(FavouriteToggle)
+export default injectIntl(FavouriteToggle);

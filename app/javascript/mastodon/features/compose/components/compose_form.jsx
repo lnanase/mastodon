@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { createRef } from 'react';
 
 import { defineMessages, injectIntl } from 'react-intl';
 
@@ -9,11 +10,13 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 
 import { length } from 'stringz';
 
+import LockIcon from '@/material-icons/400-24px/lock.svg?react';
 import { Icon }  from 'mastodon/components/icon';
+import { WithOptionalRouterPropTypes, withOptionalRouter } from 'mastodon/utils/react_router';
 
 import AutosuggestInput from '../../../components/autosuggest_input';
 import AutosuggestTextarea from '../../../components/autosuggest_textarea';
-import Button from '../../../components/button';
+import { Button } from '../../../components/button';
 import EmojiPickerDropdown from '../containers/emoji_picker_dropdown_container';
 import LanguageDropdown from '../containers/language_dropdown_container';
 import PrivacyDropdownContainer from '../containers/privacy_dropdown_container';
@@ -37,11 +40,6 @@ const messages = defineMessages({
 });
 
 class ComposeForm extends ImmutablePureComponent {
-
-  static contextTypes = {
-    router: PropTypes.object,
-  };
-
   static propTypes = {
     intl: PropTypes.object.isRequired,
     text: PropTypes.string.isRequired,
@@ -69,6 +67,7 @@ class ComposeForm extends ImmutablePureComponent {
     isInReply: PropTypes.bool,
     singleColumn: PropTypes.bool,
     lang: PropTypes.string,
+    ...WithOptionalRouterPropTypes
   };
 
   static defaultProps = {
@@ -78,6 +77,11 @@ class ComposeForm extends ImmutablePureComponent {
   state = {
     highlighted: false,
   };
+
+  constructor(props) {
+    super(props);
+    this.textareaRef = createRef(null);
+  }
 
   handleChange = (e) => {
     this.props.onChange(e.target.value);
@@ -102,17 +106,17 @@ class ComposeForm extends ImmutablePureComponent {
   };
 
   handleSubmit = (e) => {
-    if (this.props.text !== this.autosuggestTextarea.textarea.value) {
+    if (this.props.text !== this.textareaRef.current.value) {
       // Something changed the text inside the textarea (e.g. browser extensions like Grammarly)
       // Update the state to match the current text
-      this.props.onChange(this.autosuggestTextarea.textarea.value);
+      this.props.onChange(this.textareaRef.current.value);
     }
 
     if (!this.canSubmit()) {
       return;
     }
 
-    this.props.onSubmit(this.context.router ? this.context.router.history : null);
+    this.props.onSubmit(this.props.history || null);
 
     if (e) {
       e.preventDefault();
@@ -184,25 +188,21 @@ class ComposeForm extends ImmutablePureComponent {
       // immediately selectable, we have to wait for observers to run, as
       // described in https://github.com/WICG/inert#performance-and-gotchas
       Promise.resolve().then(() => {
-        this.autosuggestTextarea.textarea.setSelectionRange(selectionStart, selectionEnd);
-        this.autosuggestTextarea.textarea.focus();
+        this.textareaRef.current.setSelectionRange(selectionStart, selectionEnd);
+        this.textareaRef.current.focus();
         this.setState({ highlighted: true });
         this.timeout = setTimeout(() => this.setState({ highlighted: false }), 700);
       }).catch(console.error);
     } else if(prevProps.isSubmitting && !this.props.isSubmitting) {
-      this.autosuggestTextarea.textarea.setSelectionRange(0, 0);
-      this.autosuggestTextarea.textarea.focus();
+      this.textareaRef.current.setSelectionRange(0, 0);
+      this.textareaRef.current.focus();
     } else if (this.props.spoiler !== prevProps.spoiler) {
       if (this.props.spoiler) {
         this.spoilerText.input.focus();
       } else if (prevProps.spoiler) {
-        this.autosuggestTextarea.textarea.focus();
+        this.textareaRef.current.focus();
       }
     }
-  };
-
-  setAutosuggestTextarea = (c) => {
-    this.autosuggestTextarea = c;
   };
 
   setSpoilerText = (c) => {
@@ -215,7 +215,7 @@ class ComposeForm extends ImmutablePureComponent {
 
   handleEmojiPick = (data) => {
     const { text }     = this.props;
-    const position     = this.autosuggestTextarea.textarea.selectionStart;
+    const position     = this.textareaRef.current.selectionStart;
     const needsSpace   = data.custom && position > 0 && !allowedAroundShortCode.includes(text[position - 1]);
 
     this.props.onPickEmoji(position, data, needsSpace);
@@ -231,7 +231,7 @@ class ComposeForm extends ImmutablePureComponent {
     if (this.props.isEditing) {
       publishText = intl.formatMessage(messages.saveChanges);
     } else if (this.props.privacy === 'private' || this.props.privacy === 'direct') {
-      publishText = <span className='compose-form__publish-private'><Icon id='lock' /> {intl.formatMessage(messages.publish)}</span>;
+      publishText = <><Icon id='lock' icon={LockIcon} /> {intl.formatMessage(messages.publish)}</>;
     } else {
       publishText = this.props.privacy !== 'unlisted' ? intl.formatMessage(messages.publishLoud, { publish: intl.formatMessage(messages.publish) }) : intl.formatMessage(messages.publish);
     }
@@ -264,7 +264,7 @@ class ComposeForm extends ImmutablePureComponent {
 
         <div className={classNames('compose-form__highlightable', { active: highlighted })}>
           <AutosuggestTextarea
-            ref={this.setAutosuggestTextarea}
+            ref={this.textareaRef}
             placeholder={intl.formatMessage(messages.placeholder)}
             disabled={disabled}
             value={this.props.text}
@@ -315,4 +315,4 @@ class ComposeForm extends ImmutablePureComponent {
 
 }
 
-export default injectIntl(ComposeForm);
+export default withOptionalRouter(injectIntl(ComposeForm));
