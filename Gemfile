@@ -205,3 +205,7 @@ gem 'net-http', '~> 0.4.0'
 gem 'rubyzip', '~> 2.3'
 
 gem 'hcaptcha', '~> 7.1'
+
+group :imastodon do
+  gem 'aws-sdk-ssm', '~> 1.157'
+end
