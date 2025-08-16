@@ -22,7 +22,7 @@ SimpleNavigation::Configuration.run do |navigation|
     end
 
     n.item :filters, safe_join([material_symbol('filter_alt'), t('filters.index.title')]), filters_path, highlights_on: %r{/filters}, if: -> { current_user.functional? && !self_destruct }
-    n.item :favourite_tags, safe_join([fa_icon('tag fw'), t('settings.favourite_tags')]), settings_favourite_tags_url, if: -> { current_user.functional? && !self_destruct }
+    n.item :favourite_tags, safe_join([material_symbol('sell-fill'), t('settings.favourite_tags')]), settings_favourite_tags_url, if: -> { current_user.functional? && !self_destruct }
     n.item :statuses_cleanup, safe_join([material_symbol('history'), t('settings.statuses_cleanup')]), statuses_cleanup_path, if: -> { current_user.functional_or_moved? && !self_destruct }
 
     n.item :security, safe_join([material_symbol('lock'), t('settings.account')]), edit_user_registration_path do |s|
