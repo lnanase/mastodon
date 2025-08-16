@@ -21,6 +21,7 @@ inherit_from:
   - .rubocop/custom.yml
   - .rubocop_todo.yml
   - .rubocop/strict.yml
+  - .rubocop/imastodon.yml
 
 inherit_mode:
   merge:
