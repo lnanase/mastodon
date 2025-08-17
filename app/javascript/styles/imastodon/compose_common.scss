@@ -31,28 +31,12 @@
 
   &__icon {
     background: transparent;
-    position: absolute;
     color: $white;
     border: 0;
     padding: 0;
-    right: 45px;
+    margin-right: 8px;
     text-align: center;
-
-    i {
-      width: 14px;
-    }
-
-    .fa-gear {
-      color: $ui-primary-color;
-    }
-
-    .fa-repeat {
-      color: $ui-primary-color;
-
-      &.animate {
-        animation: rotate-anime 1s ease 0s 1 normal none;
-      }
-    }
+    width: 24px;
   }
 
   &__fold__icon {
