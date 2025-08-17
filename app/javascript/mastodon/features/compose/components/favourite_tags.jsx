@@ -8,6 +8,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import Link from 'react-router-dom/Link';
 
+import { Icon } from '@/mastodon/components/icon';
+import LockIcon from '@/material-icons/400-24px/lock.svg?react';
+import PublicIcon from '@/material-icons/400-24px/public.svg?react';
+import QuietTimeIcon from '@/material-icons/400-24px/quiet_time.svg?react';
+
 import FoldButton from '../../../components/fold_button';
 import Foldable from '../../../components/foldable';
 
@@ -16,10 +21,10 @@ const messages = defineMessages({
   toggle_visible: { id: 'media_gallery.toggle_visible', defaultMessage: 'Toggle visibility' },
 });
 
-const icons = [
-  { key: 'public', icon: 'globe' },
-  { key: 'unlisted', icon: 'unlock' },
-  { key: 'private', icon: 'lock' },
+const visibilityIcons = [
+  { key: 'public', icon: PublicIcon },
+  { key: 'unlisted', icon: QuietTimeIcon },
+  { key: 'private', icon: LockIcon },
 ];
 
 class FavouriteTags extends React.PureComponent {
@@ -45,7 +50,7 @@ class FavouriteTags extends React.PureComponent {
   UNSAFE_componentWillUpdate (nextProps, nextState) {
     // タグ操作に変更があった場合
     if (!this.state.lockedTag.equals(nextState.lockedTag)) {
-      const icon = icons.concat().reverse().find(icon => nextState.lockedVisibility.includes(icon.key));
+      const icon = visibilityIcons.concat().reverse().find(icon => nextState.lockedVisibility.includes(icon.key));
       this.execLockTag(
         nextState.lockedTag.join(' '),
         typeof icon === 'undefined' ? '' : icon.key,
@@ -72,7 +77,7 @@ class FavouriteTags extends React.PureComponent {
   }
 
   visibilityToIcon (val) {
-    return icons.find(icon => icon.key === val).icon;
+    return visibilityIcons.find(icon => icon.key === val).icon;
   }
 
   render () {
@@ -80,9 +85,7 @@ class FavouriteTags extends React.PureComponent {
 
     const tags = this.props.tags.map(tag => (
       <li key={tag.get('name')}>
-        <div className='favourite-tags__icon'>
-          <i className={`fa fa-fw fa-${this.visibilityToIcon(tag.get('visibility'))}`} />
-        </div>
+        <Icon id={tag.get('visibility')} icon={this.visibilityToIcon(tag.get('visibility'))} className='favourite-tags__icon' />
         <Link
           to={`/timelines/tag/${tag.get('name')}`}
           className='compose__extra__body__name'
