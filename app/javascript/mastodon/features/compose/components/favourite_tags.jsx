@@ -9,6 +9,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Link from 'react-router-dom/Link';
 
 import { Icon } from '@/mastodon/components/icon';
+import EditNoteIcon from '@/material-icons/400-24px/edit_note.svg?react';
 import LockIcon from '@/material-icons/400-24px/lock.svg?react';
 import PublicIcon from '@/material-icons/400-24px/public.svg?react';
 import QuietTimeIcon from '@/material-icons/400-24px/quiet_time.svg?react';
@@ -26,6 +27,11 @@ const visibilityIcons = [
   { key: 'unlisted', icon: QuietTimeIcon },
   { key: 'private', icon: LockIcon },
 ];
+
+const lockIcons = {
+  lock: LockIcon,
+  unlock: EditNoteIcon,
+};
 
 class FavouriteTags extends React.PureComponent {
 
@@ -83,6 +89,12 @@ class FavouriteTags extends React.PureComponent {
   render () {
     const { intl, visible, onToggle } = this.props;
 
+    const lockIcon = (tag) => {
+      const isLocked = this.state.lockedTag.includes(`#${tag.get('name')}`);
+      const icon = isLocked ? lockIcons.lock : lockIcons.unlock;
+      return <Icon id={icon.id} icon={icon} className='favourite-tags__lock' />;
+    };
+
     const tags = this.props.tags.map(tag => (
       <li key={tag.get('name')}>
         <Icon id={tag.get('visibility')} icon={this.visibilityToIcon(tag.get('visibility'))} className='favourite-tags__icon' />
@@ -93,11 +105,9 @@ class FavouriteTags extends React.PureComponent {
         >
           {`#${tag.get('name')}`}
         </Link>
-        <div className='favourite-tags__lock'>
-          <a href={`#${tag.get('name')}`} onClick={this.handleLockTag(tag.get('name'), tag.get('visibility'))}>
-            <i className={this.state.lockedTag.includes(`#${tag.get('name')}`) ? 'fa fa-lock' : 'fa fa-pencil-square-o'} />
-          </a>
-        </div>
+        <button onClick={this.handleLockTag(tag.get('name'), tag.get('visibility'))} className='favourite-tags__lock' >
+          {lockIcon(tag)}
+        </button>
       </li>
     ));
 
