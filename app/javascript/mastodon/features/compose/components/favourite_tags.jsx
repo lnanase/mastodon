@@ -91,8 +91,7 @@ class FavouriteTags extends React.PureComponent {
           className='compose__extra__body__name'
           key={tag.get('name')}
         >
-          <i className='fa fa-hashtag' />
-          {tag.get('name')}
+          {`#${tag.get('name')}`}
         </Link>
         <div className='favourite-tags__lock'>
           <a href={`#${tag.get('name')}`} onClick={this.handleLockTag(tag.get('name'), tag.get('visibility'))}>
