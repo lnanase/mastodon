@@ -14,6 +14,7 @@ import LockIcon from '@/material-icons/400-24px/lock.svg?react';
 import PublicIcon from '@/material-icons/400-24px/public.svg?react';
 import QuietTimeIcon from '@/material-icons/400-24px/quiet_time.svg?react';
 import TagIcon from '@/material-icons/400-24px/sell-fill.svg?react';
+import SettingIcon from '@/material-icons/400-24px/settings-fill.svg?react';
 
 import FoldButton from '../../../components/fold_button';
 import Foldable from '../../../components/foldable';
@@ -115,15 +116,19 @@ class FavouriteTags extends React.PureComponent {
     return (
       <div className='compose__extra'>
         <div className='compose__extra__header'>
-          <Icon id={'tag_icon'} icon={TagIcon} className='compose__extra__header__icon' />
-          <span>{intl.formatMessage(messages.favourite_tags)}</span>
-          <div className='compose__extra__header__icon'>
-            <a href='/settings/favourite_tags'>
-              <i className='fa fa-gear' />
-            </a>
+          <div className='compose__extra__header__left'>
+            <Icon id={'tag_icon'} icon={TagIcon} className='compose__extra__header__icon' />
+            <span>{intl.formatMessage(messages.favourite_tags)}</span>
           </div>
-          <div className='compose__extra__header__fold__icon'>
-            <FoldButton title={intl.formatMessage(messages.toggle_visible)} icon='caret-up' onClick={onToggle} size={20} animate active={visible} />
+          <div className='compose__extra__header__right'>
+            <div className='compose__extra__header__icon'>
+              <a href='/settings/favourite_tags'>
+                <Icon id='setting_icon' icon={SettingIcon} className='compose__extra__header__icon' />
+              </a>
+            </div>
+            <div className='compose__extra__header__fold__icon'>
+              <FoldButton title={intl.formatMessage(messages.toggle_visible)} icon='caret-up' onClick={onToggle} size={20} animate active={visible} />
+            </div>
           </div>
         </div>
         <Foldable isVisible={visible} fullHeight={this.props.tags.size * 30} minHeight={0} >

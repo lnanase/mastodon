@@ -15,18 +15,25 @@
 
 .compose__extra__header {
   display: flex;
-  align-items: center;
   height: 26px;
   padding: 4px 12px;
   background: lighten($ui-base-color, 4%);
   font-size: 16px;
-
-  > i {
-    padding-right: 4px;
-  }
+  align-items: center;
 
   button {
     background-color: transparent;
+  }
+
+  &__left {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
   }
 
   &__icon {
