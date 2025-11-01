@@ -8,6 +8,14 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import Link from 'react-router-dom/Link';
 
+import { Icon } from '@/mastodon/components/icon';
+import EditNoteIcon from '@/material-icons/400-24px/edit_note.svg?react';
+import LockIcon from '@/material-icons/400-24px/lock.svg?react';
+import PublicIcon from '@/material-icons/400-24px/public.svg?react';
+import QuietTimeIcon from '@/material-icons/400-24px/quiet_time.svg?react';
+import TagIcon from '@/material-icons/400-24px/sell-fill.svg?react';
+import SettingIcon from '@/material-icons/400-24px/settings-fill.svg?react';
+
 import FoldButton from '../../../components/fold_button';
 import Foldable from '../../../components/foldable';
 
@@ -16,11 +24,16 @@ const messages = defineMessages({
   toggle_visible: { id: 'media_gallery.toggle_visible', defaultMessage: 'Toggle visibility' },
 });
 
-const icons = [
-  { key: 'public', icon: 'globe' },
-  { key: 'unlisted', icon: 'unlock' },
-  { key: 'private', icon: 'lock' },
+const visibilityIcons = [
+  { key: 'public', icon: PublicIcon },
+  { key: 'unlisted', icon: QuietTimeIcon },
+  { key: 'private', icon: LockIcon },
 ];
+
+const lockIcons = {
+  lock: LockIcon,
+  unlock: EditNoteIcon,
+};
 
 class FavouriteTags extends React.PureComponent {
 
@@ -42,10 +55,10 @@ class FavouriteTags extends React.PureComponent {
     this.props.refreshFavouriteTags();
   }
 
-  componentWillUpdate (nextProps, nextState) {
+  UNSAFE_componentWillUpdate (nextProps, nextState) {
     // タグ操作に変更があった場合
     if (!this.state.lockedTag.equals(nextState.lockedTag)) {
-      const icon = icons.concat().reverse().find(icon => nextState.lockedVisibility.includes(icon.key));
+      const icon = visibilityIcons.concat().reverse().find(icon => nextState.lockedVisibility.includes(icon.key));
       this.execLockTag(
         nextState.lockedTag.join(' '),
         typeof icon === 'undefined' ? '' : icon.key,
@@ -72,45 +85,50 @@ class FavouriteTags extends React.PureComponent {
   }
 
   visibilityToIcon (val) {
-    return icons.find(icon => icon.key === val).icon;
+    return visibilityIcons.find(icon => icon.key === val).icon;
   }
 
   render () {
     const { intl, visible, onToggle } = this.props;
 
+    const lockIcon = (tag) => {
+      const isLocked = this.state.lockedTag.includes(`#${tag.get('name')}`);
+      const icon = isLocked ? lockIcons.lock : lockIcons.unlock;
+      return <Icon id={icon.id} icon={icon} className='favourite-tags__lock' />;
+    };
+
     const tags = this.props.tags.map(tag => (
       <li key={tag.get('name')}>
-        <div className='favourite-tags__icon'>
-          <i className={`fa fa-fw fa-${this.visibilityToIcon(tag.get('visibility'))}`} />
-        </div>
+        <Icon id={tag.get('visibility')} icon={this.visibilityToIcon(tag.get('visibility'))} className='favourite-tags__icon' />
         <Link
           to={`/timelines/tag/${tag.get('name')}`}
           className='compose__extra__body__name'
           key={tag.get('name')}
         >
-          <i className='fa fa-hashtag' />
-          {tag.get('name')}
+          {`#${tag.get('name')}`}
         </Link>
-        <div className='favourite-tags__lock'>
-          <a href={`#${tag.get('name')}`} onClick={this.handleLockTag(tag.get('name'), tag.get('visibility'))}>
-            <i className={this.state.lockedTag.includes(`#${tag.get('name')}`) ? 'fa fa-lock' : 'fa fa-pencil-square-o'} />
-          </a>
-        </div>
+        <button onClick={this.handleLockTag(tag.get('name'), tag.get('visibility'))} className='favourite-tags__lock' >
+          {lockIcon(tag)}
+        </button>
       </li>
     ));
 
     return (
       <div className='compose__extra'>
         <div className='compose__extra__header'>
-          <i className='fa fa-tag' />
-          <span>{intl.formatMessage(messages.favourite_tags)}</span>
-          <div className='compose__extra__header__icon'>
-            <a href='/settings/favourite_tags'>
-              <i className='fa fa-gear' />
-            </a>
+          <div className='compose__extra__header__left'>
+            <Icon id={'tag_icon'} icon={TagIcon} className='compose__extra__header__icon' />
+            <span>{intl.formatMessage(messages.favourite_tags)}</span>
           </div>
-          <div className='compose__extra__header__fold__icon'>
-            <FoldButton title={intl.formatMessage(messages.toggle_visible)} icon='caret-up' onClick={onToggle} size={20} animate active={visible} />
+          <div className='compose__extra__header__right'>
+            <div className='compose__extra__header__icon'>
+              <a href='/settings/favourite_tags'>
+                <Icon id='setting_icon' icon={SettingIcon} className='compose__extra__header__icon' />
+              </a>
+            </div>
+            <div className='compose__extra__header__fold__icon'>
+              <FoldButton title={intl.formatMessage(messages.toggle_visible)} icon='caret-up' onClick={onToggle} size={20} animate active={visible} />
+            </div>
           </div>
         </div>
         <Foldable isVisible={visible} fullHeight={this.props.tags.size * 30} minHeight={0} >

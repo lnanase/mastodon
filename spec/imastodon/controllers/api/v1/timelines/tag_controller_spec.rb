@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Api::V1::Timelines::TagController, type: :controller do
+RSpec.describe Api::V1::Timelines::TagController, type: :controller do
   render_views
 
   let(:user) { Fabricate(:user, account: Fabricate(:account, username: 'alice')) }

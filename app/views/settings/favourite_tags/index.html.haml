@@ -17,7 +17,7 @@
       - @favourite_tags.each do |fav_tag|
         %tr
           %td
-            = fa_icon 'tag'
+            = material_symbol 'sell-fill'
             = fav_tag.name
           %td
             = I18n.t("statuses.visibilities.#{fav_tag.visibility}")

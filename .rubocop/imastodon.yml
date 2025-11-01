@@ -1,0 +1,12 @@
+RSpec/ContextWording:
+  Exclude:
+    - spec/imastodon/**/*
+
+RSpec/LetSetup:
+  Exclude:
+    - spec/imastodon/**/*
+
+RSpec/NamedSubject:
+  EnforcedStyle: named_only
+  Exclude:
+    - spec/imastodon/**/*

@@ -1,12 +1,25 @@
 .account__avatar-overlay-icon {
   &-base {
-    @include avatar-radius;
-    @include avatar-size(40px);
+    border-radius: var(--avatar-border-radius);
+    background: transparent no-repeat;
+    background-position: 50%;
+    background-clip: padding-box;
+    width: 46px;
+    height: 46px;
+    background-size: 46px 46px;
   }
 
   &-overlay {
-    @include avatar-radius;
-
+    width: 16px;
+    height: 16px;
+    padding: 2px;
+    border-radius: calc(var(--avatar-border-radius) / 2)
+      calc(var(--avatar-border-radius) / 2) var(--avatar-border-radius)
+      calc(var(--avatar-border-radius) / 2);
+    background: transparent no-repeat;
+    background-size: 16px 16px;
+    background-position: 50%;
+    background-clip: padding-box;
     background-color: darken($white, 20%);
     position: absolute;
     bottom: 0;

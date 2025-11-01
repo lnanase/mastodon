@@ -15,44 +15,35 @@
 
 .compose__extra__header {
   display: flex;
-  align-items: center;
   height: 26px;
   padding: 4px 12px;
   background: lighten($ui-base-color, 4%);
   font-size: 16px;
-
-  > i {
-    padding-right: 4px;
-  }
+  align-items: center;
 
   button {
     background-color: transparent;
   }
 
+  &__left {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+  }
+
   &__icon {
     background: transparent;
-    position: absolute;
     color: $white;
     border: 0;
     padding: 0;
-    right: 45px;
+    margin-right: 8px;
     text-align: center;
-
-    i {
-      width: 14px;
-    }
-
-    .fa-gear {
-      color: $ui-primary-color;
-    }
-
-    .fa-repeat {
-      color: $ui-primary-color;
-
-      &.animate {
-        animation: rotate-anime 1s ease 0s 1 normal none;
-      }
-    }
+    width: 24px;
   }
 
   &__fold__icon {

@@ -1,15 +1,24 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
+
 import ImmutablePropTypes from 'react-immutable-proptypes';
+
+import AlternateEmailIcon from '@/material-icons/400-24px/alternate_email.svg?react';
+import LockIcon from '@/material-icons/400-24px/lock.svg?react';
+import PublicIcon from '@/material-icons/400-24px/public.svg?react';
+import QuietTimeIcon from '@/material-icons/400-24px/quiet_time.svg?react';
 
 import { autoPlayGif } from '../initial_state';
 
+import { Icon } from './icon';
+
+
 const icons = {
-  public: 'globe',
-  unlisted: 'unlock',
-  private: 'lock',
-  direct: 'envelope',
+  public: PublicIcon,
+  unlisted: QuietTimeIcon,
+  private: LockIcon,
+  direct: AlternateEmailIcon,
 };
 
 export default class AvatarOverlayIcon extends React.PureComponent {
@@ -35,7 +44,7 @@ export default class AvatarOverlayIcon extends React.PureComponent {
     return (
       <div className='account__avatar-overlay'>
         <div className='account__avatar-overlay-icon-base' style={baseStyle} />
-        <div className='account__avatar-overlay-icon-overlay'><i className={`fa fa-fw fa-${icon}`} /></div>
+        <Icon id={visibility} icon={icon} className='account__avatar-overlay-icon-overlay' />
       </div>
     );
   }
