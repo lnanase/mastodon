@@ -50,6 +50,6 @@ module AccountsHelper
 
   def svg_logo_full
     # svgタグ埋め込みだと色が反映できないので
-    image_pack_tag 'logo_full_imastodon.svg', class: 'logo', alt: 'iMastodon'
+    image_tag vite_asset_path('images/logo_full_imastodon.svg'), class: 'logo', alt: 'iMastodon'
   end
 end
