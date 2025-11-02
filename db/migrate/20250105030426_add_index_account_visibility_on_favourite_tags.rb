@@ -4,6 +4,7 @@ require Rails.root.join('lib', 'mastodon', 'migration_helpers')
 
 class AddIndexAccountVisibilityOnFavouriteTags < ActiveRecord::Migration[7.0]
   include Mastodon::MigrationHelpers
+
   disable_ddl_transaction!
 
   def change
