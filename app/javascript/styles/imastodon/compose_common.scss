@@ -1,3 +1,6 @@
+@use '../mastodon/_variables' as variables;
+@use 'sass:color';
+
 @keyframes rotate-anime {
   0% {
     transform: rotate(0deg);
@@ -9,7 +12,7 @@
 }
 
 .compose__extra {
-  background: $ui-base-color;
+  background: variables.$ui-base-color;
   position: relative;
 }
 
@@ -17,7 +20,7 @@
   display: flex;
   height: 26px;
   padding: 4px 12px;
-  background: lighten($ui-base-color, 4%);
+  background: color.adjust(variables.$ui-base-color, $lightness: 4%);
   font-size: 16px;
   align-items: center;
 
@@ -34,21 +37,26 @@
   &__right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
   }
 
   &__icon {
     background: transparent;
-    color: $white;
+    color: variables.$white;
     border: 0;
     padding: 0;
-    margin-right: 8px;
     text-align: center;
     width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
   }
 
   &__fold__icon {
-    position: absolute;
-    right: 14px;
+    display: flex;
+    align-items: center;
   }
 }
 
@@ -83,7 +91,7 @@
 
   &__name {
     font-size: 14px;
-    color: $primary-text-color;
+    color: variables.$primary-text-color;
     text-decoration: none;
     width: 200px;
     overflow: hidden;
@@ -91,7 +99,7 @@
     white-space: nowrap;
 
     .fa-hashtag {
-      color: $classic-highlight-color;
+      color: variables.$classic-highlight-color;
       margin-right: 2px;
     }
   }

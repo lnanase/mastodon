@@ -1,3 +1,6 @@
+@use '../mastodon/_variables' as variables;
+@use 'sass:color';
+
 /**
   * features/compose/components/favourite_tags
   */
@@ -12,26 +15,32 @@
   background-color: transparent;
   text-align: center;
   border: none;
-  color: $primary-text-color;
+  color: variables.$primary-text-color;
   height: 16px;
 }
 
 .favourite-tags__add-button-in-column {
   margin-bottom: 5px;
-  background-color: $ui-highlight-color;
+  background-color: variables.$ui-highlight-color;
 
   &:focus,
   &:hover {
-    background-color: lighten($ui-highlight-color, 5%);
+    background-color: color.adjust(
+      variables.$ui-highlight-color,
+      $lightness: 5%
+    );
   }
 }
 
 .favourite-tags__remove-button-in-column {
   margin-bottom: 5px;
-  background-color: $error-value-color;
+  background-color: variables.$error-value-color;
 
   &:focus,
   &:hover {
-    background-color: lighten($error-value-color, 5%);
+    background-color: color.adjust(
+      variables.$error-value-color,
+      $lightness: 5%
+    );
   }
 }

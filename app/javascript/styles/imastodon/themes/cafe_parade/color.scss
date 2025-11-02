@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 // Commonly used web colors
 $black: #3b373d; // Black
 $white: #e6e6e6; // White
@@ -23,9 +25,9 @@ $error-value-color: $error-red !default;
 
 // Tell UI to use selected colors
 $ui-base-color: $classic-base-color !default; // Darkest
-$ui-base-lighter-color: lighten(
+$ui-base-lighter-color: color.adjust(
   $ui-base-color,
-  26%
+  $lightness: 26%
 ) !default; // Lighter darkest
 $ui-primary-color: $classic-primary-color !default; // Lighter
 $ui-secondary-color: $classic-secondary-color !default; // Lightest
