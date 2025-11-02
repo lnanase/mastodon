@@ -3,6 +3,7 @@
 module Friends
   module FavouriteTagsExtension
     extend ActiveSupport::Concern
+
     DEFAULT_TAGS = %w(
       デレラジ
       デレパ
