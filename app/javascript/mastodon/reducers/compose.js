@@ -391,8 +391,8 @@ export const composeReducer = (state = initialState, action) => {
   case COMPOSE_COMPOSING_CHANGE:
     return state.set('is_composing', action.value);
   case COMPOSE_REPLY:
-    const privacy = privacyPreference(action.status.get('visibility'), getPrivacy(state));
     return state.withMutations(map => {
+      const privacy = privacyPreference(action.status.get('visibility'), getPrivacy(state));
       map.set('id', null);
       map.set('in_reply_to', action.status.get('id'));
       map.set('text', statusToTextMentions(state, action.status));
