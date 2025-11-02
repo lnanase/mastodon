@@ -1,14 +1,14 @@
-import React from 'react';
-
 import classNames from 'classnames';
+import { PureComponent } from 'react';
 
-import spring from 'react-motion/lib/spring';
+export default class FoldButton extends PureComponent {
 
-import Motion from '../features/ui/util/optional_motion';
-
-import { IconButton } from './icon_button';
-
-export default class FoldButton extends IconButton {
+  handleClick = (e) => {
+    e.preventDefault();
+    if (!this.props.disabled && this.props.onClick) {
+      this.props.onClick(e);
+    }
+  };
 
   render () {
     const style = {
@@ -41,42 +41,26 @@ export default class FoldButton extends IconButton {
       overlayed: overlay,
     });
 
-    if (!animate) {
-      // Perf optimization: avoid unnecessary <Motion> components unless
-      // we actually need to animate.
-      return (
-        <button
-          aria-label={title}
-          aria-pressed={pressed}
-          aria-expanded={expanded}
-          title={title}
-          className={classes}
-          onClick={this.handleClick}
-          style={style}
-          tabIndex={tabIndex}
-        >
-          <i className={`fa fa-fw fa-${icon}`} aria-hidden='true' />
-        </button>
-      );
-    }
+    const iconStyle = animate ? {
+      transform: `rotate(${active ? 0 : 180}deg)`,
+      transition: 'transform 300ms ease-in-out'
+    } : {
+      transform: `rotate(${active ? 180 : 0}deg)`
+    };
 
     return (
-      <Motion defaultStyle={{ rotate: this.props.active ? 180 : 0 }} style={{ rotate: this.props.animate ? spring(this.props.active ? 0 : 180) : 0 }}>
-        {({ rotate }) =>
-          (<button
-            aria-label={title}
-            aria-pressed={pressed}
-            aria-expanded={expanded}
-            title={title}
-            className={classes}
-            onClick={this.handleClick}
-            style={style}
-            tabIndex={tabIndex}
-          >
-            <i style={{ transform: `rotate(${rotate}deg)` }} className={`fa fa-fw fa-${icon}`} aria-hidden='true' />
-          </button>)
-        }
-      </Motion>
+      <button
+        aria-label={title}
+        aria-pressed={pressed}
+        aria-expanded={expanded}
+        title={title}
+        className={classes}
+        onClick={this.handleClick}
+        style={style}
+        tabIndex={tabIndex}
+      >
+        <i style={iconStyle} className={`fa fa-fw fa-${icon}`} aria-hidden='true' />
+      </button>
     );
   }
 
