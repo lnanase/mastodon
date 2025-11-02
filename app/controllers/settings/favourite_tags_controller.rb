@@ -53,11 +53,11 @@ class Settings::FavouriteTagsController < Settings::BaseController
   private
 
   def create_params
-    params.require(:favourite_tag).permit(:name, :visibility, :order)
+    params.expect(favourite_tag: [:name, :visibility, :order])
   end
 
   def update_params
-    params.require(:favourite_tag).permit(:name, :visibility, :order)
+    params.expect(favourite_tag: [:name, :visibility, :order])
   end
 
   def current_account
