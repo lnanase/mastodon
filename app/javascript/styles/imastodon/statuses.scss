@@ -1,3 +1,6 @@
+@use '../mastodon/_variables' as variables;
+@use 'sass:color';
+
 .account__avatar-overlay-icon {
   &-base {
     border-radius: var(--avatar-border-radius);
@@ -20,7 +23,7 @@
     background-size: 16px 16px;
     background-position: 50%;
     background-clip: padding-box;
-    background-color: darken($white, 20%);
+    background-color: color.adjust(variables.$white, $lightness: -20%);
     position: absolute;
     bottom: 0;
     right: 0;

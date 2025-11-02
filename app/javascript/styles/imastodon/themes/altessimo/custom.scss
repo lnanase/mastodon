@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 .card .name small,
 .button {
   color: $ui-secondary-color;
@@ -26,5 +28,5 @@
   .status.light
   .status__content
   a.status__content__spoiler-link {
-  color: lighten($classic-secondary-color, 10%);
+  color: color.adjust($classic-secondary-color, $lightness: 10%);
 }

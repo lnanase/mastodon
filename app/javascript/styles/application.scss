@@ -1,6 +1,6 @@
-@use 'mastodon/functions';
-@use 'mastodon/mixins';
-@use 'mastodon/variables';
+@use 'mastodon/_functions' as functions;
+@use 'mastodon/_mixins' as mixins;
+@use 'mastodon/_variables' as variables;
 @use 'mastodon/css_variables';
 @use 'fonts/roboto';
 @use 'fonts/roboto-mono';
