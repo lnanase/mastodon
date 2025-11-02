@@ -1,7 +1,27 @@
+import { Icon } from '@/mastodon/components/icon';
+import ArrowDropDownIcon from '@/material-icons/400-24px/arrow_drop_down.svg?react';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import { PureComponent } from 'react';
 
 export default class FoldButton extends PureComponent {
+
+  static propTypes = {
+    active: PropTypes.bool,
+    activeStyle: PropTypes.object,
+    animate: PropTypes.bool,
+    className: PropTypes.string,
+    disabled: PropTypes.bool,
+    expanded: PropTypes.bool,
+    inverted: PropTypes.bool,
+    onClick: PropTypes.func,
+    overlay: PropTypes.bool,
+    pressed: PropTypes.bool,
+    size: PropTypes.number,
+    style: PropTypes.object,
+    tabIndex: PropTypes.number,
+    title: PropTypes.string,
+  };
 
   handleClick = (e) => {
     e.preventDefault();
@@ -26,7 +46,6 @@ export default class FoldButton extends PureComponent {
       className,
       disabled,
       expanded,
-      icon,
       inverted,
       overlay,
       pressed,
@@ -42,7 +61,7 @@ export default class FoldButton extends PureComponent {
     });
 
     const iconStyle = animate ? {
-      transform: `rotate(${active ? 0 : 180}deg)`,
+      transform: `rotate(${active ? 180 : 0}deg)`,
       transition: 'transform 300ms ease-in-out'
     } : {
       transform: `rotate(${active ? 180 : 0}deg)`
@@ -59,7 +78,7 @@ export default class FoldButton extends PureComponent {
         style={style}
         tabIndex={tabIndex}
       >
-        <i style={iconStyle} className={`fa fa-fw fa-${icon}`} aria-hidden='true' />
+        <Icon id='down' icon={ArrowDropDownIcon} className='compose__extra__header__icon' style={iconStyle} />
       </button>
     );
   }
