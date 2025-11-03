@@ -4,8 +4,43 @@ set -euo pipefail
 git fetch upstream
 git fetch imas
 git checkout update/imastodon || git checkout -b update/imastodon imas/imastodon
-git merge upstream/main --no-edit
-git push -u imas update/imastodon
 
-echo https://github.com/imas/mastodon/compare/imastodon...update/imastodon
-echo "Please create a PR at the above URL."
+# 現在のimastodonブランチにはないがupstream/mainにあるコミットを取得
+new_commits=$(git rev-list HEAD..upstream/main)
+
+if [ -n "$new_commits" ]; then
+    # これらの新しいコミットにRCタグが付いているかチェック
+    rc_tags=""
+    for commit in $new_commits; do
+        commit_tags=$(git tag --points-at "$commit" | grep -E 'v[0-9]+\.[0-9]+\.[0-9]+-rc\.[0-9]+' || true)
+        if [ -n "$commit_tags" ]; then
+            rc_tags="$rc_tags$commit_tags"$'\n'
+        fi
+    done
+    
+    if [ -n "$rc_tags" ]; then
+        echo "発見されたRC（リリース候補）タグ:"
+        echo ""
+        echo "$rc_tags"
+        
+        # 最初のRCタグを取得
+        first_rc_tag=$(echo "$rc_tags" | head -n 1 | tr -d '\n')
+        
+        echo "RCタグが見つかったため、${first_rc_tag}までをマージします。"
+        git merge "$first_rc_tag" --no-edit
+        
+        echo ""
+        echo "RCタグ ${first_rc_tag} までのマージが完了しました。"
+        echo "この変更をimastodonブランチへマージした後、stableブランチを作成してください。"
+    else
+        echo "RCタグは見つかりませんでした。upstream/mainを全てマージします。"
+        git merge upstream/main --no-edit
+    fi
+
+    git push -u imas update/imastodon
+
+    echo https://github.com/imas/mastodon/compare/imastodon...update/imastodon
+    echo "上記URLでPRを作成してください。"
+else
+    echo "マージする新しいコミットはありません。"
+fi
