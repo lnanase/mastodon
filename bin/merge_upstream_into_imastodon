@@ -1,46 +1,94 @@
 #! /bin/bash
 set -euo pipefail
 
-git fetch upstream
-git fetch imas
-git checkout update/imastodon || git checkout -b update/imastodon imas/imastodon
+# リモートリポジトリから最新情報を取得
+fetch_repositories() {
+    echo "リモートリポジトリから最新情報を取得中..."
+    git fetch upstream
+    git fetch imas
+}
 
-# 現在のimastodonブランチにはないがupstream/mainにあるコミットを取得
-new_commits=$(git rev-list HEAD..upstream/main)
+# update/imastodonブランチに切り替えまたは作成
+setup_update_branch() {
+    echo "update/imastodonブランチを準備中..."
+    git checkout update/imastodon || git checkout -b update/imastodon imas/imastodon
+}
 
-if [ -n "$new_commits" ]; then
-    # これらの新しいコミットにRCタグが付いているかチェック
-    rc_tags=""
-    for commit in $new_commits; do
-        commit_tags=$(git tag --points-at "$commit" | grep -E 'v[0-9]+\.[0-9]+\.[0-9]+-rc\.[0-9]+' || true)
+# 新しいコミットを取得
+get_new_commits() {
+    git rev-list HEAD..upstream/main
+}
+
+# 指定されたコミットリストからRCタグを検索
+find_rc_tags() {
+    local commits="$1"
+    local rc_tags=""
+    
+    for commit in $commits; do
+        local commit_tags=$(git tag --points-at "$commit" | grep -E 'v[0-9]+\.[0-9]+\.[0-9]+-rc\.[0-9]+' || true)
         if [ -n "$commit_tags" ]; then
             rc_tags="$rc_tags$commit_tags"$'\n'
         fi
     done
     
-    if [ -n "$rc_tags" ]; then
-        echo "発見されたRC（リリース候補）タグ:"
-        echo ""
-        echo "$rc_tags"
-        
-        # 最初のRCタグを取得
-        first_rc_tag=$(echo "$rc_tags" | head -n 1 | tr -d '\n')
-        
-        echo "RCタグが見つかったため、${first_rc_tag}までをマージします。"
-        git merge "$first_rc_tag" --no-edit
-        
-        echo ""
-        echo "RCタグ ${first_rc_tag} までのマージが完了しました。"
-        echo "この変更をimastodonブランチへマージした後、stableブランチを作成してください。"
-    else
-        echo "RCタグは見つかりませんでした。upstream/mainを全てマージします。"
-        git merge upstream/main --no-edit
-    fi
+    echo "$rc_tags"
+}
 
+# RCタグが見つかった場合の処理
+handle_rc_tags() {
+    local rc_tags="$1"
+    
+    echo "発見されたRC（リリース候補）タグ:"
+    echo ""
+    echo "$rc_tags"
+    
+    # 最初のRCタグを取得
+    local first_rc_tag=$(echo "$rc_tags" | head -n 1 | tr -d '\n')
+    
+    echo "RCタグが見つかったため、${first_rc_tag}までをマージします。"
+    git merge "$first_rc_tag" --no-edit
+    
+    echo ""
+    echo "RCタグ ${first_rc_tag} までのマージが完了しました。"
+    echo "この変更をimastodonブランチへマージした後、stableブランチを作成してください。"
+}
+
+# 通常のマージ処理
+handle_normal_merge() {
+    echo "RCタグは見つかりませんでした。upstream/mainを全てマージします。"
+    git merge upstream/main --no-edit
+}
+
+# 変更をプッシュしてPR作成案内
+finalize_merge() {
     git push -u imas update/imastodon
-
+    
+    echo ""
     echo https://github.com/imas/mastodon/compare/imastodon...update/imastodon
     echo "上記URLでPRを作成してください。"
-else
-    echo "マージする新しいコミットはありません。"
-fi
+}
+
+# メイン処理
+main() {
+    fetch_repositories
+    setup_update_branch
+    
+    local new_commits=$(get_new_commits)
+    
+    if [ -n "$new_commits" ]; then
+        local rc_tags=$(find_rc_tags "$new_commits")
+        
+        if [ -n "$rc_tags" ]; then
+            handle_rc_tags "$rc_tags"
+        else
+            handle_normal_merge
+        fi
+        
+        finalize_merge
+    else
+        echo "マージする新しいコミットはありません。"
+    fi
+}
+
+# スクリプト実行
+main
