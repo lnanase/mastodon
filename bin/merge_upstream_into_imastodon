@@ -79,10 +79,42 @@ finalize_merge() {
     echo "上記URLでPRを作成してください。"
 }
 
+# 最新のコミットがRCタグをマージするマージコミットかどうかをチェック
+check_latest_commit_for_rc() {
+    local latest_commit=$(git rev-parse upstream/main)
+    
+    # マージコミットかどうかをチェック（親コミットが2つ以上）
+    local parent_count=$(git rev-list --parents -n 1 "$latest_commit" | wc -w)
+    parent_count=$((parent_count - 1))  # 最初の要素はコミット自体なので除く
+    
+    if [ "$parent_count" -ge 2 ]; then
+        echo "最新コミットがマージコミットです。RCタグのマージかチェック中..." >&2
+        
+        # マージされた親コミットをチェック
+        local parents=$(git rev-list --parents -n 1 "$latest_commit" | cut -d' ' -f3-)
+        
+        for parent in $parents; do
+            local rc_tag=$(git tag --points-at "$parent" | grep -E 'v[0-9]+\.[0-9]+\.[0-9]+-rc\.[0-9]+' || true)
+            if [ -n "$rc_tag" ]; then
+                echo "エラー: upstream/mainの最新コミットはRCタグ '${rc_tag}' をマージするマージコミットです。"
+                echo ""
+                echo "RCリリースのマージは不安定なリリース候補版を含むため、自動マージを中止します。"
+                echo "手動でstableブランチを作成してからマージを検討してください。"
+                echo ""
+                echo "マージを中止しました。"
+                exit 1
+            fi
+        done
+    fi
+}
+
 # メイン処理
 main() {
     fetch_repositories
     setup_update_branch
+    
+    # 最新コミットがRCタグかどうかを最初にチェック
+    check_latest_commit_for_rc
     
     local new_commits=$(get_new_commits)
     
