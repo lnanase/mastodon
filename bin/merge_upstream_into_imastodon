@@ -24,13 +24,24 @@ find_rc_tags() {
     local commits="$1"
     local rc_tags=""
     
+    # コミット数を計算
+    local total_commits=$(echo "$commits" | wc -l)
+    local current=0
+    
+    echo "RCタグをチェック中... (${total_commits}個のコミット)" >&2
+    
     for commit in $commits; do
+        current=$((current + 1))
+        printf "\rコミット %d/%d をチェック中... " "$current" "$total_commits" >&2
+        
         local commit_tags=$(git tag --points-at "$commit" | grep -E 'v[0-9]+\.[0-9]+\.[0-9]+-rc\.[0-9]+' || true)
         if [ -n "$commit_tags" ]; then
             rc_tags="$rc_tags$commit_tags"$'\n'
         fi
     done
     
+    printf "\rRCタグチェック完了 (%d/%d)     \n" "$current" "$total_commits" >&2
+
     echo "$rc_tags"
 }
 
