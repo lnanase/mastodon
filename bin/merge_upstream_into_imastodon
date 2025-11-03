@@ -1,0 +1,11 @@
+#! /bin/bash
+set -euo pipefail
+
+git fetch upstream
+git fetch imas
+git checkout update/imastodon || git checkout -b update/imastodon imas/imastodon
+git merge upstream/main --no-edit
+git push -u imas update/imastodon
+
+echo https://github.com/imas/mastodon/compare/imastodon...update/imastodon
+echo "Please create a PR at the above URL."
