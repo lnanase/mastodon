@@ -1,0 +1,137 @@
+#! /bin/bash
+set -euo pipefail
+
+# リモートリポジトリから最新情報を取得
+fetch_repositories() {
+    echo "リモートリポジトリから最新情報を取得中..."
+    git fetch upstream
+    git fetch imas
+}
+
+# update/imastodonブランチに切り替えまたは作成
+setup_update_branch() {
+    echo "update/imastodonブランチを準備中..."
+    git checkout update/imastodon || git checkout -b update/imastodon imas/imastodon
+}
+
+# 新しいコミットを取得
+get_new_commits() {
+    git rev-list HEAD..upstream/main
+}
+
+# 指定されたコミットリストからRCタグを検索
+find_rc_tags() {
+    local commits="$1"
+    local rc_tags=""
+    
+    # コミット数を計算
+    local total_commits=$(echo "$commits" | wc -l)
+    local current=0
+    
+    echo "RCタグをチェック中... (${total_commits}個のコミット)" >&2
+    
+    for commit in $commits; do
+        current=$((current + 1))
+        printf "\rコミット %d/%d をチェック中... " "$current" "$total_commits" >&2
+        
+        local commit_tags=$(git tag --points-at "$commit" | grep -E 'v[0-9]+\.[0-9]+\.[0-9]+-rc\.[0-9]+' || true)
+        if [ -n "$commit_tags" ]; then
+            rc_tags="$rc_tags$commit_tags"$'\n'
+        fi
+    done
+    
+    printf "\rRCタグチェック完了 (%d/%d)     \n" "$current" "$total_commits" >&2
+
+    echo "$rc_tags"
+}
+
+# RCタグが見つかった場合の処理
+handle_rc_tags() {
+    local rc_tags="$1"
+    
+    echo "発見されたRC（リリース候補）タグ:"
+    echo ""
+    echo "$rc_tags"
+    
+    # 最初のRCタグを取得
+    local first_rc_tag=$(echo "$rc_tags" | head -n 1 | tr -d '\n')
+    
+    echo "RCタグが見つかったため、${first_rc_tag}までをマージします。"
+    git merge "$first_rc_tag" --no-edit
+    
+    echo ""
+    echo "RCタグ ${first_rc_tag} までのマージが完了しました。"
+    echo "この変更をimastodonブランチへマージした後、stableブランチを作成してください。"
+}
+
+# 通常のマージ処理
+handle_normal_merge() {
+    echo "RCタグは見つかりませんでした。upstream/mainを全てマージします。"
+    git merge upstream/main --no-edit
+}
+
+# 変更をプッシュしてPR作成案内
+finalize_merge() {
+    git push -u imas update/imastodon
+    
+    echo ""
+    echo https://github.com/imas/mastodon/compare/imastodon...update/imastodon
+    echo "上記URLでPRを作成してください。"
+}
+
+# 最新のコミットがRCタグをマージするマージコミットかどうかをチェック
+check_latest_commit_for_rc() {
+    local latest_commit=$(git rev-parse upstream/main)
+    
+    # マージコミットかどうかをチェック（親コミットが2つ以上）
+    local parent_count=$(git rev-list --parents -n 1 "$latest_commit" | wc -w)
+    parent_count=$((parent_count - 1))  # 最初の要素はコミット自体なので除く
+    
+    if [ "$parent_count" -ge 2 ]; then
+        echo "最新コミットがマージコミットです。RCタグのマージかチェック中..." >&2
+        
+        # マージされた親コミットをチェック
+        local parents=$(git rev-list --parents -n 1 "$latest_commit" | cut -d' ' -f3-)
+        
+        for parent in $parents; do
+            local rc_tag=$(git tag --points-at "$parent" | grep -E 'v[0-9]+\.[0-9]+\.[0-9]+-rc\.[0-9]+' || true)
+            if [ -n "$rc_tag" ]; then
+                echo "エラー: upstream/mainの最新コミットはRCタグ '${rc_tag}' をマージするマージコミットです。"
+                echo ""
+                echo "RCリリースのマージは不安定なリリース候補版を含むため、自動マージを中止します。"
+                echo "手動でstableブランチを作成してからマージを検討してください。"
+                echo ""
+                echo "マージを中止しました。"
+                exit 1
+            fi
+        done
+    fi
+}
+
+# メイン処理
+main() {
+    fetch_repositories
+    setup_update_branch
+    
+    # 最新コミットがRCタグかどうかを最初にチェック
+    check_latest_commit_for_rc
+    
+    local new_commits=$(get_new_commits)
+    
+    if [ -n "$new_commits" ]; then
+        local rc_tags=$(find_rc_tags "$new_commits")
+        
+        if [ -n "$rc_tags" ]; then
+            handle_rc_tags "$rc_tags"
+        else
+            handle_normal_merge
+        fi
+        
+        finalize_merge
+    else
+        echo "マージする新しいコミットはありません。"
+    fi
+}
+
+# スクリプト実行
+main
