@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import classNames from 'classnames';
 
@@ -24,9 +24,7 @@ import { MediaGallery, Video, Audio } from '../features/ui/util/async-components
 import { SensitiveMediaContext } from '../features/ui/util/sensitive_media_context';
 import { displayMedia } from '../initial_state';
 
-import { Avatar } from './avatar';
-import { AvatarOverlay } from './avatar_overlay';
-import AvatarOverlayIcon from './avatar_overlay_icon';
+import { injectIntl } from './intl';
 import { StatusHeader } from './status/header'
 import { LinkedDisplayName } from './display_name';
 import { getHashtagBarForStatus } from './hashtag_bar';
@@ -416,7 +414,7 @@ class Status extends ImmutablePureComponent {
       onTranslate: this.handleTranslate,
     };
 
-    let media, statusAvatar, prepend, rebloggedByText;
+    let media, prepend, rebloggedByText;
 
     const connectUp = previousId && previousId === status.get('in_reply_to_id');
     const connectToRoot = rootId && rootId === status.get('in_reply_to_id');
@@ -437,7 +435,7 @@ class Status extends ImmutablePureComponent {
       prepend = (
         <div className='status__prepend'>
           <div className='status__prepend__icon'><Icon id='retweet' icon={RepeatIcon} /></div>
-          <FormattedMessage id='status.reblogged_by' defaultMessage='{name} boosted' values={{ name }} />
+          <FormattedMessage id='status.reblogged_by' defaultMessage='{name} boosted' values={{ name }} tagName='span' />
         </div>
       );
 
@@ -449,7 +447,7 @@ class Status extends ImmutablePureComponent {
       prepend = (
         <div className='status__prepend'>
           <div className='status__prepend__icon'><Icon id='at' icon={AlternateEmailIcon} /></div>
-          <FormattedMessage id='status.direct_indicator' defaultMessage='Private mention' />
+          <FormattedMessage id='status.direct_indicator' defaultMessage='Private mention' tagName='span' />
         </div>
       );
     } else if (showThread && status.get('in_reply_to_id')) {
@@ -557,16 +555,6 @@ class Status extends ImmutablePureComponent {
         />
       );
     }
-
-
-    if (account ==  null && status.get('visibility') === 'public') {
-      statusAvatar = <Avatar account={status.get('account')} size={avatarSize} />;
-    } else if (account ==  null) {
-      statusAvatar = <AvatarOverlayIcon account={status.get('account')} visibility={status.get('visibility')} size={avatarSize} />;
-    } else {
-      statusAvatar = <AvatarOverlay account={status.get('account')} friend={account} />;
-    }
-
 
     const {statusContentProps, hashtagBar} = getHashtagBarForStatus(status);
 
