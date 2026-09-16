@@ -22,9 +22,12 @@
 //   link        リンク・アクティブ状態・セカンダリボタン     旧 $highlight-text-color
 //   accent      強調色（compose のアクティブ枠、通知バナーのティント元） 旧 $ui-highlight-color
 
+// 投稿ボタン・フォローボタン等（--color-bg-brand-base）は accent で塗る。
+// v4.4 では全テーマ Mastodon 既定の紫のままだったが、テーマに合わせる方針に変えた。
+// ボタン上の文字色は accent の明度で決める（明るい accent なら背景色、暗い accent なら白）。
 // 触らない token:
-//   --color-bg-brand-base（投稿ボタン等）は v4.4 でも全テーマ Mastodon 既定の紫だったので upstream に任せる。
 //   red / yellow / green 系（エラー・警告・成功）は意味色なので upstream に任せる。
+@use 'sass:color';
 @use 'sass:map';
 
 @mixin tokens($roles) {
@@ -32,6 +35,13 @@
   $text: map.get($roles, text);
   $link: map.get($roles, link);
   $accent: map.get($roles, accent);
+  $accent-is-light: color.channel($accent, 'lightness', $space: oklch) > 60%;
+  $on-accent: if($accent-is-light, $bg, #fff);
+
+  /* BRAND */
+  --color-bg-brand-base: #{$accent};
+  --color-bg-brand-base-hover: color-mix(in oklab, #{$accent}, #{$text} 15%);
+  --color-text-on-brand-base: #{$on-accent};
 
   /* TEXT */
   --color-text-primary: #{$text};

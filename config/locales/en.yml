@@ -2209,14 +2209,14 @@ en:
     title: The terms of service of %{domain} are changing
   themes:
     default: Mastodon
-    idolmaster: THE IDOLM@STER (Pink)
-    765pro-allstars: 765PRO ALLSTARS (Red)
-    cinderella: Cinderella Girls (Blue)
-    millionlive: Million Live (Yellow)
-    sidem: SideM (Green)
-    shinycolors: Shiny Colors (Skyblue)
-    gakumas: Gakuen Idolmaster (Orange)
-    va-liv: vα-liv (Silver)
+    idolmaster: THE IDOLM@STER (Pink, light recommended)
+    765pro-allstars: 765PRO ALLSTARS (Red, dark recommended)
+    cinderella: Cinderella Girls (Blue, dark recommended)
+    millionlive: Million Live (Yellow, light recommended)
+    sidem: SideM (Green, dark recommended)
+    shinycolors: Shiny Colors (Skyblue, light recommended)
+    gakumas: Gakuen Idolmaster (Orange, light recommended)
+    va-liv: vα-liv (Silver, dark recommended)
   time:
     formats:
       default: "%b %d, %Y, %H:%M"

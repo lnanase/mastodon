@@ -1934,15 +1934,15 @@ ja:
     review_link: 利用規約を確認する
     title: "%{domain} の利用規約が変更されています"
   themes:
-      default: Mastodon
-      idolmaster: アイドルマスター (ピンク)
-      765pro-allstars: 765PRO ALLSTARS (レッド)
-      cinderella: シンデレラガールズ (ブルー)
-      millionlive: ミリオンライブ！ (イエロー)
-      sidem: SideM (グリーン)
-      shinycolors: シャイニーカラーズ (スカイブルー)
-      gakumas: 学園アイドルマスター (オレンジ)
-      va-liv: ヴイアライヴ (シルバー)
+    default: Mastodon
+    idolmaster: アイドルマスター (ピンク・ライト推奨)
+    765pro-allstars: 765PRO ALLSTARS (レッド・ダーク推奨)
+    cinderella: シンデレラガールズ (ブルー・ダーク推奨)
+    millionlive: ミリオンライブ！ (イエロー・ライト推奨)
+    sidem: SideM (グリーン・ダーク推奨)
+    shinycolors: シャイニーカラーズ (スカイブルー・ライト推奨)
+    gakumas: 学園アイドルマスター (オレンジ・ライト推奨)
+    va-liv: ヴイアライヴ (シルバー・ダーク推奨)
   time:
     formats:
       default: "%Y年%m月%d日 %H:%M"
