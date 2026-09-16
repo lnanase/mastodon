@@ -19,17 +19,17 @@ import type { Account } from '@/mastodon/models/account';
 import { getAccountHidden } from '@/mastodon/selectors/accounts';
 import { useAppSelector, useAppDispatch } from '@/mastodon/store';
 
+import { FamiliarFollowers } from '../../../components/familiar_followers';
+
 import { AccountName } from './account_name';
 import { AccountSubscriptionForm } from './account_subscription_form';
-import { AccountBadges } from './badges';
 import { AccountButtons } from './buttons';
-import { FamiliarFollowers } from './familiar_followers';
 import { AccountHeaderFields } from './fields';
 import { MemorialNote } from './memorial_note';
 import { MovedNote } from './moved_note';
-import { AccountNote as AccountNoteRedesign } from './note';
+import { AccountNote } from './note';
 import { AccountNumberFields } from './number_fields';
-import redesignClasses from './redesign.module.scss';
+import classes from './styles.module.scss';
 import { AccountTabs } from './tabs';
 
 const titleFromAccount = (account: Account) => {
@@ -72,7 +72,7 @@ export const AccountHeader: React.FC<{
           modalType: 'IMAGE',
           modalProps: {
             src: account.avatar,
-            alt: '',
+            alt: account.avatar_description,
           },
         }),
       );
@@ -111,31 +111,21 @@ export const AccountHeader: React.FC<{
           <FollowRequestNoteContainer account={account} />
         )}
 
-        <div
-          className={classNames(
-            'account__header__image',
-            redesignClasses.header,
-          )}
-        >
+        <div className={classNames('account__header__image', classes.header)}>
           {!suspendedOrHidden && (
             <img
               src={autoPlayGif ? account.header : account.header_static}
-              alt=''
+              alt={account.header_description}
               className='parallax'
             />
           )}
         </div>
 
-        <div
-          className={classNames(
-            'account__header__bar',
-            redesignClasses.barWrapper,
-          )}
-        >
+        <div className={classNames('account__header__bar', classes.barWrapper)}>
           <div
             className={classNames(
               'account__header__tabs',
-              redesignClasses.avatarWrapper,
+              classes.avatarWrapper,
             )}
           >
             <a
@@ -147,6 +137,7 @@ export const AccountHeader: React.FC<{
             >
               <Avatar
                 account={suspendedOrHidden ? undefined : account}
+                alt={account.avatar_description}
                 size={80}
               />
             </a>
@@ -155,29 +146,32 @@ export const AccountHeader: React.FC<{
           <div
             className={classNames(
               'account__header__tabs__name',
-              redesignClasses.nameWrapper,
+              classes.displayNameWrapper,
             )}
           >
             <AccountName accountId={accountId} />
             <AccountButtons
               accountId={accountId}
-              className={redesignClasses.buttonsDesktop}
+              className={classes.buttonsDesktop}
               noShare={!isMe || 'share' in navigator}
               forceMenu={'share' in navigator}
             />
           </div>
 
-          <AccountBadges accountId={accountId} />
+          <AccountNumberFields accountId={accountId} />
 
           {!isMe && !suspendedOrHidden && (
-            <FamiliarFollowers accountId={accountId} />
+            <FamiliarFollowers
+              accountId={accountId}
+              className={classes.familiarFollowers}
+            />
           )}
 
           {!suspendedOrHidden && (
             <div className='account__header__extra'>
               <div className='account__header__bio'>
                 {me && account.id !== me && (
-                  <AccountNoteRedesign accountId={accountId} />
+                  <AccountNote accountId={accountId} />
                 )}
 
                 <AccountBio
@@ -185,7 +179,7 @@ export const AccountHeader: React.FC<{
                   accountId={accountId}
                   className={classNames(
                     'account__header__content',
-                    redesignClasses.bio,
+                    classes.bio,
                   )}
                 />
 
@@ -195,15 +189,13 @@ export const AccountHeader: React.FC<{
               {!me && account.email_subscriptions && (
                 <AccountSubscriptionForm accountId={accountId} />
               )}
-
-              <AccountNumberFields accountId={accountId} />
             </div>
           )}
 
           <AccountButtons
             className={classNames(
-              redesignClasses.buttonsMobile,
-              !isIntersecting && redesignClasses.buttonsMobileIsStuck,
+              classes.buttonsMobile,
+              !isIntersecting && classes.buttonsMobileIsStuck,
             )}
             accountId={accountId}
             noShare

@@ -6,10 +6,10 @@ import { useHistory } from 'react-router';
 
 import { List as ImmutableList } from 'immutable';
 
+import { AccountListItem } from '@/mastodon/components/account_list_item';
 import { useAccount } from '@/mastodon/hooks/useAccount';
+import AddIcon from '@/material-icons/400-24px/add.svg?react';
 import { fetchEndorsedAccounts } from 'mastodon/actions/accounts';
-import { fetchFeaturedTags } from 'mastodon/actions/featured_tags';
-import { Account } from 'mastodon/components/account';
 import { ColumnBackButton } from 'mastodon/components/column_back_button';
 import { LoadingIndicator } from 'mastodon/components/loading_indicator';
 import { RemoteHint } from 'mastodon/components/remote_hint';
@@ -29,12 +29,13 @@ import {
 } from 'mastodon/reducers/slices/collections';
 import { useAppDispatch, useAppSelector } from 'mastodon/store';
 
-import { CollectionListItem } from '../collections/detail/collection_list_item';
+import { CollectionListItem } from '../collections/components/collection_list_item';
 import { areCollectionsEnabled } from '../collections/utils';
 
 import { EmptyMessage } from './components/empty_message';
-import { FeaturedTag } from './components/featured_tag';
-import type { TagMap } from './components/featured_tag';
+import { Subheading, SubheadingLink } from './components/subheading';
+
+const collectionsEnabled = areCollectionsEnabled();
 
 const AccountFeatured: React.FC<{ multiColumn: boolean }> = ({
   multiColumn,
@@ -55,26 +56,14 @@ const AccountFeatured: React.FC<{ multiColumn: boolean }> = ({
 
   useEffect(() => {
     if (accountId) {
-      void dispatch(fetchFeaturedTags({ accountId }));
       void dispatch(fetchEndorsedAccounts({ accountId }));
-      if (areCollectionsEnabled()) {
+
+      if (collectionsEnabled) {
         void dispatch(fetchAccountCollections({ accountId }));
       }
     }
   }, [accountId, dispatch]);
 
-  const isLoading = useAppSelector(
-    (state) =>
-      !accountId ||
-      !!state.user_lists.getIn(['featured_tags', accountId, 'isLoading']),
-  );
-  const featuredTags = useAppSelector(
-    (state) =>
-      state.user_lists.getIn(
-        ['featured_tags', accountId, 'items'],
-        ImmutableList(),
-      ) as ImmutableList<TagMap>,
-  );
   const featuredAccountIds = useAppSelector(
     (state) =>
       state.user_lists.getIn(
@@ -82,8 +71,8 @@ const AccountFeatured: React.FC<{ multiColumn: boolean }> = ({
         ImmutableList(),
       ) as ImmutableList<string>,
   );
-  const { collections, status } = useAppSelector((state) =>
-    selectAccountCollections(state, accountId ?? null),
+  const { collections, status: collectionsLoadStatus } = useAppSelector(
+    (state) => selectAccountCollections(state, accountId ?? null),
   );
   const listedCollections = collections.filter(
     // Hide unlisted and empty collections to avoid confusion
@@ -91,6 +80,16 @@ const AccountFeatured: React.FC<{ multiColumn: boolean }> = ({
     // when viewing your own profile.)
     (item) => item.discoverable && !!item.item_count,
   );
+
+  const hasCollections =
+    collectionsEnabled &&
+    collectionsLoadStatus === 'idle' &&
+    listedCollections.length > 0;
+
+  const hasFeaturedAccounts = !featuredAccountIds.isEmpty();
+
+  const isLoading =
+    !accountId || (collectionsEnabled && collectionsLoadStatus !== 'idle');
 
   if (accountId === null) {
     return <BundleColumnError multiColumn={multiColumn} errorType='routing' />;
@@ -106,13 +105,7 @@ const AccountFeatured: React.FC<{ multiColumn: boolean }> = ({
     );
   }
 
-  const noTags = featuredTags.isEmpty();
-
-  if (
-    noTags &&
-    featuredAccountIds.isEmpty() &&
-    listedCollections.length === 0
-  ) {
+  if (!hasFeaturedAccounts && !hasCollections) {
     return (
       <AccountFeaturedWrapper accountId={accountId}>
         <EmptyMessage
@@ -134,58 +127,14 @@ const AccountFeatured: React.FC<{ multiColumn: boolean }> = ({
         {accountId && (
           <AccountHeader accountId={accountId} hideTabs={forceEmptyState} />
         )}
-        {listedCollections.length > 0 && status === 'idle' && (
-          <>
-            <h4 className='column-subheading'>
-              <FormattedMessage
-                id='account.featured.collections'
-                defaultMessage='Collections'
-              />
-            </h4>
-            <ItemList>
-              {listedCollections.map((item, index) => (
-                <CollectionListItem
-                  key={item.id}
-                  collection={item}
-                  withoutBorder={index === listedCollections.length - 1}
-                  withAuthorHandle={false}
-                  positionInList={index + 1}
-                  listSize={listedCollections.length}
-                />
-              ))}
-            </ItemList>
-          </>
-        )}
-        {!noTags && (
-          <>
-            <h4 className='column-subheading'>
-              <FormattedMessage
-                id='account.featured.hashtags'
-                defaultMessage='Hashtags'
-              />
-            </h4>
-            <ItemList>
-              {featuredTags.map((tag, index) => (
-                <Article
-                  focusable
-                  key={tag.get('id')}
-                  aria-posinset={index + 1}
-                  aria-setsize={featuredTags.size}
-                >
-                  <FeaturedTag tag={tag} account={account?.acct ?? ''} />
-                </Article>
-              ))}
-            </ItemList>
-          </>
-        )}
         {!featuredAccountIds.isEmpty() && (
           <>
-            <h4 className='column-subheading'>
+            <Subheading as='h2'>
               <FormattedMessage
                 id='account.featured.accounts'
                 defaultMessage='Profiles'
               />
-            </h4>
+            </Subheading>
             <ItemList>
               {featuredAccountIds.map((featuredAccountId, index) => (
                 <Article
@@ -194,10 +143,50 @@ const AccountFeatured: React.FC<{ multiColumn: boolean }> = ({
                   aria-posinset={index + 1}
                   aria-setsize={featuredAccountIds.size}
                 >
-                  <Account id={featuredAccountId} />
+                  <AccountListItem accountId={featuredAccountId} />
                 </Article>
               ))}
             </ItemList>
+          </>
+        )}
+        {collectionsEnabled && (
+          <>
+            <Subheading as='header'>
+              <h2>
+                <FormattedMessage
+                  id='account.featured.collections'
+                  defaultMessage='Collections'
+                />
+              </h2>
+              <SubheadingLink to='/collections/new' icon={AddIcon}>
+                <FormattedMessage
+                  id='account.featured.new_collection'
+                  defaultMessage='New collection'
+                />
+              </SubheadingLink>
+            </Subheading>
+            {hasCollections ? (
+              <ItemList>
+                {listedCollections.map((item, index) => (
+                  <CollectionListItem
+                    key={item.id}
+                    collection={item}
+                    withoutBorder={index === listedCollections.length - 1}
+                    withAuthorHandle={false}
+                    positionInList={index + 1}
+                    listSize={listedCollections.length}
+                  />
+                ))}
+              </ItemList>
+            ) : (
+              <EmptyMessage
+                withoutAddCollectionButton
+                blockedBy={blockedBy}
+                hidden={hidden}
+                suspended={suspended}
+                accountId={accountId}
+              />
+            )}
           </>
         )}
         <RemoteHint accountId={accountId} />

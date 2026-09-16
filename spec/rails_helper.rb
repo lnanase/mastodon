@@ -132,9 +132,9 @@ RSpec.configure do |config|
 
   config.around do |example|
     if example.metadata[:inline_jobs] == true
-      Sidekiq::Testing.inline!
+      Sidekiq.testing!(:inline)
     else
-      Sidekiq::Testing.fake!
+      Sidekiq.testing!(:fake)
     end
     example.run
   end
