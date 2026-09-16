@@ -23,37 +23,3 @@ $no-columns-breakpoint: 600px;
 $font-sans-serif: 'mastodon-font-sans-serif' !default;
 $font-display: 'mastodon-font-display' !default;
 $font-monospace: 'mastodon-font-monospace' !default;
-
-$emojis-requiring-inversion: 'back' 'copyright' 'curly_loop' 'currency_exchange'
-  'end' 'heavy_check_mark' 'heavy_division_sign' 'heavy_dollar_sign'
-  'heavy_minus_sign' 'heavy_multiplication_x' 'heavy_plus_sign' 'on'
-  'registered' 'soon' 'spider' 'telephone_receiver' 'tm' 'top' 'wavy_dash' !default;
-
-// Compatibility stubs: upstream removed these variables in the new CSS custom properties theme system.
-// imastodon themes still reference these. They are accepted by the Sass module system but
-// do NOT affect CSS output in the new theme architecture.
-// TODO: migrate imastodon themes to CSS custom properties and remove these stubs.
-$ui-base-color: #282c37 !default;
-$ui-base-lighter-color: #313543 !default;
-$ui-primary-color: #9baec8 !default;
-$ui-secondary-color: #d9e1e8 !default;
-$ui-highlight-color: #6364ff !default;
-$primary-text-color: #fff !default;
-$darker-text-color: #ecf0f4 !default;
-$secondary-text-color: #c2cede !default;
-$lighter-text-color: #a0b1c2 !default;
-$highlight-text-color: #d0e0f0 !default;
-$dark-text-color: #606984 !default;
-$light-text-color: #8d9ac2 !default;
-$inverted-text-color: #000 !default;
-$action-button-color: #8d9ac2 !default;
-$base-overlay-background: #000 !default;
-$success-green: #79bd9a !default;
-$ui-button-secondary-color: #6364ff !default;
-$ui-button-secondary-border-color: #6364ff !default;
-$ui-button-secondary-focus-color: #fff !default;
-$ui-button-tertiary-color: #6364ff !default;
-$ui-button-tertiary-border-color: #6364ff !default;
-$error-value-color: #df405a !default;
-$white: #fff !default;
-$black: #000 !default;
