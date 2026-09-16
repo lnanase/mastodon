@@ -35,8 +35,10 @@
   $text: map.get($roles, text);
   $link: map.get($roles, link);
   $accent: map.get($roles, accent);
-  $accent-is-light: color.channel($accent, 'lightness', $space: oklch) > 60%;
-  $on-accent: if($accent-is-light, $bg, #fff);
+  $on-accent: #fff;
+  @if color.channel($accent, 'lightness', $space: oklch) > 60% {
+    $on-accent: $bg;
+  }
 
   /* BRAND */
   --color-bg-brand-base: #{$accent};
