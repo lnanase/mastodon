@@ -208,9 +208,13 @@ RSpec.describe User do
     context 'with a new user' do
       let(:user) { Fabricate.build :user }
 
+      before { allow(ActivityTracker).to receive(:record) }
+
       it 'does not persist the user' do
         expect { user.update_sign_in! }
           .to_not change(user, :persisted?).from(false)
+        expect(ActivityTracker)
+          .to_not have_received(:record).with('activity:logins', anything)
       end
     end
   end
@@ -399,7 +403,7 @@ RSpec.describe User do
       expect(user).to have_attributes(disabled: true)
 
       expect(redis)
-        .to have_received(:publish).with("timeline:system:#{user.account.id}", Oj.dump(event: :kill)).once
+        .to have_received(:publish).with("timeline:system:#{user.account.id}", { event: :kill }.to_json).once
     end
   end
 
@@ -441,7 +445,7 @@ RSpec.describe User do
       expect { web_push_subscription.reload }
         .to raise_error(ActiveRecord::RecordNotFound)
       expect(redis_pipeline_stub)
-        .to have_received(:publish).with("timeline:access_token:#{access_token.id}", Oj.dump(event: :kill)).once
+        .to have_received(:publish).with("timeline:access_token:#{access_token.id}", { event: :kill }.to_json).once
     end
 
     def remove_activated_sessions
