@@ -11,7 +11,6 @@ import announcements from './announcements';
 import { composeReducer } from './compose';
 import { contextsReducer } from './contexts';
 import conversations from './conversations';
-import custom_emojis from './custom_emojis';
 import { dropdownMenuReducer } from './dropdown_menu';
 import favourite_tags from './favourite_tags';
 import filters from './filters';
@@ -69,7 +68,6 @@ const reducers = {
   notifications,
   notificationGroups: notificationGroupsReducer,
   height_cache,
-  custom_emojis,
   lists: listsReducer,
   followedTags: followedTagsReducer,
   filters,
