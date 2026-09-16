@@ -695,7 +695,6 @@ ja:
       resolved_msg: 通報を解決済みにしました！
       skip_to_actions: アクションに移動
       status: ステータス
-      statuses: 通報内容
       statuses_description_html: 問題の投稿は通報されたアカウントへの連絡時に引用されます
       summary:
         action_preambles:
@@ -1933,18 +1932,15 @@ ja:
     review_link: 利用規約を確認する
     title: "%{domain} の利用規約が変更されています"
   themes:
-    contrast: Mastodon (ハイコントラスト)
-    default: Mastodon (ダーク)
-    mastodon-light: Mastodon (ライト)
-    system: 自動 (システムのテーマを使用)
-    idolmaster: アイドルマスター (ピンク)
-    765pro-allstars: 765PRO ALLSTARS (レッド)
-    cinderella: シンデレラガールズ (ブルー)
-    millionlive: ミリオンライブ！ (イエロー)
-    sidem: SideM (グリーン)
-    shinycolors: シャイニーカラーズ (スカイブルー)
-    gakumas: 学園アイドルマスター (オレンジ)
-    va-liv: ヴイアライヴ (シルバー)
+      default: Mastodon
+      idolmaster: アイドルマスター (ピンク)
+      765pro-allstars: 765PRO ALLSTARS (レッド)
+      cinderella: シンデレラガールズ (ブルー)
+      millionlive: ミリオンライブ！ (イエロー)
+      sidem: SideM (グリーン)
+      shinycolors: シャイニーカラーズ (スカイブルー)
+      gakumas: 学園アイドルマスター (オレンジ)
+      va-liv: ヴイアライヴ (シルバー)
   time:
     formats:
       default: "%Y年%m月%d日 %H:%M"
