@@ -99,15 +99,14 @@ const getCollectionItems = createAppSelector(
 );
 
 export const CollectionAccountsList: React.FC<{
-  collection?: ApiCollectionJSON;
-  isLoading: boolean;
-}> = ({ collection, isLoading }) => {
+  collection: ApiCollectionJSON;
+}> = ({ collection }) => {
   const intl = useIntl();
   const confirmRevoke = useConfirmRevoke(collection);
   const listHeadingRef = useRef<HTMLHeadingElement>(null);
 
-  const isOwnCollection = collection?.account_id === me;
-  const { account_id: collectionOwnerId, id } = collection ?? {};
+  const isOwnCollection = collection.account_id === me;
+  const { account_id: collectionOwnerId, id } = collection;
 
   const relationships = useAppSelector((state) => state.relationships);
   const collectionAccounts = useAppSelector((state) =>
@@ -139,12 +138,16 @@ export const CollectionAccountsList: React.FC<{
 
   const renderAccountItemButton = useCallback(
     ({ relationship, accountId }: RenderButtonOptions) => {
+      if (!me || !relationship) {
+        // Show follow button when logged out (it will trigger the remote interaction modal)
+        return <AccountListItemFollowButton accountId={accountId} />;
+      }
+
       // When viewing your own collection, only show the Follow button
       // for accounts you're not following anymore.
       const withoutButton =
-        !relationship ||
-        (collectionOwnerId === me &&
-          (relationship.following || relationship.requested));
+        collectionOwnerId === me &&
+        (relationship.following || relationship.requested);
 
       if (withoutButton) return null;
 
@@ -194,53 +197,41 @@ export const CollectionAccountsList: React.FC<{
         tabIndex={-1}
         ref={listHeadingRef}
       >
-        {collection ? (
-          <FormattedMessage
-            id='collections.account_count'
-            defaultMessage='{count, plural, one {# account} other {# accounts}}'
-            values={{ count: collection.item_count }}
-          />
-        ) : (
-          <FormattedMessage
-            id='collections.detail.accounts_heading'
-            defaultMessage='Accounts'
-          />
-        )}
+        <FormattedMessage
+          id='collections.account_count'
+          defaultMessage='{count, plural, one {# account} other {# accounts}}'
+          values={{ count: collection.item_count }}
+        />
       </h3>
-      {collection && (
-        <SensitiveScreen
-          sensitive={!isOwnCollection && collection.sensitive}
-          focusTargetRef={listHeadingRef}
-        >
-          <ItemList
-            isLoading={isLoading}
-            emptyMessage={intl.formatMessage(messages.empty)}
-          >
-            <TruncatedListItems
-              visibleItems={visibleAccounts}
-              truncatedItems={hiddenAccounts}
-              toggleButton={{
-                icon: VisibilityOffIcon,
-                title: (
-                  <FormattedMessage
-                    id='collections.hidden_accounts_link'
-                    defaultMessage='{count, plural, one {# hidden account} other {# hidden accounts}}'
-                    values={{ count: hiddenAccounts.length }}
-                  />
-                ),
-                subtitle: (
-                  <FormattedMessage
-                    id='collections.hidden_accounts_description'
-                    defaultMessage='You’ve blocked or muted {count, plural, one {this user} other {these users}}'
-                    values={{ count: hiddenAccounts.length }}
-                  />
-                ),
-              }}
-              renderListItem={renderListItem}
-            />
-          </ItemList>
-        </SensitiveScreen>
-      )}
+      <SensitiveScreen
+        sensitive={!isOwnCollection && collection.sensitive}
+        focusTargetRef={listHeadingRef}
+      >
+        <ItemList emptyMessage={intl.formatMessage(messages.empty)}>
+          <TruncatedListItems
+            visibleItems={visibleAccounts}
+            truncatedItems={hiddenAccounts}
+            toggleButton={{
+              icon: VisibilityOffIcon,
+              title: (
+                <FormattedMessage
+                  id='collections.hidden_accounts_link'
+                  defaultMessage='{count, plural, one {# hidden account} other {# hidden accounts}}'
+                  values={{ count: hiddenAccounts.length }}
+                />
+              ),
+              subtitle: (
+                <FormattedMessage
+                  id='collections.hidden_accounts_description'
+                  defaultMessage='You’ve blocked or muted {count, plural, one {this user} other {these users}}'
+                  values={{ count: hiddenAccounts.length }}
+                />
+              ),
+            }}
+            renderListItem={renderListItem}
+          />
+        </ItemList>
+      </SensitiveScreen>
     </>
   );
 };

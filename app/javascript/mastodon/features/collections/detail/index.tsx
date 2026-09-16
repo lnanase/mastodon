@@ -2,9 +2,10 @@ import { useCallback, useEffect } from 'react';
 
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { Helmet } from 'react-helmet';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
+
+import { Helmet } from '@unhead/react/helmet';
 
 import HelpIcon from '@/material-icons/400-24px/help.svg?react';
 import ListAltIcon from '@/material-icons/400-24px/list_alt.svg?react';
@@ -23,6 +24,7 @@ import { DisplayName } from 'mastodon/components/display_name';
 import { useAccountHandle } from 'mastodon/components/display_name/default';
 import { FormattedDateWrapper } from 'mastodon/components/formatted_date';
 import { IconButton } from 'mastodon/components/icon_button';
+import { LoadingIndicator } from 'mastodon/components/loading_indicator';
 import { Scrollable } from 'mastodon/components/scrollable_list/components';
 import { useAccount } from 'mastodon/hooks/useAccount';
 import { domain, me } from 'mastodon/initial_state';
@@ -116,7 +118,7 @@ const RevokeControls: React.FC<{
   );
 };
 
-const PendingNote: React.FC = () => {
+export const PendingNote: React.FC = () => {
   return (
     <Callout
       variant='subtle'
@@ -218,7 +220,6 @@ export const CollectionDetailPage: React.FC<{
   const collection = useAppSelector((state) =>
     id ? state.collections.collections[id] : undefined,
   );
-  const isLoading = !!id && !collection;
 
   useEffect(() => {
     if (id) {
@@ -239,8 +240,14 @@ export const CollectionDetailPage: React.FC<{
       />
 
       <Scrollable>
-        {collection && <CollectionHeader collection={collection} />}
-        <CollectionAccountsList collection={collection} isLoading={isLoading} />
+        {collection ? (
+          <>
+            <CollectionHeader collection={collection} />
+            <CollectionAccountsList collection={collection} />
+          </>
+        ) : (
+          <LoadingIndicator />
+        )}
       </Scrollable>
 
       <Helmet>
