@@ -31,18 +31,21 @@ const FavouriteToggle = ({ tag, addFavouriteTags, removeFavouriteTags, unlistedI
     removeFavouriteTags(unlistedId);
   }, [removeFavouriteTags, unlistedId]);
 
+  // upstream のカラム設定と同じ .column-settings > section 構造にして、同じ余白（section の padding）を得る
   return (
-    <div>
-      <div className='column-settings__row'>
-        {
-          publicId != null ? <Button className='favourite-tags__remove-button-in-column' text={intl.formatMessage(messages.remove_favourite_tags_public)} onClick={removePublic} block />
-            : <Button className='favourite-tags__add-button-in-column' text={intl.formatMessage(messages.add_favourite_tags_public)} onClick={addPublic} block />
-        }
-        {
-          unlistedId != null ? <Button className='favourite-tags__remove-button-in-column' text={intl.formatMessage(messages.remove_favourite_tags_unlisted)} onClick={removeUnlisted} block />
-            : <Button className='favourite-tags__add-button-in-column' text={intl.formatMessage(messages.add_favourite_tags_unlisted)} onClick={addUnlisted} block />
-        }
-      </div>
+    <div className='column-settings'>
+      <section>
+        <div className='column-settings__row'>
+          {
+            publicId != null ? <Button className='favourite-tags__remove-button-in-column' text={intl.formatMessage(messages.remove_favourite_tags_public)} onClick={removePublic} block />
+              : <Button className='favourite-tags__add-button-in-column' text={intl.formatMessage(messages.add_favourite_tags_public)} onClick={addPublic} block />
+          }
+          {
+            unlistedId != null ? <Button className='favourite-tags__remove-button-in-column' text={intl.formatMessage(messages.remove_favourite_tags_unlisted)} onClick={removeUnlisted} block />
+              : <Button className='favourite-tags__add-button-in-column' text={intl.formatMessage(messages.add_favourite_tags_unlisted)} onClick={addUnlisted} block />
+          }
+        </div>
+      </section>
     </div>
   );
 };
