@@ -22,7 +22,11 @@
 
   &:focus,
   &:hover {
-    background-color: color-mix(in oklab, var(--color-bg-brand-base), white 8%);
+    background-color: color-mix(
+      in oklab,
+      var(--color-bg-brand-base),
+      var(--color-text-primary) 8%
+    );
   }
 }
 
@@ -32,6 +36,10 @@
 
   &:focus,
   &:hover {
-    background-color: color-mix(in oklab, var(--color-bg-error-base), white 8%);
+    background-color: color-mix(
+      in oklab,
+      var(--color-bg-error-base),
+      var(--color-text-primary) 8%
+    );
   }
 }

@@ -43,7 +43,11 @@
   display: flex;
   height: 26px;
   padding: 4px 12px;
-  background: color-mix(in oklab, var(--color-bg-primary), white 8%);
+  background: color-mix(
+    in oklab,
+    var(--color-bg-primary),
+    var(--color-text-primary) 8%
+  );
   font-size: 16px;
   align-items: center;
 
