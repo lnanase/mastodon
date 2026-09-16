@@ -345,12 +345,20 @@ es:
       updated_msg: "¡Anuncio actualizado con éxito!"
     collections:
       accounts: Cuentas
+      back_to_account: Volver a la página de la cuenta
+      back_to_report: Volver a la página del informe
+      batch:
+        add_to_report: 'Añadir al informe #%{id}'
+        remove_from_report: Quitar del informe
+        report: Informar
       collection_title: Colección de %{name}
       contents: Contenidos
+      no_collection_selected: No se ha cambiado ninguna colección, ya que no se ha seleccionado ninguna
       number_of_accounts:
         one: 1 cuenta
         other: "%{count} cuentas"
       open: Abrir
+      title: Colecciones de la cuenta - @%{name}
       view_publicly: Ver públicamente
     critical_update_pending: Actualización crítica pendiente
     custom_emojis:
@@ -947,11 +955,6 @@ es:
           authenticated: Solo usuarios autenticados
           disabled: Requerir un rol de usuario específico
           public: Todos
-      landing_page:
-        values:
-          about: Acerca de
-          local_feed: Cronología local
-          trends: Tendencias
       registrations:
         moderation_recommandation: Por favor, ¡asegúrate de tener un equipo de moderación adecuado y reactivo antes de abrir los registros a todo el mundo!
         preamble: Controla quién puede crear una cuenta en tu servidor.
@@ -971,6 +974,7 @@ es:
     site_uploads:
       delete: Eliminar archivo subido
       destroyed_msg: "¡Carga del sitio eliminada con éxito!"
+    skip_to_content: Saltar al contenido
     software_updates:
       critical_update: Crítica— por favor actualiza rápidamente
       description: Se recomienda mantener actualizada tu instalación de Mastodon para beneficiarte de las últimas correcciones y características. Además, a veces es crítico actualizar Mastodon de manera oportuna para evitar problemas de seguridad. Por estas razones, Mastodon comprueba si hay actualizaciones cada 30 minutos, y te notificará de acuerdo a tus preferencias de notificación por correo electrónico.
@@ -1292,7 +1296,7 @@ es:
     animations_and_accessibility: Animaciones y accesibilidad
     boosting_preferences: Preferencias de impulso
     boosting_preferences_info_html: "<strong>Consejo:</strong> Sin importar los ajustes, pulsar <kbd>Mayus</kbd> al hacer <kbd>clic</kbd> en el icono de %{icon} Impulsar, dará impulso inmediatamente."
-    discovery: Descubrir
+    discovery: Descubrimiento
     localization:
       body: Mastodon es traducido con la ayuda de voluntarios.
       guide_link: https://es.crowdin.com/project/mastodon
