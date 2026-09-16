@@ -28,7 +28,7 @@ RSpec.describe 'お気に入りタグ', :js, type: :system do
       within('.compose__extra li', text: '#imastest') do
         click_button class: 'favourite-tags__lock'
       end
-      expect(find('.autosuggest-textarea__textarea').value).to match(/#imastest/)
+      expect(find('.autosuggest-textarea__textarea').value).to include('#imastest')
     end
 
     it '折りたたみボタンで開閉できる' do
