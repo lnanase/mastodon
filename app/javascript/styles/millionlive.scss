@@ -1,1 +1,37 @@
+// ミリオンライブ！ yellow (#ffc30b)
+// ライト側が正（v4.4 までの見た目）。ダーク側は同じ色相から機械生成した派生。
 @use 'application';
+@use 'imastodon/theme';
+
+[data-color-scheme='light'] {
+  @include theme.tokens(
+    (
+      bg: #fcca3f,
+      bg-compose: #fdd567,
+      bg-surface: #fdcf53,
+      border: #fddb7b,
+      text: #2d1f00,
+      text-2: #3b2b00,
+      text-3: #5b4400,
+      link: #a37500,
+      accent: #5b4400,
+    )
+  );
+}
+
+[data-color-scheme='dark'],
+html:not([data-color-scheme]) {
+  @include theme.tokens(
+    (
+      bg: #2b1d00,
+      bg-compose: #3b2c00,
+      bg-surface: #322400,
+      border: #4b3b05,
+      text: #f5eee0,
+      text-2: #dad0bb,
+      text-3: #b0a389,
+      link: #e5b55d,
+      accent: #c4a766,
+    )
+  );
+}

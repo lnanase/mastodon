@@ -1,1 +1,37 @@
+// SideM green (#0fbe94)
+// ダーク側が正（v4.4 までの見た目）。ライト側は同じ色相から機械生成した派生。
 @use 'application';
+@use 'imastodon/theme';
+
+[data-color-scheme='light'] {
+  @include theme.tokens(
+    (
+      bg: #c7f3e5,
+      bg-compose: #9fe9d3,
+      bg-surface: #b5ecdb,
+      border: #86cfb9,
+      text: #00291e,
+      text-2: #0f3f2e,
+      text-3: #2a624b,
+      link: #276c56,
+      accent: #005b45,
+    )
+  );
+}
+
+[data-color-scheme='dark'],
+html:not([data-color-scheme]) {
+  @include theme.tokens(
+    (
+      bg: #1a5d4d,
+      bg-compose: #237d68,
+      bg-surface: #1f6d5b,
+      border: #278d75,
+      text: #6efccf,
+      text-2: #dbdfdd,
+      text-3: #c1c5c3,
+      link: #a0ddc6,
+      accent: #2cca9f,
+    )
+  );
+}

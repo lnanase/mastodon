@@ -1,1 +1,37 @@
+// 765PRO ALLSTARS red (#f34f6d)
+// ダーク側が正（v4.4 までの見た目）。ライト側は同じ色相から機械生成した派生。
 @use 'application';
+@use 'imastodon/theme';
+
+[data-color-scheme='light'] {
+  @include theme.tokens(
+    (
+      bg: #ffdfe0,
+      bg-compose: #fdc8cc,
+      bg-surface: #fed1d3,
+      border: #eca9b0,
+      text: #361719,
+      text-2: #50282a,
+      text-3: #774547,
+      link: #7b5053,
+      accent: #842637,
+    )
+  );
+}
+
+[data-color-scheme='dark'],
+html:not([data-color-scheme]) {
+  @include theme.tokens(
+    (
+      bg: #c1314a,
+      bg-compose: #d14a61,
+      bg-surface: #cd3a53,
+      border: #d55a6f,
+      text: #fff6f6,
+      text-2: #e2dcdc,
+      text-3: #f6f0f0,
+      link: #ffd1d3,
+      accent: #ff9ea7,
+    )
+  );
+}

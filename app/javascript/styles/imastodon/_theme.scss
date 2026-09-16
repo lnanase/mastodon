@@ -1,0 +1,57 @@
+// imastodon 独自テーマの共通 mixin。
+
+// upstream の theme token（app/javascript/styles/mastodon/theme/）を
+// 役割単位で上書きする。upstream の Sass モジュールには依存せず、
+// 生成される CSS 変数名だけに依存する。
+
+// 各テーマの entrypoint（app/javascript/styles/<theme>.scss）は
+//   @use 'application';
+//   @use 'imastodon/theme';
+//   [data-color-scheme='light'] { @include theme.tokens((...)); }
+//   [data-color-scheme='dark'], html:not([data-color-scheme]) { @include theme.tokens((...)); }
+// の形で、upstream の [data-color-scheme] ブロックと同じ詳細度で後から出力し、後勝ちさせる。
+
+// $roles のキーと、v4.4 までの旧 SCSS 変数との対応:
+//   bg          body・カラム・ナビの背景                  旧 --background-color（darken($ui-base-color, 8%)）
+//   bg-compose  compose フォーム・検索入力・カードの背景    旧 $ui-base-color
+//   bg-surface  見出し行など一段違う面                      旧 --surface-background-color（darken($ui-base-color, 4%)）
+//   border      区切り線・カラム枠                          旧 --background-border-color（lighten($ui-base-color, 4%)）
+//   text        本文                                        旧 $primary-text-color
+//   text-2      二次テキスト・入力文字・ナビ項目             旧 $secondary-text-color / $darker-text-color
+//   text-3      placeholder・相対時刻                        旧 $dark-text-color
+//   link        リンク・アクティブ状態・セカンダリボタン     旧 $highlight-text-color
+//   accent      強調色（compose のアクティブ枠、通知バナーのティント元） 旧 $ui-highlight-color
+
+// 触らない token:
+//   --color-bg-brand-base（投稿ボタン等）は v4.4 でも全テーマ Mastodon 既定の紫だったので upstream に任せる。
+//   red / yellow / green 系（エラー・警告・成功）は意味色なので upstream に任せる。
+@use 'sass:map';
+
+@mixin tokens($roles) {
+  $bg: map.get($roles, bg);
+  $text: map.get($roles, text);
+  $link: map.get($roles, link);
+  $accent: map.get($roles, accent);
+
+  /* TEXT */
+  --color-text-primary: #{$text};
+  --color-text-secondary: #{map.get($roles, text-2)};
+  --color-text-tertiary: #{map.get($roles, text-3)};
+  --color-text-inverted: #{$bg};
+  --color-text-brand: #{$link};
+  --color-text-status-links: #{$link};
+
+  /* BACKGROUND */
+  --color-bg-primary: #{$bg};
+  --color-bg-secondary: #{map.get($roles, bg-compose)};
+  --color-bg-tertiary: #{map.get($roles, bg-surface)};
+  --color-bg-inverted: #{$text};
+  --color-bg-overlay-highlight: color-mix(in srgb, #{$text} 6%, transparent);
+  --color-bg-brand-soft: color-mix(in oklab, #{$bg}, #{$accent} 14%);
+  --color-bg-brand-softest: color-mix(in oklab, #{$bg}, #{$accent} 6%);
+
+  /* BORDER */
+  --color-border-primary: #{map.get($roles, border)};
+  --color-border-brand: #{$accent};
+  --color-border-brand-soft: color-mix(in oklab, #{$bg}, #{$accent} 25%);
+}

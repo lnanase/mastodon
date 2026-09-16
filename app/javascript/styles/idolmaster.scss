@@ -1,1 +1,37 @@
+// アイドルマスター pink (#ff74b8)
+// ライト側が正（v4.4 までの見た目）。ダーク側は同じ色相から機械生成した派生。
 @use 'application';
+@use 'imastodon/theme';
+
+[data-color-scheme='light'] {
+  @include theme.tokens(
+    (
+      bg: #ffb9d6,
+      bg-compose: #ffe2ee,
+      bg-surface: #ffcee2,
+      border: #fff6fa,
+      text: #420027,
+      text-2: #570034,
+      text-3: #830051,
+      link: #a9236e,
+      accent: #830051,
+    )
+  );
+}
+
+[data-color-scheme='dark'],
+html:not([data-color-scheme]) {
+  @include theme.tokens(
+    (
+      bg: #341122,
+      bg-compose: #3e2530,
+      bg-surface: #3c1929,
+      border: #433a3e,
+      text: #fae9f0,
+      text-2: #e2c9d3,
+      text-3: #b99ba7,
+      link: #f99dc6,
+      accent: #ed83b4,
+    )
+  );
+}
