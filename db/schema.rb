@@ -740,7 +740,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_120000) do
     t.datetime "updated_at", null: false
     t.string "uri"
     t.index ["account_id", "local_fragment"], name: "index_keypairs_on_account_id_and_local_fragment", unique: true
-    t.index ["account_id"], name: "index_keypairs_on_account_id"
     t.index ["uri"], name: "index_keypairs_on_uri", unique: true
   end
 
