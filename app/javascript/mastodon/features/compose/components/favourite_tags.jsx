@@ -10,7 +10,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Link from 'react-router-dom/Link';
 
 import { Icon } from '@/mastodon/components/icon';
-import EditNoteIcon from '@/material-icons/400-24px/edit_note.svg?react';
+import EditIcon from '@/material-icons/400-24px/edit.svg?react';
 import LockIcon from '@/material-icons/400-24px/lock.svg?react';
 import PublicIcon from '@/material-icons/400-24px/public.svg?react';
 import QuietTimeIcon from '@/material-icons/400-24px/quiet_time.svg?react';
@@ -33,7 +33,7 @@ const visibilityIcons = [
 
 const lockIcons = {
   lock: LockIcon,
-  unlock: EditNoteIcon,
+  unlock: EditIcon,
 };
 
 const visibilityToIcon = (val) => visibilityIcons.find(icon => icon.key === val).icon;
