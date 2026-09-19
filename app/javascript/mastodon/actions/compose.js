@@ -19,6 +19,8 @@ import { updateTimeline } from './timelines';
 let fetchComposeSuggestionsAccountsController;
 /** @type {AbortController | undefined} */
 let fetchComposeSuggestionsTagsController;
+/** @type {AbortController | undefined} */
+let searchComposeSuggestionsEmojiController;
 
 export const COMPOSE_CHANGE          = 'COMPOSE_CHANGE';
 export const COMPOSE_SUBMIT_REQUEST  = 'COMPOSE_SUBMIT_REQUEST';
@@ -60,10 +62,6 @@ export const COMPOSE_COMPOSING_CHANGE    = 'COMPOSE_COMPOSING_CHANGE';
 export const COMPOSE_LANGUAGE_CHANGE     = 'COMPOSE_LANGUAGE_CHANGE';
 
 export const COMPOSE_EMOJI_INSERT = 'COMPOSE_EMOJI_INSERT';
-
-export const COMPOSE_UPLOAD_CHANGE_REQUEST     = 'COMPOSE_UPLOAD_UPDATE_REQUEST';
-export const COMPOSE_UPLOAD_CHANGE_SUCCESS     = 'COMPOSE_UPLOAD_UPDATE_SUCCESS';
-export const COMPOSE_UPLOAD_CHANGE_FAIL        = 'COMPOSE_UPLOAD_UPDATE_FAIL';
 
 export const COMPOSE_POLL_ADD             = 'COMPOSE_POLL_ADD';
 export const COMPOSE_POLL_REMOVE          = 'COMPOSE_POLL_REMOVE';
@@ -461,58 +459,6 @@ export function onChangeMediaFocus(focusX, focusY) {
   };
 }
 
-export function changeUploadCompose(id, params) {
-  return (dispatch, getState) => {
-    dispatch(changeUploadComposeRequest());
-
-    let media = getState().getIn(['compose', 'media_attachments']).find((item) => item.get('id') === id);
-
-    // Editing already-attached media is deferred to editing the post itself.
-    // For simplicity's sake, fake an API reply.
-    if (media && !media.get('unattached')) {
-      const { focus, ...other } = params;
-      const data = { ...media.toJS(), ...other };
-
-      if (focus) {
-        const [x, y] = focus.split(',');
-        data.meta = { focus: { x: parseFloat(x), y: parseFloat(y) } };
-      }
-
-      dispatch(changeUploadComposeSuccess(data, true));
-    } else {
-      api().put(`/api/v1/media/${id}`, params).then(response => {
-        dispatch(changeUploadComposeSuccess(response.data, false));
-      }).catch(error => {
-        dispatch(changeUploadComposeFail(id, error));
-      });
-    }
-  };
-}
-
-export function changeUploadComposeRequest() {
-  return {
-    type: COMPOSE_UPLOAD_CHANGE_REQUEST,
-    skipLoading: true,
-  };
-}
-
-export function changeUploadComposeSuccess(media, attached) {
-  return {
-    type: COMPOSE_UPLOAD_CHANGE_SUCCESS,
-    media: media,
-    attached: attached,
-    skipLoading: true,
-  };
-}
-
-export function changeUploadComposeFail(error) {
-  return {
-    type: COMPOSE_UPLOAD_CHANGE_FAIL,
-    error: error,
-    skipLoading: true,
-  };
-}
-
 export function uploadComposeRequest() {
   return {
     type: COMPOSE_UPLOAD_REQUEST,
@@ -553,9 +499,8 @@ export function undoUploadCompose(media_id) {
 }
 
 export function clearComposeSuggestions() {
-  if (fetchComposeSuggestionsAccountsController) {
-    fetchComposeSuggestionsAccountsController.abort();
-  }
+  fetchComposeSuggestionsAccountsController?.abort();
+  searchComposeSuggestionsEmojiController?.abort();
   return {
     type: COMPOSE_SUGGESTIONS_CLEAR,
   };
@@ -588,12 +533,25 @@ const fetchComposeSuggestionsAccounts = throttle((dispatch, token) => {
   });
 }, 200, { leading: true, trailing: true });
 
-const fetchComposeSuggestionsEmojis = async (dispatch, token) => {
-  // Right now we are hard-coding the locale to English since the picker search only supports English.
-  // Once we replace the legacy picker we can remove this and use the actual locale of the user.
-  const results = await emojiMartSearch(token, 'en', 5);
-  dispatch(readyComposeSuggestionsEmojis(token, results));
-};
+const fetchComposeSuggestionsEmojis = (dispatch, token) => {
+  dispatch(clearComposeSuggestions());
+  searchComposeSuggestionsEmojiController = new AbortController();
+
+  void emojiMartSearch({
+    token,
+    // Right now we are hard-coding the locale to English since the picker search only supports English.
+    // Once we replace the legacy picker we can remove this and use the actual locale of the user.
+    locale: 'en',
+    limit: 5,
+    signal: searchComposeSuggestionsEmojiController.signal,
+  }).then((results) => {
+    if (results) {
+      dispatch(readyComposeSuggestionsEmojis(token, results));
+    }
+  }).finally(() => {
+    searchComposeSuggestionsEmojiController = undefined;
+  });
+}
 
 const fetchComposeSuggestionsTags = throttle((dispatch, token) => {
   if (fetchComposeSuggestionsTagsController) {
@@ -626,7 +584,7 @@ const fetchComposeSuggestionsTags = throttle((dispatch, token) => {
 }, 200, { leading: true, trailing: true });
 
 export function fetchComposeSuggestions(token) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     switch (token[0]) {
     case ':':
       void fetchComposeSuggestionsEmojis(dispatch, token);
