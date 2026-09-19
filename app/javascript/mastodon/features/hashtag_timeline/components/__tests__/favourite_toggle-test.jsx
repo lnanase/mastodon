@@ -1,36 +1,30 @@
-import { IntlProvider } from 'react-intl';
-
-import renderer from 'react-test-renderer';
-
 import { render, fireEvent, screen } from '@/testing/rendering';
 
 import FavouriteToggle from '../favourite_toggle';
 
-const renderWithIntl = (ui) => renderer.create(<IntlProvider locale='en'>{ui}</IntlProvider>);
-
 describe('<FavouriteToggle />', () => {
   it('publicId/unlistedIdがnullの場合は両方の追加ボタンが表示される', () => {
     const noop = vi.fn();
-    const tree = renderWithIntl(
+    const { container } = render(
       <FavouriteToggle tag='test' addFavouriteTags={noop} removeFavouriteTags={noop} />
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    expect(container.firstChild).toMatchSnapshot();
   });
 
   it('publicIdが指定されている場合はpublicに対応する削除ボタンが表示される', () => {
     const noop = vi.fn();
-    const tree = renderWithIntl(
+    const { container } = render(
       <FavouriteToggle tag='test' publicId={1} addFavouriteTags={noop} removeFavouriteTags={noop} />
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    expect(container.firstChild).toMatchSnapshot();
   });
 
   it('publicId/unlistedIdの両方が指定されている場合は両方の削除ボタンが表示される', () => {
     const noop = vi.fn();
-    const tree = renderWithIntl(
+    const { container } = render(
       <FavouriteToggle tag='test' publicId={1} unlistedId={2} addFavouriteTags={noop} removeFavouriteTags={noop} />
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    expect(container.firstChild).toMatchSnapshot();
   });
 
   it('publicの追加ボタン押下でaddFavouriteTagsがtagと"public"で呼ばれる', () => {

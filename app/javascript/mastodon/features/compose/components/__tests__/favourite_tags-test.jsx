@@ -1,21 +1,8 @@
-
-import { IntlProvider } from 'react-intl';
-
-import { MemoryRouter } from 'react-router';
-
 import { fromJS, List as ImmutableList } from 'immutable';
-
-import renderer from 'react-test-renderer';
 
 import { render, fireEvent, screen, waitFor } from '@/testing/rendering';
 
 import FavouriteTags from '../favourite_tags';
-
-const renderTree = (ui) => renderer.create(
-  <MemoryRouter>
-    <IntlProvider locale='en'>{ui}</IntlProvider>
-  </MemoryRouter>
-);
 
 describe('<FavouriteTags />', () => {
   const sampleTags = fromJS([
@@ -27,7 +14,7 @@ describe('<FavouriteTags />', () => {
     const refreshFavouriteTags = vi.fn();
     const onToggle = vi.fn();
     const onLockTag = vi.fn();
-    const tree = renderTree(
+    const { container } = render(
       <FavouriteTags
         visible={false}
         tags={ImmutableList()}
@@ -35,15 +22,15 @@ describe('<FavouriteTags />', () => {
         onToggle={onToggle}
         onLockTag={onLockTag}
       />
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    expect(container.firstChild).toMatchSnapshot();
   });
 
   it('tagsに2件・visible=trueのときの表示', () => {
     const refreshFavouriteTags = vi.fn();
     const onToggle = vi.fn();
     const onLockTag = vi.fn();
-    const tree = renderTree(
+    const { container } = render(
       <FavouriteTags
         visible
         tags={sampleTags}
@@ -51,8 +38,8 @@ describe('<FavouriteTags />', () => {
         onToggle={onToggle}
         onLockTag={onLockTag}
       />
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    expect(container.firstChild).toMatchSnapshot();
   });
 
   it('マウント時にrefreshFavouriteTagsが呼ばれる', () => {

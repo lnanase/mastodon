@@ -1,23 +1,21 @@
-import renderer from 'react-test-renderer';
-
 import { render, fireEvent, screen } from '@/testing/rendering';
 
 import FoldButton from '../fold_button';
 
 describe('<FoldButton />', () => {
   it('renders a button element with default props', () => {
-    const tree = renderer.create(<FoldButton size={20} title='toggle' />).toJSON();
-    expect(tree).toMatchSnapshot();
+    const { container } = render(<FoldButton size={20} title='toggle' />);
+    expect(container.firstChild).toMatchSnapshot();
   });
 
   it('rotates icon 180deg when active', () => {
-    const tree = renderer.create(<FoldButton size={20} title='toggle' active />).toJSON();
-    expect(tree).toMatchSnapshot();
+    const { container } = render(<FoldButton size={20} title='toggle' active />);
+    expect(container.firstChild).toMatchSnapshot();
   });
 
   it('applies transition styles when animate is true', () => {
-    const tree = renderer.create(<FoldButton size={20} title='toggle' active animate />).toJSON();
-    expect(tree).toMatchSnapshot();
+    const { container } = render(<FoldButton size={20} title='toggle' active animate />);
+    expect(container.firstChild).toMatchSnapshot();
   });
 
   it('calls onClick handler when clicked', () => {
