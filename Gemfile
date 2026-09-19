@@ -74,6 +74,7 @@ gem 'public_suffix', '~> 7.0'
 gem 'pundit', '~> 2.3'
 gem 'rack-attack', '~> 6.6'
 gem 'rack-cors', require: 'rack/cors'
+gem 'rack-proxy', require: 'rack/proxy'
 gem 'rails-i18n', '~> 8.0'
 gem 'redcarpet', '~> 3.6'
 gem 'redis', '~> 5'
@@ -103,7 +104,7 @@ gem 'rdf-normalize', '~> 0.5'
 
 gem 'prometheus_exporter', '~> 2.2', require: false
 
-gem 'opentelemetry-api', '~> 1.10.0'
+gem 'opentelemetry-api', '~> 1.11.0'
 
 group :opentelemetry do
   gem 'opentelemetry-exporter-otlp', '~> 0.34.0', require: false
