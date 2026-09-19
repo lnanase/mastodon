@@ -227,6 +227,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_120000) do
     t.datetime "created_at", precision: nil, null: false
     t.string "human_identifier"
     t.string "permalink"
+    t.jsonb "recorded_changes"
+    t.string "recorded_changes_format"
     t.string "route_param"
     t.bigint "target_id"
     t.string "target_type"
