@@ -1,2 +1,37 @@
-@use 'imastodon/themes/gakumas/color';
+// 学園アイドルマスター orange (#f39800)
+// ライト側が正（v4.4 までの見た目）。ダーク側は同じ色相から機械生成した派生。
 @use 'application';
+@use 'imastodon/theme';
+
+[data-color-scheme='light'] {
+  @include theme.tokens(
+    (
+      bg: #ffa838,
+      bg-compose: #ffba61,
+      bg-surface: #ffb14d,
+      border: #ffc375,
+      text: #231100,
+      text-2: #231100,
+      text-3: #4d2d00,
+      link: #8b5500,
+      accent: #663d00,
+    )
+  );
+}
+
+[data-color-scheme='dark'],
+html:not([data-color-scheme]) {
+  @include theme.tokens(
+    (
+      bg: #311800,
+      bg-compose: #432600,
+      bg-surface: #392000,
+      border: #53360a,
+      text: #f8ece1,
+      text-2: #dfcebd,
+      text-3: #b6a08a,
+      link: #f1af64,
+      accent: #d39f66,
+    )
+  );
+}

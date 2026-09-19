@@ -1,6 +1,3 @@
-@use '../mastodon/_variables' as variables;
-@use 'sass:color';
-
 .account__avatar-overlay-icon-overlay {
   display: block;
   width: 16px;
@@ -13,5 +10,5 @@
   background-size: 16px 16px;
   background-position: 50%;
   background-clip: padding-box;
-  background-color: color.adjust(variables.$white, $lightness: -20%);
+  background-color: var(--color-bg-secondary);
 }

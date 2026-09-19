@@ -1,6 +1,3 @@
-@use '../mastodon/_variables' as variables;
-@use 'sass:color';
-
 /**
   * features/compose/components/favourite_tags
   */
@@ -15,32 +12,33 @@
   background-color: transparent;
   text-align: center;
   border: none;
-  color: variables.$primary-text-color;
+  color: var(--color-text-primary);
   height: 16px;
 }
 
 .favourite-tags__add-button-in-column {
-  margin-bottom: 5px;
-  background-color: variables.$ui-highlight-color;
+  background-color: var(--color-bg-brand-base);
 
   &:focus,
   &:hover {
-    background-color: color.adjust(
-      variables.$ui-highlight-color,
-      $lightness: 5%
+    background-color: color-mix(
+      in oklab,
+      var(--color-bg-brand-base),
+      var(--color-text-primary) 8%
     );
   }
 }
 
+// v4.4 までの見た目（旧 $error-red）を保つため、upstream の意味色 token ではなく固定色にする
 .favourite-tags__remove-button-in-column {
-  margin-bottom: 5px;
-  background-color: variables.$error-value-color;
+  background-color: #df405a;
 
   &:focus,
   &:hover {
-    background-color: color.adjust(
-      variables.$error-value-color,
-      $lightness: 5%
+    background-color: color-mix(
+      in oklab,
+      #df405a,
+      var(--color-text-primary) 8%
     );
   }
 }
