@@ -740,7 +740,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_120000) do
     t.datetime "updated_at", null: false
     t.string "uri"
     t.index ["account_id", "local_fragment"], name: "index_keypairs_on_account_id_and_local_fragment", unique: true
-    t.index ["account_id"], name: "index_keypairs_on_account_id"
     t.index ["uri"], name: "index_keypairs_on_uri", unique: true
   end
 
@@ -1568,7 +1567,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_120000) do
   add_foreign_key "follow_requests", "accounts", name: "fk_76d644b0e7", on_delete: :cascade
   add_foreign_key "follows", "accounts", column: "target_account_id", name: "fk_745ca29eac", on_delete: :cascade
   add_foreign_key "follows", "accounts", name: "fk_32ed1b5560", on_delete: :cascade
-  add_foreign_key "generated_annual_reports", "accounts"
+  add_foreign_key "generated_annual_reports", "accounts", on_delete: :cascade
   add_foreign_key "global_follow_recommendations", "accounts", on_delete: :cascade
   add_foreign_key "identities", "users", name: "fk_bea040f377", on_delete: :cascade
   add_foreign_key "instance_moderation_notes", "accounts", on_delete: :cascade
