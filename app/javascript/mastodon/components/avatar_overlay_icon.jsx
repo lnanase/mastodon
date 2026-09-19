@@ -18,7 +18,7 @@ const icons = {
   direct: AlternateEmailIcon,
 };
 
-const AvatarOverlayIcon = ({ account, visibility, animate, size = 46 }) => (
+const AvatarOverlayIcon = ({ account, visibility, animate = false, size = 46 }) => (
   <div className='account__avatar-overlay' style={{ width: size, height: size }}>
     <div className='account__avatar-overlay-base'>
       <Avatar account={account} animate={animate} size={size} />
