@@ -2,17 +2,17 @@
 
 exports[`<FavouriteTags /> > tagsが空かつvisible=falseのときの表示 1`] = `
 <div
-  className="compose__extra"
+  class="compose__extra"
 >
   <div
-    className="compose__extra__header"
+    class="compose__extra__header"
   >
     <div
-      className="compose__extra__header__left"
+      class="compose__extra__header__left"
     >
       <svg
-        aria-hidden={true}
-        className="icon icon-tag_icon compose__extra__header__icon"
+        aria-hidden="true"
+        class="icon icon-tag_icon compose__extra__header__icon"
         fill="#1f1f1f"
         height="24px"
         title=""
@@ -29,19 +29,19 @@ exports[`<FavouriteTags /> > tagsが空かつvisible=falseのときの表示 1`]
       </span>
     </div>
     <div
-      className="compose__extra__header__right"
+      class="compose__extra__header__right"
     >
       <a
-        className="compose__extra__header__icon"
+        class="compose__extra__header__icon"
         href="/settings/favourite_tags"
       >
         <svg
-          aria-hidden={true}
-          className="icon icon-setting_icon compose__extra__header__icon"
-          height={24}
+          aria-hidden="true"
+          class="icon icon-setting_icon compose__extra__header__icon"
+          height="24"
           title=""
           viewBox="0 -960 960 960"
-          width={24}
+          width="24"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -50,35 +50,22 @@ exports[`<FavouriteTags /> > tagsが空かつvisible=falseのときの表示 1`]
         </svg>
       </a>
       <div
-        className="compose__extra__header__fold__icon"
+        class="compose__extra__header__fold__icon"
       >
         <button
           aria-label="Toggle visibility"
-          className="icon-button"
-          onClick={[Function]}
-          style={
-            {
-              "fontSize": "20px",
-              "height": "25.7142858px",
-              "lineHeight": "20px",
-              "width": "25.7142858px",
-            }
-          }
+          class="icon-button"
+          style="font-size: 20px; width: 25.7142858px; height: 25.7142858px; line-height: 20px;"
           title="Toggle visibility"
         >
           <svg
-            aria-hidden={true}
-            className="icon icon-down compose__extra__header__icon"
-            height={24}
-            style={
-              {
-                "transform": "rotate(0deg)",
-                "transition": "transform 300ms ease-in-out",
-              }
-            }
+            aria-hidden="true"
+            class="icon icon-down compose__extra__header__icon"
+            height="24"
+            style="transform: rotate(0deg); transition: transform 300ms ease-in-out;"
             title=""
             viewBox="0 -960 960 960"
-            width={24}
+            width="24"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -90,13 +77,13 @@ exports[`<FavouriteTags /> > tagsが空かつvisible=falseのときの表示 1`]
     </div>
   </div>
   <div
-    className="foldable"
+    class="foldable"
   >
     <div
-      className="foldable__inner"
+      class="foldable__inner"
     >
       <ul
-        className="compose__extra__body"
+        class="compose__extra__body"
       />
     </div>
   </div>
@@ -105,17 +92,17 @@ exports[`<FavouriteTags /> > tagsが空かつvisible=falseのときの表示 1`]
 
 exports[`<FavouriteTags /> > tagsに2件・visible=trueのときの表示 1`] = `
 <div
-  className="compose__extra"
+  class="compose__extra"
 >
   <div
-    className="compose__extra__header"
+    class="compose__extra__header"
   >
     <div
-      className="compose__extra__header__left"
+      class="compose__extra__header__left"
     >
       <svg
-        aria-hidden={true}
-        className="icon icon-tag_icon compose__extra__header__icon"
+        aria-hidden="true"
+        class="icon icon-tag_icon compose__extra__header__icon"
         fill="#1f1f1f"
         height="24px"
         title=""
@@ -132,19 +119,19 @@ exports[`<FavouriteTags /> > tagsに2件・visible=trueのときの表示 1`] = 
       </span>
     </div>
     <div
-      className="compose__extra__header__right"
+      class="compose__extra__header__right"
     >
       <a
-        className="compose__extra__header__icon"
+        class="compose__extra__header__icon"
         href="/settings/favourite_tags"
       >
         <svg
-          aria-hidden={true}
-          className="icon icon-setting_icon compose__extra__header__icon"
-          height={24}
+          aria-hidden="true"
+          class="icon icon-setting_icon compose__extra__header__icon"
+          height="24"
           title=""
           viewBox="0 -960 960 960"
-          width={24}
+          width="24"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -153,35 +140,22 @@ exports[`<FavouriteTags /> > tagsに2件・visible=trueのときの表示 1`] = 
         </svg>
       </a>
       <div
-        className="compose__extra__header__fold__icon"
+        class="compose__extra__header__fold__icon"
       >
         <button
           aria-label="Toggle visibility"
-          className="icon-button active"
-          onClick={[Function]}
-          style={
-            {
-              "fontSize": "20px",
-              "height": "25.7142858px",
-              "lineHeight": "20px",
-              "width": "25.7142858px",
-            }
-          }
+          class="icon-button active"
+          style="font-size: 20px; width: 25.7142858px; height: 25.7142858px; line-height: 20px;"
           title="Toggle visibility"
         >
           <svg
-            aria-hidden={true}
-            className="icon icon-down compose__extra__header__icon"
-            height={24}
-            style={
-              {
-                "transform": "rotate(180deg)",
-                "transition": "transform 300ms ease-in-out",
-              }
-            }
+            aria-hidden="true"
+            class="icon icon-down compose__extra__header__icon"
+            height="24"
+            style="transform: rotate(180deg); transition: transform 300ms ease-in-out;"
             title=""
             viewBox="0 -960 960 960"
-            width={24}
+            width="24"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -193,22 +167,22 @@ exports[`<FavouriteTags /> > tagsに2件・visible=trueのときの表示 1`] = 
     </div>
   </div>
   <div
-    className="foldable foldable--visible"
+    class="foldable foldable--visible"
   >
     <div
-      className="foldable__inner"
+      class="foldable__inner"
     >
       <ul
-        className="compose__extra__body"
+        class="compose__extra__body"
       >
         <li>
           <svg
-            aria-hidden={true}
-            className="icon icon-public favourite-tags__icon"
-            height={24}
+            aria-hidden="true"
+            class="icon icon-public favourite-tags__icon"
+            height="24"
             title=""
             viewBox="0 -960 960 960"
-            width={24}
+            width="24"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -216,39 +190,37 @@ exports[`<FavouriteTags /> > tagsに2件・visible=trueのときの表示 1`] = 
             />
           </svg>
           <a
-            className="compose__extra__body__name"
+            class="compose__extra__body__name"
             href="/timelines/tag/foo"
-            onClick={[Function]}
           >
             #foo
           </a>
           <button
-            className="favourite-tags__lock"
-            onClick={[Function]}
+            class="favourite-tags__lock"
           >
             <svg
-              aria-hidden={true}
-              className="icon icon-undefined favourite-tags__lock"
-              height={24}
+              aria-hidden="true"
+              class="icon icon-undefined favourite-tags__lock"
+              height="24"
               title=""
               viewBox="0 -960 960 960"
-              width={24}
+              width="24"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M160-400v-80h280v80H160Zm0-160v-80h440v80H160Zm0-160v-80h440v80H160Zm360 560v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"
+                d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"
               />
             </svg>
           </button>
         </li>
         <li>
           <svg
-            aria-hidden={true}
-            className="icon icon-unlisted favourite-tags__icon"
-            height={24}
+            aria-hidden="true"
+            class="icon icon-unlisted favourite-tags__icon"
+            height="24"
             title=""
             viewBox="0 -960 960 960"
-            width={24}
+            width="24"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -256,27 +228,25 @@ exports[`<FavouriteTags /> > tagsに2件・visible=trueのときの表示 1`] = 
             />
           </svg>
           <a
-            className="compose__extra__body__name"
+            class="compose__extra__body__name"
             href="/timelines/tag/bar"
-            onClick={[Function]}
           >
             #bar
           </a>
           <button
-            className="favourite-tags__lock"
-            onClick={[Function]}
+            class="favourite-tags__lock"
           >
             <svg
-              aria-hidden={true}
-              className="icon icon-undefined favourite-tags__lock"
-              height={24}
+              aria-hidden="true"
+              class="icon icon-undefined favourite-tags__lock"
+              height="24"
               title=""
               viewBox="0 -960 960 960"
-              width={24}
+              width="24"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M160-400v-80h280v80H160Zm0-160v-80h440v80H160Zm0-160v-80h440v80H160Zm360 560v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"
+                d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"
               />
             </svg>
           </button>

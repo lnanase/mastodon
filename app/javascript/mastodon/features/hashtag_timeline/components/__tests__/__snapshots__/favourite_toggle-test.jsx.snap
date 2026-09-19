@@ -2,22 +2,20 @@
 
 exports[`<FavouriteToggle /> > publicId/unlistedIdがnullの場合は両方の追加ボタンが表示される 1`] = `
 <div
-  className="column-settings"
+  class="column-settings"
 >
   <section>
     <div
-      className="column-settings__row"
+      class="column-settings__row"
     >
       <button
-        className="button favourite-tags__add-button-in-column button--block"
-        onClick={[Function]}
+        class="button favourite-tags__add-button-in-column button--block"
         type="button"
       >
         add in the favourite tags (Public)
       </button>
       <button
-        className="button favourite-tags__add-button-in-column button--block"
-        onClick={[Function]}
+        class="button favourite-tags__add-button-in-column button--block"
         type="button"
       >
         add in the favourite tags (Unlisted)
@@ -29,22 +27,20 @@ exports[`<FavouriteToggle /> > publicId/unlistedIdがnullの場合は両方の�
 
 exports[`<FavouriteToggle /> > publicId/unlistedIdの両方が指定されている場合は両方の削除ボタンが表示される 1`] = `
 <div
-  className="column-settings"
+  class="column-settings"
 >
   <section>
     <div
-      className="column-settings__row"
+      class="column-settings__row"
     >
       <button
-        className="button favourite-tags__remove-button-in-column button--block"
-        onClick={[Function]}
+        class="button favourite-tags__remove-button-in-column button--block"
         type="button"
       >
         Remove from the favourite tags (Public)
       </button>
       <button
-        className="button favourite-tags__remove-button-in-column button--block"
-        onClick={[Function]}
+        class="button favourite-tags__remove-button-in-column button--block"
         type="button"
       >
         Remove from the favourite tags (Unlisted)
@@ -56,22 +52,20 @@ exports[`<FavouriteToggle /> > publicId/unlistedIdの両方が指定されてい
 
 exports[`<FavouriteToggle /> > publicIdが指定されている場合はpublicに対応する削除ボタンが表示される 1`] = `
 <div
-  className="column-settings"
+  class="column-settings"
 >
   <section>
     <div
-      className="column-settings__row"
+      class="column-settings__row"
     >
       <button
-        className="button favourite-tags__remove-button-in-column button--block"
-        onClick={[Function]}
+        class="button favourite-tags__remove-button-in-column button--block"
         type="button"
       >
         Remove from the favourite tags (Public)
       </button>
       <button
-        className="button favourite-tags__add-button-in-column button--block"
-        onClick={[Function]}
+        class="button favourite-tags__add-button-in-column button--block"
         type="button"
       >
         add in the favourite tags (Unlisted)

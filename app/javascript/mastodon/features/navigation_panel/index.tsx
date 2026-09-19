@@ -442,7 +442,7 @@ export const CollapsibleNavigationPanel: React.FC = () => {
   const dispatch = useAppDispatch();
   const openable = useBreakpoint('openable');
   const location = useLocation();
-  const overlayRef = useRef<HTMLDivElement | null>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     dispatch(closeNavigation());
@@ -528,7 +528,7 @@ export const CollapsibleNavigationPanel: React.FC = () => {
     },
   );
 
-  const previouslyFocusedElementRef = useRef<HTMLElement | null>();
+  const previouslyFocusedElementRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (open) {

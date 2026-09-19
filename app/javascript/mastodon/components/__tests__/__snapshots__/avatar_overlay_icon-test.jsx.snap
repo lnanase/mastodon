@@ -2,46 +2,32 @@
 
 exports[`<AvatarOverlayIcon /> > animate=trueでアニメーションavatarが表示される 1`] = `
 <div
-  className="account__avatar-overlay"
-  style={
-    {
-      "height": 46,
-      "width": 46,
-    }
-  }
+  class="account__avatar-overlay"
+  style="width: 46px; height: 46px;"
 >
   <div
-    className="account__avatar-overlay-base"
+    class="account__avatar-overlay-base"
   >
     <span
-      className="account__avatar account__avatar--loading"
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={
-        {
-          "height": "46px",
-          "width": "46px",
-        }
-      }
+      class="account__avatar account__avatar--loading"
+      style="width: 46px; height: 46px;"
     >
       <img
         alt=""
-        onError={[Function]}
-        onLoad={[Function]}
         src="/animated/alice.gif"
       />
     </span>
   </div>
   <div
-    className="account__avatar-overlay-overlay"
+    class="account__avatar-overlay-overlay"
   >
     <svg
-      aria-hidden={true}
-      className="icon icon-direct account__avatar-overlay-icon-overlay"
-      height={24}
+      aria-hidden="true"
+      class="icon icon-direct account__avatar-overlay-icon-overlay"
+      height="24"
       title=""
       viewBox="0 -960 960 960"
-      width={24}
+      width="24"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
@@ -54,46 +40,32 @@ exports[`<AvatarOverlayIcon /> > animate=trueでアニメーションavatarが�
 
 exports[`<AvatarOverlayIcon /> > directのときAlternateEmailアイコンと静止画avatarが表示される 1`] = `
 <div
-  className="account__avatar-overlay"
-  style={
-    {
-      "height": 46,
-      "width": 46,
-    }
-  }
+  class="account__avatar-overlay"
+  style="width: 46px; height: 46px;"
 >
   <div
-    className="account__avatar-overlay-base"
+    class="account__avatar-overlay-base"
   >
     <span
-      className="account__avatar account__avatar--loading"
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={
-        {
-          "height": "46px",
-          "width": "46px",
-        }
-      }
+      class="account__avatar account__avatar--loading"
+      style="width: 46px; height: 46px;"
     >
       <img
         alt=""
-        onError={[Function]}
-        onLoad={[Function]}
         src="/static/alice.jpg"
       />
     </span>
   </div>
   <div
-    className="account__avatar-overlay-overlay"
+    class="account__avatar-overlay-overlay"
   >
     <svg
-      aria-hidden={true}
-      className="icon icon-direct account__avatar-overlay-icon-overlay"
-      height={24}
+      aria-hidden="true"
+      class="icon icon-direct account__avatar-overlay-icon-overlay"
+      height="24"
       title=""
       viewBox="0 -960 960 960"
-      width={24}
+      width="24"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
@@ -106,46 +78,32 @@ exports[`<AvatarOverlayIcon /> > directのときAlternateEmailアイコンと静
 
 exports[`<AvatarOverlayIcon /> > privateのときLockアイコンが表示される 1`] = `
 <div
-  className="account__avatar-overlay"
-  style={
-    {
-      "height": 46,
-      "width": 46,
-    }
-  }
+  class="account__avatar-overlay"
+  style="width: 46px; height: 46px;"
 >
   <div
-    className="account__avatar-overlay-base"
+    class="account__avatar-overlay-base"
   >
     <span
-      className="account__avatar account__avatar--loading"
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={
-        {
-          "height": "46px",
-          "width": "46px",
-        }
-      }
+      class="account__avatar account__avatar--loading"
+      style="width: 46px; height: 46px;"
     >
       <img
         alt=""
-        onError={[Function]}
-        onLoad={[Function]}
         src="/static/alice.jpg"
       />
     </span>
   </div>
   <div
-    className="account__avatar-overlay-overlay"
+    class="account__avatar-overlay-overlay"
   >
     <svg
-      aria-hidden={true}
-      className="icon icon-private account__avatar-overlay-icon-overlay"
-      height={24}
+      aria-hidden="true"
+      class="icon icon-private account__avatar-overlay-icon-overlay"
+      height="24"
       title=""
       viewBox="0 -960 960 960"
-      width={24}
+      width="24"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
@@ -158,46 +116,32 @@ exports[`<AvatarOverlayIcon /> > privateのときLockアイコンが表示され
 
 exports[`<AvatarOverlayIcon /> > unlistedのときQuietTimeアイコンが表示される 1`] = `
 <div
-  className="account__avatar-overlay"
-  style={
-    {
-      "height": 46,
-      "width": 46,
-    }
-  }
+  class="account__avatar-overlay"
+  style="width: 46px; height: 46px;"
 >
   <div
-    className="account__avatar-overlay-base"
+    class="account__avatar-overlay-base"
   >
     <span
-      className="account__avatar account__avatar--loading"
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={
-        {
-          "height": "46px",
-          "width": "46px",
-        }
-      }
+      class="account__avatar account__avatar--loading"
+      style="width: 46px; height: 46px;"
     >
       <img
         alt=""
-        onError={[Function]}
-        onLoad={[Function]}
         src="/static/alice.jpg"
       />
     </span>
   </div>
   <div
-    className="account__avatar-overlay-overlay"
+    class="account__avatar-overlay-overlay"
   >
     <svg
-      aria-hidden={true}
-      className="icon icon-unlisted account__avatar-overlay-icon-overlay"
-      height={24}
+      aria-hidden="true"
+      class="icon icon-unlisted account__avatar-overlay-icon-overlay"
+      height="24"
       title=""
       viewBox="0 -960 960 960"
-      width={24}
+      width="24"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

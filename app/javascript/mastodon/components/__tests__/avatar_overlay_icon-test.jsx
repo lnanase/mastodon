@@ -1,6 +1,6 @@
 import { Record } from 'immutable';
 
-import renderer from 'react-test-renderer';
+import { render } from '@/testing/rendering';
 
 import AvatarOverlayIcon from '../avatar_overlay_icon';
 
@@ -15,24 +15,24 @@ describe('<AvatarOverlayIcon />', () => {
   const account = new AccountRecord();
 
   it('directのときAlternateEmailアイコンと静止画avatarが表示される', () => {
-    const tree = renderer.create(<AvatarOverlayIcon account={account} visibility='direct' animate={false} />).toJSON();
-    expect(tree).toMatchSnapshot();
-    expect(JSON.stringify(tree)).toContain('/static/alice.jpg');
+    const { container } = render(<AvatarOverlayIcon account={account} visibility='direct' animate={false} />);
+    expect(container.firstChild).toMatchSnapshot();
+    expect(container.innerHTML).toContain('/static/alice.jpg');
   });
 
   it('privateのときLockアイコンが表示される', () => {
-    const tree = renderer.create(<AvatarOverlayIcon account={account} visibility='private' animate={false} />).toJSON();
-    expect(tree).toMatchSnapshot();
+    const { container } = render(<AvatarOverlayIcon account={account} visibility='private' animate={false} />);
+    expect(container.firstChild).toMatchSnapshot();
   });
 
   it('unlistedのときQuietTimeアイコンが表示される', () => {
-    const tree = renderer.create(<AvatarOverlayIcon account={account} visibility='unlisted' animate={false} />).toJSON();
-    expect(tree).toMatchSnapshot();
+    const { container } = render(<AvatarOverlayIcon account={account} visibility='unlisted' animate={false} />);
+    expect(container.firstChild).toMatchSnapshot();
   });
 
   it('animate=trueでアニメーションavatarが表示される', () => {
-    const tree = renderer.create(<AvatarOverlayIcon account={account} visibility='direct' animate />).toJSON();
-    expect(tree).toMatchSnapshot();
-    expect(JSON.stringify(tree)).toContain('/animated/alice.gif');
+    const { container } = render(<AvatarOverlayIcon account={account} visibility='direct' animate />);
+    expect(container.firstChild).toMatchSnapshot();
+    expect(container.innerHTML).toContain('/animated/alice.gif');
   });
 });
