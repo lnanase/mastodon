@@ -1170,8 +1170,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_120000) do
     t.index ["var"], name: "index_site_uploads_on_var", unique: true
   end
 
+  create_table "software_deprecations", force: :cascade do |t|
+    t.string "branch", null: false
+    t.datetime "created_at", null: false
+    t.date "end_of_support", null: false
+    t.datetime "updated_at", null: false
+    t.integer "warning_issued", null: false
+    t.index ["branch"], name: "index_software_deprecations_on_branch", unique: true
+  end
+
   create_table "software_updates", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.date "end_of_support"
     t.string "release_notes", default: "", null: false
     t.integer "type", default: 0, null: false
     t.datetime "updated_at", null: false
