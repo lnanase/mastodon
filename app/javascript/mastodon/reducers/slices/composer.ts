@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import {
   changeCompose,
+  clearComposeSuggestions,
   directCompose,
   replyComposeById,
   resetCompose,
@@ -29,8 +30,18 @@ export function getComposerTextarea() {
   }
   return null;
 }
-export function focusComposerTextarea() {
-  getComposerTextarea()?.focus();
+/**
+ * Focuses on the composer textarea.
+ * @param defer Waits before focusing. Useful if the composer may not be focusable immediately.
+ */
+export function focusComposerTextarea(defer = false) {
+  if (defer) {
+    requestAnimationFrame(() => {
+      getComposerTextarea()?.focus();
+    });
+  } else {
+    getComposerTextarea()?.focus();
+  }
 }
 
 type DisplayState = 'hidden' | 'showing' | 'minimized';
@@ -63,7 +74,17 @@ const composerSlice = createSlice({
 });
 
 export const composer = composerSlice.reducer;
-export const { minimizeComposerToggle } = composerSlice.actions;
+
+export const minimizeComposerToggle = createAppThunk(
+  (_arg, { dispatch, getState }) => {
+    dispatch(composerSlice.actions.minimizeComposerToggle());
+
+    const displayState = getState().composer.displayState;
+    if (displayState !== 'showing') {
+      dispatch(clearComposeSuggestions());
+    }
+  },
+);
 
 export const selectComposerIsChanged = createAppSelector(
   [
@@ -131,16 +152,14 @@ export const openNewComposer = createAppThunk(
     }
     dispatch(composerSlice.actions.showComposer());
 
-    // Delay for a frame to ensure the DOM has updated.
-    requestAnimationFrame(() => {
-      focusComposerTextarea();
-    });
+    focusComposerTextarea(true);
   },
 );
 
 export const resetComposer = createAppThunk((_arg, { dispatch }) => {
   dispatch(composerSlice.actions.hideComposer());
   dispatch(resetCompose());
+  dispatch(clearComposeSuggestions());
 });
 
 export const closeComposer = createAppThunk((_arg, { getState, dispatch }) => {

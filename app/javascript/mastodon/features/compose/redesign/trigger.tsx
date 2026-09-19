@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/no-autofocus */
-import type React from 'react';
-import { lazy, Suspense, useCallback, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 
 import { FormattedMessage } from 'react-intl';
+
+import classNames from 'classnames';
 
 import {
   ChatCircleIcon,
@@ -13,11 +14,12 @@ import {
 import { IconButton } from '@/mastodon/components/button/redesign';
 import { CircularProgress } from '@/mastodon/components/circular_progress';
 import {
-  Dropdown,
-  DropdownItemButton,
-  DropdownPopover,
-} from '@/mastodon/components/dropdown/redesign';
-import { useToggle } from '@/mastodon/hooks/useToggle';
+  Menu,
+  MenuTrigger,
+  MenuList,
+  MenuItem,
+} from '@/mastodon/components/menu';
+import { MenuCard } from '@/mastodon/components/menu/card';
 import { openNewComposer } from '@/mastodon/reducers/slices/composer';
 import { useAppDispatch, useAppSelector } from '@/mastodon/store';
 import { isRedesignEnabled } from '@/mastodon/utils/environment';
@@ -31,11 +33,27 @@ const ComposeLazyForm = lazy(() =>
   })),
 );
 
-export const ComposeRedesignButton: React.FC = () => {
-  const [ref, setRef] = useState<HTMLButtonElement | null>(null);
-  const [menuOpen, { onFalse: onMenuClose, onToggle: onMenuToggle }] =
-    useToggle();
+export const ComposeRedesignButton: React.FC<{
+  /**
+   * Render the button in regular document flow instead of fixed positioning for mobile layout
+   */
+  inline?: boolean;
+}> = ({ inline }) => {
   const displayState = useAppSelector((state) => state.composer.displayState);
+
+  // Update viewport based on visual size in order to account for the virtual keyboard.
+  const [viewportHeight, setViewportHeight] = useState<null | number>(null);
+  useEffect(() => {
+    const updateHeight = () => {
+      setViewportHeight(visualViewport?.height ?? null);
+    };
+
+    visualViewport?.addEventListener('resize', updateHeight);
+
+    return () => {
+      visualViewport?.removeEventListener('resize', updateHeight);
+    };
+  }, []);
 
   const dispatch = useAppDispatch();
   const handleComposerOpen: React.MouseEventHandler<HTMLButtonElement> =
@@ -46,10 +64,9 @@ export const ComposeRedesignButton: React.FC = () => {
         } = event;
         if (name === 'post' || name === 'message') {
           dispatch(openNewComposer({ type: name }));
-          onMenuClose();
         }
       },
-      [dispatch, onMenuClose],
+      [dispatch],
     );
 
   if (!isRedesignEnabled()) {
@@ -58,59 +75,56 @@ export const ComposeRedesignButton: React.FC = () => {
 
   if (displayState === 'minimized') {
     return (
-      <Dropdown className={classes.composerMinimized} elevation={2}>
+      <MenuCard className={classes.composerMinimized} elevation={2}>
         <ComposeFormHeader />
-      </Dropdown>
+      </MenuCard>
     );
   }
 
   if (displayState === 'showing') {
+    // Pass the viewport height as a CSS variable so it's only used for mobile.
+    const style = {
+      '--viewport-height': viewportHeight ? `${viewportHeight}px` : undefined,
+    } as React.CSSProperties;
     return (
       <Suspense fallback={<CircularProgress strokeWidth={2} size={50} />}>
-        <ComposeLazyForm autoFocus className={classes.composer} />
+        <ComposeLazyForm autoFocus className={classes.composer} style={style} />
       </Suspense>
     );
   }
 
   return (
-    <>
-      <IconButton
+    <Menu>
+      <MenuTrigger
+        as={IconButton}
         icon={PenNibIcon}
-        color='neutral'
-        ref={setRef}
-        onClick={onMenuToggle}
-        className={classes.button}
+        variant='solid'
+        className={classNames(classes.button, inline && classes.buttonInline)}
         size='lg'
       >
         <FormattedMessage
           id='compose.new'
           defaultMessage='Write a new post or messsage'
         />
-      </IconButton>
+      </MenuTrigger>
 
-      <DropdownPopover
-        isOpen={menuOpen}
-        maxWidth={180}
-        reference={ref}
-        onClose={onMenuClose}
-        placement='top-end'
-      >
-        <DropdownItemButton
-          name='post'
-          onClick={handleComposerOpen}
-          leadingIcon={NewspaperIcon}
-        >
+      <MenuList maxWidth={180} placement='top-end'>
+        <MenuItem name='post' onClick={handleComposerOpen} icon={NewspaperIcon}>
           <FormattedMessage id='compose.new.post' defaultMessage='Post' />
-        </DropdownItemButton>
+        </MenuItem>
 
-        <DropdownItemButton
+        <MenuItem
           name='message'
           onClick={handleComposerOpen}
-          leadingIcon={ChatCircleIcon}
+          icon={ChatCircleIcon}
         >
-          <FormattedMessage id='compose.new.message' defaultMessage='Message' />
-        </DropdownItemButton>
-      </DropdownPopover>
-    </>
+          <FormattedMessage
+            id='compose.new.message'
+            defaultMessage='Message'
+            description='Message refers to a direct message. For languages where this is confusing, "chat" or "direct message" can be used.'
+          />
+        </MenuItem>
+      </MenuList>
+    </Menu>
   );
 };

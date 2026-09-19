@@ -164,16 +164,6 @@ export default tseslint.config([
     },
 
     rules: {
-      'no-restricted-syntax': [
-        'error',
-        {
-          // eslint-disable-next-line no-restricted-syntax
-          selector: 'Literal[value=/•/], JSXText[value=/•/]',
-          // eslint-disable-next-line no-restricted-syntax
-          message: "Use '·' (middle dot) instead of '•' (bullet)",
-        },
-      ],
-
       'formatjs/enforce-description': 'off', // description values not currently used
       'formatjs/enforce-id': 'off', // Explicit IDs are used in the project
       'formatjs/enforce-placeholders': 'off', // Issues in short_number.jsx
@@ -302,6 +292,8 @@ export default tseslint.config([
       'jsdoc/require-jsdoc': 'off',
       'jsdoc/require-param': 'off',
       'jsdoc/require-returns': 'off',
+
+      'jsx-a11y/media-has-caption': 'off',
 
       'react/prefer-stateless-function': 'warn',
       'react/function-component-definition': [

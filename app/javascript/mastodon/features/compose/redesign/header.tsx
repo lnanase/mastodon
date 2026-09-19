@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { ArrowsOutSimpleIcon, MinusIcon, XIcon } from '@phosphor-icons/react';
+import { ReadCvLogoIcon } from '@phosphor-icons/react/dist/ssr';
 
 import { IconButton } from '@/mastodon/components/button/redesign';
 import {
@@ -15,6 +16,8 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '@/mastodon/store';
+
+import { useBreakpoint } from '../../ui/hooks/useBreakpoint';
 
 import { selectComposeType } from './selectors';
 import classes from './styles.module.scss';
@@ -39,10 +42,14 @@ const messages = defineMessages({
   messageNew: {
     id: 'compose_form.message.title.new',
     defaultMessage: 'New message',
+    description:
+      'Message refers to a direct message. For languages where this is confusing, "chat" or "direct message" can be used.',
   },
   messageEdit: {
     id: 'compose_form.message.title.edit',
     defaultMessage: 'Edit message',
+    description:
+      'Message refers to a direct message. For languages where this is confusing, "chat" or "direct message" can be used.',
   },
 });
 
@@ -68,6 +75,16 @@ export const ComposeFormHeader: React.FC<{
   const onMinimize = useCallback(() => {
     dispatch(minimizeComposerToggle());
   }, [dispatch]);
+
+  const isMobile = useBreakpoint('openable');
+
+  if (isMobile && isMinimized && !noMinimize) {
+    return (
+      <IconButton icon={ReadCvLogoIcon} onClick={onMinimize} size='lg'>
+        <FormattedMessage id='compose.expand' defaultMessage='Show composer' />
+      </IconButton>
+    );
+  }
 
   return (
     <header className={classes.header}>

@@ -21,8 +21,8 @@ import {
 import { useAppSelector, useAppDispatch } from '@/mastodon/store';
 import { DAY, HOUR, MINUTE } from '@/mastodon/utils/time';
 
+import classes from './attachments.module.scss';
 import { selectComposePoll } from './selectors';
-import classes from './styles.module.scss';
 
 const messages = defineMessages({
   option_placeholder: {
@@ -113,7 +113,10 @@ export const ComposePoll: React.FC = () => {
     useCallback(
       (event) => {
         dispatch(
-          changePollSettings(Number.parseInt(event.target.value), multiple),
+          changePollSettings(
+            Number.parseInt(event.target.value) / 1000,
+            multiple,
+          ),
         );
       },
       [dispatch, multiple],
@@ -181,15 +184,15 @@ export const ComposePoll: React.FC = () => {
             className={classNames(
               classes.pollDurationSelect,
               buttonClasses.base,
-              buttonClasses.solid,
               buttonClasses.tonal,
+              buttonClasses.neutral,
               buttonClasses.xs,
             )}
           >
             {pollDurationOptions.map((duration) => {
               const { message, multiplier } = durationToMessage(duration);
               return (
-                <option key={duration} value={duration}>
+                <option key={duration} value={duration / 1000}>
                   {intl.formatMessage(message, {
                     number: duration / multiplier,
                   })}

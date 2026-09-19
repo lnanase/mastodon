@@ -140,6 +140,7 @@ const StatusDisplayName: FC<{
     <LinkedDisplayName
       displayProps={{ account: statusAccount }}
       className='status__display-name'
+      reference='status'
     >
       <div className='status__avatar'>{avatarNode}</div>
     </LinkedDisplayName>
