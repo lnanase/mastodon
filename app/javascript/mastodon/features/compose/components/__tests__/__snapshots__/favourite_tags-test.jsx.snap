@@ -200,7 +200,7 @@ exports[`<FavouriteTags /> > tagsに2件・visible=trueのときの表示 1`] = 
           >
             <svg
               aria-hidden="true"
-              class="icon icon-undefined favourite-tags__lock"
+              class="icon favourite-tags__lock"
               height="24"
               title=""
               viewBox="0 -960 960 960"
@@ -238,7 +238,7 @@ exports[`<FavouriteTags /> > tagsに2件・visible=trueのときの表示 1`] = 
           >
             <svg
               aria-hidden="true"
-              class="icon icon-undefined favourite-tags__lock"
+              class="icon favourite-tags__lock"
               height="24"
               title=""
               viewBox="0 -960 960 960"
